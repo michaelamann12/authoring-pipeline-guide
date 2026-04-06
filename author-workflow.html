@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Author Workflow — Authoring Pipeline Guide</title>
+    <style>
+        :root {
+            --bg: #f5f6fa;
+            --surface: #ffffff;
+            --surface-hover: #f0f1f5;
+            --border: #e2e4ec;
+            --text: #1a1d2e;
+            --text-muted: #5f6478;
+            --accent: #3b5bdb;
+            --accent-glow: rgba(59, 91, 219, 0.08);
+            --green: #0ca678;
+            --green-bg: rgba(12, 166, 120, 0.08);
+            --amber: #e67700;
+            --amber-bg: rgba(230, 119, 0, 0.07);
+            --rose: #e03131;
+            --rose-bg: rgba(224, 49, 49, 0.07);
+            --purple: #7048e8;
+            --purple-bg: rgba(112, 72, 232, 0.07);
+            --cyan: #1098ad;
+            --cyan-bg: rgba(16, 152, 173, 0.07);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+        .header h1 span { color: var(--accent); }
+        .header-subtitle { color: var(--text-muted); font-size: 0.85rem; }
+
+        .back-link {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
+            border: 1.5px solid var(--accent);
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            transition: all 0.2s;
+        }
+        .back-link:hover { background: var(--accent-glow); }
+
+        .main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Progress tracker */
+        .progress-track {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            margin-bottom: 2.5rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+        }
+
+        .progress-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.4rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+            min-width: 80px;
+        }
+
+        .progress-step:hover { transform: translateY(-2px); }
+
+        .progress-dot {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 700;
+            border: 2.5px solid var(--border);
+            background: var(--surface);
+            color: var(--text-muted);
+            transition: all 0.2s;
+        }
+
+        .progress-step.active .progress-dot,
+        .progress-step:hover .progress-dot {
+            border-color: var(--accent);
+            background: var(--accent);
+            color: white;
+        }
+
+        .progress-label {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-align: center;
+            max-width: 85px;
+        }
+
+        .progress-step.active .progress-label { color: var(--accent); }
+
+        .progress-line {
+            flex: 1;
+            height: 2px;
+            background: var(--border);
+            min-width: 20px;
+            margin-bottom: 1.4rem;
+        }
+
+        /* Step sections */
+        .step-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .step-section.active-highlight {
+            border-color: var(--accent);
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1.25rem 1.5rem;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .step-header-text { flex: 1; }
+        .step-title { font-size: 1.1rem; font-weight: 700; }
+        .step-subtitle { font-size: 0.82rem; color: var(--text-muted); }
+
+        .step-actor-badge {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.25rem 0.65rem;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .badge-you { background: var(--green-bg); color: var(--green); }
+        .badge-auto { background: var(--accent-glow); color: var(--accent); }
+        .badge-lead { background: var(--purple-bg); color: var(--purple); }
+
+        .step-body {
+            padding: 0 1.5rem 1.5rem;
+        }
+
+        .step-body h3 {
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--accent);
+            margin: 1.25rem 0 0.65rem;
+        }
+
+        .step-body h3:first-child { margin-top: 0.5rem; }
+
+        .step-body p, .step-body li {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            line-height: 1.7;
+        }
+
+        .step-body ul, .step-body ol {
+            padding-left: 1.2rem;
+            margin: 0.5rem 0;
+        }
+
+        .step-body li { margin-bottom: 0.35rem; }
+        .step-body strong { color: var(--text); font-weight: 600; }
+
+        .step-body code {
+            background: #eef0f6;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.82rem;
+            color: var(--accent);
+        }
+
+        /* Jira board visual */
+        .jira-board {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding: 1rem 0;
+            margin: 0.75rem 0;
+        }
+
+        .jira-lane {
+            min-width: 130px;
+            flex: 1;
+            background: #eef0f6;
+            border-radius: 8px;
+            padding: 0.6rem;
+        }
+
+        .jira-lane-title {
+            font-size: 0.68rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-align: center;
+        }
+
+        .jira-ticket {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.5rem;
+            font-size: 0.7rem;
+            color: var(--text);
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        }
+
+        .jira-ticket.highlight-ticket {
+            border-color: var(--accent);
+            background: var(--accent-glow);
+        }
+
+        .jira-ticket.error-ticket {
+            border-color: var(--rose);
+            background: var(--rose-bg);
+        }
+
+        .jira-ticket .ticket-status {
+            font-size: 0.6rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            display: block;
+            margin-top: 0.2rem;
+        }
+
+        .jira-lane.active-lane {
+            background: var(--accent-glow);
+            border: 1.5px solid var(--accent);
+        }
+
+        /* Action card */
+        .action-card {
+            background: #eef0f6;
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            margin: 0.75rem 0;
+        }
+
+        .action-card .action-label {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            margin-bottom: 0.4rem;
+        }
+
+        .action-card p {
+            font-size: 0.85rem;
+            color: var(--text);
+        }
+
+        /* Trigger arrow */
+        .trigger-flow {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .trigger-box {
+            background: var(--surface);
+            border: 1.5px solid var(--border);
+            border-radius: 8px;
+            padding: 0.6rem 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .trigger-box.you-do { border-color: var(--green); color: var(--green); }
+        .trigger-box.system-does { border-color: var(--accent); color: var(--accent); }
+        .trigger-box.error-state { border-color: var(--rose); color: var(--rose); }
+
+        .trigger-arrow {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+        }
+
+        /* Callouts */
+        .callout {
+            border-left: 3px solid var(--accent);
+            background: var(--accent-glow);
+            padding: 0.85rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+        }
+
+        .callout.warning { border-left-color: var(--amber); background: var(--amber-bg); }
+        .callout.error { border-left-color: var(--rose); background: var(--rose-bg); }
+        .callout.success { border-left-color: var(--green); background: var(--green-bg); }
+        .callout p { color: var(--text); }
+
+        /* Error states section */
+        .error-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin: 0.75rem 0;
+        }
+
+        @media (max-width: 768px) {
+            .error-grid { grid-template-columns: 1fr; }
+        }
+
+        .error-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .error-card h4 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
+        .error-card p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .error-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .indicator-red { background: var(--rose); }
+        .indicator-amber { background: var(--amber); }
+
+        /* Detail table */
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0.75rem 0;
+            font-size: 0.85rem;
+        }
+
+        .detail-table th {
+            text-align: left;
+            padding: 0.6rem 0.75rem;
+            background: #eef0f6;
+            color: var(--text-muted);
+            font-weight: 600;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .detail-table td {
+            padding: 0.6rem 0.75rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-muted);
+        }
+
+        .detail-table td strong { color: var(--text); }
+
+        .footer {
+            max-width: 1100px;
+            margin: 3rem auto 2rem;
+            padding: 0 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+        }
+
+        .footer a { color: var(--accent); text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .main { padding: 1rem; }
+            .step-header { flex-wrap: wrap; }
+            .jira-board { flex-wrap: nowrap; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <div>
+            <h1><span>Author Workflow</span> Walkthrough</h1>
+            <p class="header-subtitle">Your step-by-step guide to working in the authoring pipeline</p>
+        </div>
+        <a href="index.html" class="back-link">&larr; Pipeline Overview</a>
+    </div>
+</header>
+
+<main class="main">
+
+    <!-- Progress tracker -->
+    <div class="progress-track">
+        <div class="progress-step active" data-target="step-1">
+            <div class="progress-dot">1</div>
+            <span class="progress-label">Module Plan</span>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step" data-target="step-2">
+            <div class="progress-dot">2</div>
+            <span class="progress-label">Confirm Ready</span>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step" data-target="step-3">
+            <div class="progress-dot">3</div>
+            <span class="progress-label">Drag to Drafting</span>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step" data-target="step-4">
+            <div class="progress-dot">4</div>
+            <span class="progress-label">Claude Drafts</span>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step" data-target="step-5">
+            <div class="progress-dot">5</div>
+            <span class="progress-label">Review Draft</span>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step" data-target="step-6">
+            <div class="progress-dot">6</div>
+            <span class="progress-label">Edit &amp; Refine</span>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step" data-target="step-7">
+            <div class="progress-dot">7</div>
+            <span class="progress-label">Submit</span>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step" data-target="step-8">
+            <div class="progress-dot">8</div>
+            <span class="progress-label">Finalize</span>
+        </div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step-section" id="step-1">
+        <div class="step-header">
+            <div class="step-number" style="background:var(--green-bg);color:var(--green);">1</div>
+            <div class="step-header-text">
+                <div class="step-title">Complete Your Module Plan</div>
+                <div class="step-subtitle">Before anything runs, the plan must be in place</div>
+            </div>
+            <span class="step-actor-badge badge-you">You</span>
+        </div>
+        <div class="step-body">
+            <p>Your module plan is the blueprint that drives everything downstream. Each row represents one activity. Claude reads this plan to determine what to build.</p>
+
+            <h3>What You Need to Fill In</h3>
+            <ul>
+                <li><strong>Activity ID</strong> &mdash; the unique identifier that tracks this activity through the entire pipeline</li>
+                <li><strong>Activity Objective</strong> &mdash; what students will learn or do</li>
+                <li><strong>Anchor Text</strong> &mdash; the source text for this lesson</li>
+                <li><strong>Exact Text Excerpt</strong> &mdash; the specific section of the text (e.g., "Ch. 6" or "paragraphs 58&ndash;120"). When filled in, Claude goes directly to this section.</li>
+                <li><strong>Text Segment</strong> &mdash; broader reading range with guidance (e.g., "Excerpts from Chs. 1&ndash;3; 700&ndash;900 words; focus on the idea of being 'ordinary' vs 'extraordinary'"). Claude selects the best excerpt within this range.</li>
+                <li><strong>Target Task (Verbatim)</strong> &mdash; the assessment question, word-for-word from the curriculum</li>
+                <li><strong>Driving Questions (Verbatim &amp; Outline)</strong> &mdash; scaffolding questions and guidance</li>
+                <li><strong>Planning Notes</strong> &mdash; how closely Claude should follow the original curriculum</li>
+            </ul>
+
+            <div class="callout">
+                <p><strong>Keep it lean.</strong> Give Claude direction, not copy-pasted content. Reference where texts live &mdash; Claude goes and pulls them. The leaner your plan, the fewer transcription errors and the more scalable the process.</p>
+            </div>
+
+            <h3>Where to Save It</h3>
+            <p>Save your completed module plan CSV to <code>module_plans/{Curriculum}/{Grade}/</code> on the shared drive.</p>
+        </div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step-section" id="step-2">
+        <div class="step-header">
+            <div class="step-number" style="background:var(--green-bg);color:var(--green);">2</div>
+            <div class="step-header-text">
+                <div class="step-title">Confirm Source Materials Are Ready</div>
+                <div class="step-subtitle">Verify everything Claude needs is in the Curriculum Hub</div>
+            </div>
+            <span class="step-actor-badge badge-you">You</span>
+        </div>
+        <div class="step-body">
+            <p>Before you move any ticket, check that the source texts your plan references actually exist in the Curriculum Hub folders.</p>
+
+            <h3>Pre-Flight Checklist</h3>
+            <ul>
+                <li>Every text referenced in your plan exists in the correct Hub folder</li>
+                <li>Supplemental materials (handouts, tool pages) are in place if referenced</li>
+                <li>For novel/supplemental curricula: if you sourced a text yourself (e.g., a TED talk transcript), it's uploaded to the Hub</li>
+                <li>Your Activity IDs are present in the module plan</li>
+            </ul>
+
+            <div class="callout warning">
+                <p><strong>If source materials are missing, the build will fail.</strong> Claude will not fabricate content. The ticket will stall in Drafting and show an error. Better to catch this now than after the build runs.</p>
+            </div>
+
+            <h3>Your Jira Ticket at This Point</h3>
+            <div class="jira-board">
+                <div class="jira-lane active-lane">
+                    <div class="jira-lane-title">Backlog</div>
+                    <div class="jira-ticket highlight-ticket">
+                        OE_SLP_XX_G9_1.1_7_v1
+                        <span class="ticket-status">Ready to move</span>
+                    </div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Ready for Authoring</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Drafting</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Draft Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Final Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Done</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step-section" id="step-3">
+        <div class="step-header">
+            <div class="step-number" style="background:var(--green-bg);color:var(--green);">3</div>
+            <div class="step-header-text">
+                <div class="step-title">Drag Your Ticket to "Drafting"</div>
+                <div class="step-subtitle">This is the trigger &mdash; the pipeline picks it up from here</div>
+            </div>
+            <span class="step-actor-badge badge-you">You</span>
+        </div>
+        <div class="step-body">
+            <p>In Jira, drag your ticket from <strong>Backlog</strong> (or Ready for Authoring) to the <strong>Drafting</strong> lane. This is the signal that tells the pipeline: "This activity is ready to be built."</p>
+
+            <div class="trigger-flow">
+                <div class="trigger-box you-do">You drag ticket to Drafting</div>
+                <span class="trigger-arrow">&rarr;</span>
+                <div class="trigger-box system-does">Pipeline detects ticket</div>
+                <span class="trigger-arrow">&rarr;</span>
+                <div class="trigger-box system-does">Claude starts building</div>
+            </div>
+
+            <h3>What Happens Behind the Scenes</h3>
+            <p>The pipeline polls Jira every 30 minutes during business hours. When it finds your ticket in "Drafting," it:</p>
+            <ol>
+                <li>Tags the ticket as <code>pipeline_queued</code> so it doesn't get picked up twice</li>
+                <li>Reads your module plan row for this Activity ID</li>
+                <li>Runs the three-skill build sequence: <strong>Populate</strong> &rarr; <strong>Pick Excerpt</strong> &rarr; <strong>Draft Activity</strong></li>
+                <li>Runs the 11-point quality check</li>
+                <li>If successful, auto-moves the ticket to <strong>Draft Review</strong></li>
+            </ol>
+
+            <div class="jira-board">
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Backlog</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Ready for Authoring</div>
+                </div>
+                <div class="jira-lane active-lane">
+                    <div class="jira-lane-title">Drafting</div>
+                    <div class="jira-ticket highlight-ticket">
+                        OE_SLP_XX_G9_1.1_7_v1
+                        <span class="ticket-status">Pipeline processing...</span>
+                    </div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Draft Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Final Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Done</div>
+                </div>
+            </div>
+
+            <div class="callout">
+                <p><strong>You don't need to do anything else at this point.</strong> The pipeline handles the build automatically. You'll see the ticket move to Draft Review when the draft is ready for you.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-section" id="step-4">
+        <div class="step-header">
+            <div class="step-number" style="background:var(--accent-glow);color:var(--accent);">4</div>
+            <div class="step-header-text">
+                <div class="step-title">Claude Builds Your Draft</div>
+                <div class="step-subtitle">Automated &mdash; you wait for this to complete</div>
+            </div>
+            <span class="step-actor-badge badge-auto">Automated</span>
+        </div>
+        <div class="step-body">
+            <p>While you wait (usually within the next polling cycle), Claude runs three skills in sequence:</p>
+
+            <table class="detail-table">
+                <thead>
+                    <tr><th>Skill</th><th>What It Does</th><th>Time</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>/populate-lesson</strong></td>
+                        <td>Navigates the Curriculum Hub, copies source texts and lesson plans to the working folder</td>
+                        <td>~2 min</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/pick-excerpt</strong></td>
+                        <td>Selects and formats the text excerpt with correct paragraph numbering</td>
+                        <td>~3 min</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/draft-activity</strong></td>
+                        <td>Generates the full activity: intro, questions, criteria, assessment, conclusion</td>
+                        <td>~5 min</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/edit-draft</strong></td>
+                        <td>Runs 11-point quality validation and auto-fixes issues</td>
+                        <td>~3 min</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>When It Succeeds</h3>
+            <div class="trigger-flow">
+                <div class="trigger-box system-does">Draft complete</div>
+                <span class="trigger-arrow">&rarr;</span>
+                <div class="trigger-box system-does">Ticket auto-moves to Draft Review</div>
+                <span class="trigger-arrow">&rarr;</span>
+                <div class="trigger-box you-do">You see ticket in Draft Review</div>
+            </div>
+
+            <h3>When It Fails</h3>
+            <div class="trigger-flow">
+                <div class="trigger-box error-state">Build error</div>
+                <span class="trigger-arrow">&rarr;</span>
+                <div class="trigger-box error-state">Ticket stays in Drafting</div>
+                <span class="trigger-arrow">&rarr;</span>
+                <div class="trigger-box you-do">Check error &amp; fix inputs</div>
+            </div>
+
+            <p>See <a href="#error-states" style="color:var(--accent);">Error States</a> below for what to look for and how to resolve stalled tickets.</p>
+
+            <div class="jira-board">
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Backlog</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Ready for Authoring</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Drafting</div>
+                </div>
+                <div class="jira-lane active-lane">
+                    <div class="jira-lane-title">Draft Review</div>
+                    <div class="jira-ticket highlight-ticket">
+                        OE_SLP_XX_G9_1.1_7_v1
+                        <span class="ticket-status">Draft ready for review</span>
+                    </div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Final Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Done</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 5 -->
+    <div class="step-section" id="step-5">
+        <div class="step-header">
+            <div class="step-number" style="background:var(--green-bg);color:var(--green);">5</div>
+            <div class="step-header-text">
+                <div class="step-title">Review Your Draft</div>
+                <div class="step-subtitle">Read the output and assess it against the plan</div>
+            </div>
+            <span class="step-actor-badge badge-you">You</span>
+        </div>
+        <div class="step-body">
+            <h3>Find Your Draft</h3>
+            <p>Open VS Code. Navigate to <code>draft_outputs/</code> on the shared drive. Your draft folder is named with the date and Activity ID:</p>
+
+            <div class="action-card">
+                <div class="action-label">Your File</div>
+                <p><code>draft_outputs/2026-04-01_OE_SLP_XX_G9_1.1_7_v1/</code></p>
+                <p style="margin-top:0.5rem;font-size:0.8rem;color:var(--text-muted);">
+                    <strong style="color:var(--green);">Open this:</strong> <code>_Activity_Content.md</code> &mdash; this is the draft you'll review and edit<br>
+                    <strong style="color:var(--text-muted);">Reference:</strong> <code>_Match_Report.md</code> &mdash; explains why Claude made the choices it did<br>
+                    <strong style="color:var(--rose);">Don't touch:</strong> <code>_DO_NOT_EDIT/</code> &mdash; backup files for change tracking
+                </p>
+            </div>
+
+            <h3>First Read: Top to Bottom</h3>
+            <p>Read the entire draft without editing. Get a feel for the arc. Then check:</p>
+            <ul>
+                <li>Does the activity match the objective from your module plan?</li>
+                <li>Do the driving questions scaffold logically toward the target task?</li>
+                <li>Are paragraph references accurate to the actual excerpt?</li>
+                <li>Are verbatim questions unchanged from what you wrote in the plan?</li>
+                <li>Do the criteria and example responses feel realistic for this grade level?</li>
+                <li>Is the tone right for students?</li>
+            </ul>
+
+            <div class="callout success">
+                <p><strong>The Match Report is your friend.</strong> If a question or design choice surprises you, check the <code>_Match_Report.md</code> &mdash; it documents which exemplars Claude referenced and why it made specific decisions.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 6 -->
+    <div class="step-section" id="step-6">
+        <div class="step-header">
+            <div class="step-number" style="background:var(--green-bg);color:var(--green);">6</div>
+            <div class="step-header-text">
+                <div class="step-title">Edit &amp; Refine</div>
+                <div class="step-subtitle">Make the draft yours &mdash; three ways to edit</div>
+            </div>
+            <span class="step-actor-badge badge-you">You</span>
+        </div>
+        <div class="step-body">
+            <h3>Option A: Edit Directly</h3>
+            <p>For small changes &mdash; typos, rewording, adjusting criteria &mdash; just edit the markdown file in VS Code and save.</p>
+
+            <h3>Option B: Ask Claude</h3>
+            <p>For larger structural changes, describe what you want in the Claude panel. Be specific:</p>
+            <div class="action-card">
+                <div class="action-label">Example Prompts</div>
+                <p style="font-size:0.82rem;">
+                    "Question 3 feels too easy &mdash; make it more analytically demanding while keeping the same text focus."<br><br>
+                    "The success criteria for Question 5 are too vague &mdash; tighten them with specific paragraph references."<br><br>
+                    "Swap Questions 2 and 3 &mdash; students need the vocabulary context before tackling inference."<br><br>
+                    "The excerpt is too long &mdash; trim it to focus on paragraphs 14&ndash;22."<br><br>
+                    "Add a highlight question before Question 4 to scaffold the close reading."
+                </p>
+            </div>
+            <p>Claude makes the edits in the file and explains what changed. You can review, approve, or ask for further adjustments.</p>
+
+            <h3>Option C: Run /edit-draft</h3>
+            <p>For a comprehensive quality pass, type <code>/edit-draft</code> in the Claude panel. This re-runs the 11-point validation and auto-fixes what it can. Use this if you've made significant changes and want a fresh check.</p>
+
+            <div class="callout">
+                <p><strong>You can't break anything.</strong> The <code>_DO_NOT_EDIT/</code> folder has a backup of the original draft. If something goes sideways, Claude can restore from there.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 7 -->
+    <div class="step-section" id="step-7">
+        <div class="step-header">
+            <div class="step-number" style="background:var(--purple-bg);color:var(--purple);">7</div>
+            <div class="step-header-text">
+                <div class="step-title">Submit for Review (If Applicable)</div>
+                <div class="step-subtitle">Route to your lead if two-tier review is in place</div>
+            </div>
+            <span class="step-actor-badge badge-lead">Lead Review</span>
+        </div>
+        <div class="step-body">
+            <p>If your curriculum uses two-tier review (contractor edits, then lead reviews), submit your edited draft:</p>
+
+            <div class="action-card">
+                <div class="action-label">In Claude Code</div>
+                <p>Type <code>/move-to-review</code></p>
+            </div>
+
+            <p>This skill:</p>
+            <ol>
+                <li>Generates a <strong>change summary</strong> comparing your edits to the original draft</li>
+                <li>Moves the draft to <code>draft_outputs/review_ready/</code></li>
+                <li>Updates the Jira ticket to <strong>Final Review</strong></li>
+            </ol>
+
+            <div class="jira-board">
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Backlog</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Ready for Authoring</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Drafting</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Draft Review</div>
+                </div>
+                <div class="jira-lane active-lane">
+                    <div class="jira-lane-title">Final Review</div>
+                    <div class="jira-ticket highlight-ticket">
+                        OE_SLP_XX_G9_1.1_7_v1
+                        <span class="ticket-status">Awaiting lead review</span>
+                    </div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Done</div>
+                </div>
+            </div>
+
+            <p>Your lead reviews in the <code>review_ready/</code> folder and makes any final adjustments. If your workflow doesn't require lead review, skip to Step 8.</p>
+        </div>
+    </div>
+
+    <!-- STEP 8 -->
+    <div class="step-section" id="step-8">
+        <div class="step-header">
+            <div class="step-number" style="background:var(--green-bg);color:var(--green);">8</div>
+            <div class="step-header-text">
+                <div class="step-title">Finalize</div>
+                <div class="step-subtitle">Lock it in, capture feedback, move to transformation</div>
+            </div>
+            <span class="step-actor-badge badge-you">You / Lead</span>
+        </div>
+        <div class="step-body">
+            <div class="action-card">
+                <div class="action-label">In Claude Code</div>
+                <p>Type <code>/move-to-final</code></p>
+            </div>
+
+            <p>This skill runs 5 steps:</p>
+            <ol>
+                <li><strong>Asks you 3 feedback questions</strong> &mdash; What worked well? What needed the most editing? Any patterns you're seeing across drafts?</li>
+                <li><strong>Generates a changelog</strong> &mdash; a diff comparing your final version to the original draft (two-layer diff if lead review was used)</li>
+                <li><strong>Moves the final version</strong> to <code>final_outputs/</code></li>
+                <li><strong>Updates Jira</strong> &mdash; ticket moves to <strong>In Transformation</strong></li>
+                <li><strong>Cleans up</strong> the draft folder</li>
+            </ol>
+
+            <div class="jira-board">
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Backlog</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Ready for Authoring</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Drafting</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Draft Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Final Review</div>
+                </div>
+                <div class="jira-lane active-lane">
+                    <div class="jira-lane-title">Done</div>
+                    <div class="jira-ticket highlight-ticket">
+                        OE_SLP_XX_G9_1.1_7_v1
+                        <span class="ticket-status">In Transformation</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="callout success">
+                <p><strong>Your feedback matters.</strong> Even a one-sentence note like "Questions were solid but the intro felt generic" helps improve future drafts. Patterns in feedback directly inform how Claude drafts for this curriculum going forward.</p>
+            </div>
+
+            <h3>One Activity at a Time</h3>
+            <p>Finish and <code>/move-to-final</code> before starting the next activity, so changelogs stay clean and feedback is captured per-activity.</p>
+        </div>
+    </div>
+
+    <!-- ERROR STATES -->
+    <div class="step-section" id="error-states" style="border-left: 3px solid var(--rose);">
+        <div class="step-header">
+            <div class="step-number" style="background:var(--rose-bg);color:var(--rose);">!</div>
+            <div class="step-header-text">
+                <div class="step-title">Error States &amp; Stalled Tickets</div>
+                <div class="step-subtitle">What to do when something doesn't go right</div>
+            </div>
+        </div>
+        <div class="step-body">
+            <h3>How to Spot a Problem</h3>
+            <p>If your ticket has been in <strong>Drafting</strong> for more than one polling cycle (~30 minutes) and hasn't moved to Draft Review, the build may have stalled.</p>
+
+            <div class="jira-board">
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Backlog</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Ready for Authoring</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Drafting</div>
+                    <div class="jira-ticket error-ticket">
+                        OE_SLP_XX_G9_1.1_7_v1
+                        <span class="ticket-status">Stalled &mdash; check errors</span>
+                    </div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Draft Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Final Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Done</div>
+                </div>
+            </div>
+
+            <h3>Common Causes &amp; Fixes</h3>
+            <div class="error-grid">
+                <div class="error-card">
+                    <h4><span class="error-indicator indicator-red"></span> Missing Source Text</h4>
+                    <p>Claude couldn't find the text referenced in your plan. <strong>Fix:</strong> Check the Curriculum Hub for the file. Upload it if missing, then drag the ticket back to Drafting to re-trigger.</p>
+                </div>
+                <div class="error-card">
+                    <h4><span class="error-indicator indicator-red"></span> Missing Activity ID</h4>
+                    <p>The module plan row doesn't have an Activity ID. <strong>Fix:</strong> Add the ID to your plan, save, and re-trigger the ticket.</p>
+                </div>
+                <div class="error-card">
+                    <h4><span class="error-indicator indicator-amber"></span> Module Plan Not Found</h4>
+                    <p>The plan CSV isn't in the expected folder or doesn't match the naming convention. <strong>Fix:</strong> Verify the file is in <code>module_plans/{Curriculum}/{Grade}/</code> and re-trigger.</p>
+                </div>
+                <div class="error-card">
+                    <h4><span class="error-indicator indicator-amber"></span> Ambiguous Excerpt Reference</h4>
+                    <p>The Text Segment was too vague for Claude to identify the right passage. <strong>Fix:</strong> Add more specificity to the Exact Text Excerpt or Text Segment column (e.g., page numbers, paragraph ranges).</p>
+                </div>
+                <div class="error-card">
+                    <h4><span class="error-indicator indicator-red"></span> Supplemental Text Missing</h4>
+                    <p>"Requires Supplemental Text" is marked Yes but the supplemental file isn't in the Hub. <strong>Fix:</strong> Upload the supplemental material and re-trigger.</p>
+                </div>
+                <div class="error-card">
+                    <h4><span class="error-indicator indicator-amber"></span> Polling Window Missed</h4>
+                    <p>You moved the ticket outside business hours or between polling cycles. <strong>Fix:</strong> Just wait &mdash; the next polling cycle will pick it up. The pipeline runs every 30 minutes during business hours.</p>
+                </div>
+            </div>
+
+            <h3>How to Re-Trigger a Stalled Ticket</h3>
+            <ol>
+                <li>Fix the underlying issue (upload missing file, update plan, etc.)</li>
+                <li>Drag the ticket back to <strong>Backlog</strong> or <strong>Ready for Authoring</strong></li>
+                <li>Drag it to <strong>Drafting</strong> again</li>
+                <li>The pipeline will pick it up on the next cycle</li>
+            </ol>
+
+            <div class="callout error">
+                <p><strong>If you're stuck:</strong> Reach out to Michaela. She can check the pipeline logs, diagnose what went wrong, and help resolve it quickly. Don't spend time guessing &mdash; that's what she's here for.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUICK REFERENCE -->
+    <div class="step-section">
+        <div class="step-header">
+            <div class="step-number" style="background:#eef0f6;color:var(--text-muted);">&#x26A1;</div>
+            <div class="step-header-text">
+                <div class="step-title">Quick Reference</div>
+                <div class="step-subtitle">Everything at a glance</div>
+            </div>
+        </div>
+        <div class="step-body">
+            <table class="detail-table">
+                <thead>
+                    <tr><th>I want to...</th><th>Do this</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Start a new build</strong></td><td>Complete plan + verify source materials + drag ticket to Drafting</td></tr>
+                    <tr><td><strong>Find my draft</strong></td><td><code>draft_outputs/</code> &gt; find your Activity ID folder &gt; open <code>_Activity_Content.md</code></td></tr>
+                    <tr><td><strong>Understand a design choice</strong></td><td>Read the <code>_Match_Report.md</code> in the same folder</td></tr>
+                    <tr><td><strong>Fix a small issue</strong></td><td>Edit the file directly in VS Code and save</td></tr>
+                    <tr><td><strong>Make a bigger change</strong></td><td>Ask Claude in the panel &mdash; describe what you want in plain English</td></tr>
+                    <tr><td><strong>Run a full quality check</strong></td><td>Type <code>/edit-draft</code> in the Claude panel</td></tr>
+                    <tr><td><strong>Submit for lead review</strong></td><td>Type <code>/move-to-review</code></td></tr>
+                    <tr><td><strong>Finish and submit</strong></td><td>Type <code>/move-to-final</code></td></tr>
+                    <tr><td><strong>Check a stalled ticket</strong></td><td>Look at Jira comments for error info, fix inputs, re-trigger by dragging back then forward</td></tr>
+                    <tr><td><strong>Something looks wrong</strong></td><td>Ask Claude in the panel &mdash; or reach out to Michaela</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</main>
+
+<footer class="footer">
+    <p>Authoring Pipeline Guide &mdash; CourseMojo &middot; <a href="index.html">Back to Pipeline Overview</a></p>
+</footer>
+
+<script>
+    // Progress step click -> scroll to section
+    document.querySelectorAll('.progress-step').forEach(step => {
+        step.addEventListener('click', () => {
+            const targetId = step.dataset.target;
+            const target = document.getElementById(targetId);
+            if (!target) return;
+
+            // Update active
+            document.querySelectorAll('.progress-step').forEach(s => s.classList.remove('active'));
+            step.classList.add('active');
+
+            // Scroll and highlight
+            target.classList.add('active-highlight');
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => target.classList.remove('active-highlight'), 2000);
+        });
+    });
+</script>
+
+</body>
+</html>
