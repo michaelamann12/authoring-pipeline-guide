@@ -471,31 +471,36 @@
         <div class="progress-line"></div>
         <div class="progress-step" data-target="step-3">
             <div class="progress-dot">3</div>
-            <span class="progress-label">Drag to Drafting</span>
+            <span class="progress-label">Pull Ticket</span>
         </div>
         <div class="progress-line"></div>
         <div class="progress-step" data-target="step-4">
             <div class="progress-dot">4</div>
-            <span class="progress-label">Claude Drafts</span>
+            <span class="progress-label">Drag to Drafting</span>
         </div>
         <div class="progress-line"></div>
         <div class="progress-step" data-target="step-5">
             <div class="progress-dot">5</div>
-            <span class="progress-label">Review Draft</span>
+            <span class="progress-label">Claude Drafts</span>
         </div>
         <div class="progress-line"></div>
         <div class="progress-step" data-target="step-6">
             <div class="progress-dot">6</div>
-            <span class="progress-label">Edit &amp; Refine</span>
+            <span class="progress-label">Review Draft</span>
         </div>
         <div class="progress-line"></div>
         <div class="progress-step" data-target="step-7">
             <div class="progress-dot">7</div>
-            <span class="progress-label">Submit</span>
+            <span class="progress-label">Edit &amp; Refine</span>
         </div>
         <div class="progress-line"></div>
         <div class="progress-step" data-target="step-8">
             <div class="progress-dot">8</div>
+            <span class="progress-label">Submit</span>
+        </div>
+        <div class="progress-line"></div>
+        <div class="progress-step" data-target="step-9">
+            <div class="progress-dot">9</div>
             <span class="progress-label">Finalize</span>
         </div>
     </div>
@@ -530,7 +535,7 @@
             </div>
 
             <h3>Where to Save It</h3>
-            <p>Save your completed module plan CSV to <code>module_plans/{Curriculum}/{Grade}/</code> on the shared drive.</p>
+            <p>Save your completed module plan CSV to the Curriculum Hub inside of <code>00. Curriculum &amp; Text - Raw Materials</code>, under the correct <strong>curriculum</strong> and <strong>grade</strong> folder.</p>
         </div>
     </div>
 
@@ -561,15 +566,15 @@
 
             <h3>Your Jira Ticket at This Point</h3>
             <div class="jira-board">
-                <div class="jira-lane active-lane">
+                <div class="jira-lane">
                     <div class="jira-lane-title">Backlog</div>
+                </div>
+                <div class="jira-lane active-lane">
+                    <div class="jira-lane-title">Ready for Authoring</div>
                     <div class="jira-ticket highlight-ticket">
                         OE_SLP_XX_G9_1.1_7_v1
-                        <span class="ticket-status">Ready to move</span>
+                        <span class="ticket-status">Sources verified</span>
                     </div>
-                </div>
-                <div class="jira-lane">
-                    <div class="jira-lane-title">Ready for Authoring</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Drafting</div>
@@ -591,6 +596,71 @@
     <div class="step-section" id="step-3">
         <div class="step-header">
             <div class="step-number" style="background:var(--green-bg);color:var(--green);">3</div>
+            <div class="step-header-text">
+                <div class="step-title">Pull Your Ticket from the Backlog</div>
+                <div class="step-subtitle">Find the ticket with your Activity ID and claim it</div>
+            </div>
+            <span class="step-actor-badge badge-you">You</span>
+        </div>
+        <div class="step-body">
+            <p>Your Jira board has a <strong>Backlog</strong> lane filled with tickets &mdash; one for each activity that needs to be built. Each ticket is named with its <strong>Activity ID</strong> (the same ID from your module plan).</p>
+
+            <h3>What You Do</h3>
+            <ol>
+                <li>Open the APT Jira board</li>
+                <li>Find the ticket in <strong>Backlog</strong> that matches the Activity ID you're working on (e.g., <code>OE_SLP_XX_G9_1.1_7_v1</code>)</li>
+                <li>Drag it to <strong>Ready for Authoring</strong> to signal that you've verified the plan and source materials are in place</li>
+            </ol>
+
+            <div class="trigger-flow">
+                <div class="trigger-box you-do">Find ticket in Backlog</div>
+                <span class="trigger-arrow">&rarr;</span>
+                <div class="trigger-box you-do">Drag to Ready for Authoring</div>
+            </div>
+
+            <div class="jira-board">
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Backlog</div>
+                    <div class="jira-ticket">
+                        OE_SLP_XX_G9_1.1_5_v1
+                        <span class="ticket-status">Waiting</span>
+                    </div>
+                    <div class="jira-ticket">
+                        OE_SLP_XX_G9_1.1_6_v1
+                        <span class="ticket-status">Waiting</span>
+                    </div>
+                </div>
+                <div class="jira-lane active-lane">
+                    <div class="jira-lane-title">Ready for Authoring</div>
+                    <div class="jira-ticket highlight-ticket">
+                        OE_SLP_XX_G9_1.1_7_v1
+                        <span class="ticket-status">You pulled this one</span>
+                    </div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Drafting</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Draft Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Final Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Done</div>
+                </div>
+            </div>
+
+            <div class="callout">
+                <p><strong>The Activity ID is the connective tissue.</strong> It links your module plan row &rarr; the Jira ticket &rarr; the draft output folder &rarr; the final deliverable. Make sure the ID on the ticket matches the ID in your plan exactly.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- STEP 4 -->
+    <div class="step-section" id="step-4">
+        <div class="step-header">
+            <div class="step-number" style="background:var(--green-bg);color:var(--green);">4</div>
             <div class="step-header-text">
                 <div class="step-title">Drag Your Ticket to "Drafting"</div>
                 <div class="step-subtitle">This is the trigger &mdash; the pipeline picks it up from here</div>
@@ -649,10 +719,10 @@
         </div>
     </div>
 
-    <!-- STEP 4 -->
-    <div class="step-section" id="step-4">
+    <!-- STEP 5 -->
+    <div class="step-section" id="step-5">
         <div class="step-header">
-            <div class="step-number" style="background:var(--accent-glow);color:var(--accent);">4</div>
+            <div class="step-number" style="background:var(--accent-glow);color:var(--accent);">5</div>
             <div class="step-header-text">
                 <div class="step-title">Claude Builds Your Draft</div>
                 <div class="step-subtitle">Automated &mdash; you wait for this to complete</div>
@@ -670,25 +740,29 @@
                     <tr>
                         <td><strong>/populate-lesson</strong></td>
                         <td>Navigates the Curriculum Hub, copies source texts and lesson plans to the working folder</td>
-                        <td>~2 min</td>
+                        <td>~3&ndash;5 min</td>
                     </tr>
                     <tr>
                         <td><strong>/pick-excerpt</strong></td>
                         <td>Selects and formats the text excerpt with correct paragraph numbering</td>
-                        <td>~3 min</td>
+                        <td>~3&ndash;5 min</td>
                     </tr>
                     <tr>
                         <td><strong>/draft-activity</strong></td>
                         <td>Generates the full activity: intro, questions, criteria, assessment, conclusion</td>
-                        <td>~5 min</td>
+                        <td>~8&ndash;12 min</td>
                     </tr>
                     <tr>
                         <td><strong>/edit-draft</strong></td>
                         <td>Runs 11-point quality validation and auto-fixes issues</td>
-                        <td>~3 min</td>
+                        <td>~5&ndash;8 min</td>
                     </tr>
                 </tbody>
             </table>
+
+            <div class="callout warning">
+                <p><strong>Total build time: approximately 20&ndash;30 minutes.</strong> Times vary depending on text length and complexity. Don't worry if it takes a while &mdash; the pipeline will move your ticket automatically when it's done.</p>
+            </div>
 
             <h3>When It Succeeds</h3>
             <div class="trigger-flow">
@@ -737,10 +811,10 @@
         </div>
     </div>
 
-    <!-- STEP 5 -->
-    <div class="step-section" id="step-5">
+    <!-- STEP 6 -->
+    <div class="step-section" id="step-6">
         <div class="step-header">
-            <div class="step-number" style="background:var(--green-bg);color:var(--green);">5</div>
+            <div class="step-number" style="background:var(--green-bg);color:var(--green);">6</div>
             <div class="step-header-text">
                 <div class="step-title">Review Your Draft</div>
                 <div class="step-subtitle">Read the output and assess it against the plan</div>
@@ -778,10 +852,10 @@
         </div>
     </div>
 
-    <!-- STEP 6 -->
-    <div class="step-section" id="step-6">
+    <!-- STEP 7 -->
+    <div class="step-section" id="step-7">
         <div class="step-header">
-            <div class="step-number" style="background:var(--green-bg);color:var(--green);">6</div>
+            <div class="step-number" style="background:var(--green-bg);color:var(--green);">7</div>
             <div class="step-header-text">
                 <div class="step-title">Edit &amp; Refine</div>
                 <div class="step-subtitle">Make the draft yours &mdash; three ways to edit</div>
@@ -815,10 +889,10 @@
         </div>
     </div>
 
-    <!-- STEP 7 -->
-    <div class="step-section" id="step-7">
+    <!-- STEP 8 -->
+    <div class="step-section" id="step-8">
         <div class="step-header">
-            <div class="step-number" style="background:var(--purple-bg);color:var(--purple);">7</div>
+            <div class="step-number" style="background:var(--purple-bg);color:var(--purple);">8</div>
             <div class="step-header-text">
                 <div class="step-title">Submit for Review (If Applicable)</div>
                 <div class="step-subtitle">Route to your lead if two-tier review is in place</div>
@@ -826,7 +900,7 @@
             <span class="step-actor-badge badge-lead">Lead Review</span>
         </div>
         <div class="step-body">
-            <p>If your curriculum uses two-tier review (contractor edits, then lead reviews), submit your edited draft:</p>
+            <p>If your curriculum uses two-tier review (author edits, then lead reviews), submit your edited draft:</p>
 
             <div class="action-card">
                 <div class="action-label">In Claude Code</div>
@@ -869,10 +943,10 @@
         </div>
     </div>
 
-    <!-- STEP 8 -->
-    <div class="step-section" id="step-8">
+    <!-- STEP 9 -->
+    <div class="step-section" id="step-9">
         <div class="step-header">
-            <div class="step-number" style="background:var(--green-bg);color:var(--green);">8</div>
+            <div class="step-number" style="background:var(--green-bg);color:var(--green);">9</div>
             <div class="step-header-text">
                 <div class="step-title">Finalize</div>
                 <div class="step-subtitle">Lock it in, capture feedback, move to transformation</div>
