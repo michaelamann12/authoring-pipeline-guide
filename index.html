@@ -6,25 +6,25 @@
     <title>Authoring Pipeline Guide</title>
     <style>
         :root {
-            --bg: #0f1117;
-            --surface: #1a1d27;
-            --surface-hover: #222633;
-            --border: #2a2e3d;
+            --bg: #f5f6fa;
+            --surface: #ffffff;
+            --surface-hover: #f0f1f5;
+            --border: #e2e4ec;
             --border-active: #4a6cf7;
-            --text: #e4e7ef;
-            --text-muted: #8b90a0;
-            --accent: #4a6cf7;
-            --accent-glow: rgba(74, 108, 247, 0.15);
-            --green: #34d399;
-            --green-bg: rgba(52, 211, 153, 0.1);
-            --amber: #fbbf24;
-            --amber-bg: rgba(251, 191, 36, 0.1);
-            --rose: #f87171;
-            --rose-bg: rgba(248, 113, 113, 0.1);
-            --purple: #a78bfa;
-            --purple-bg: rgba(167, 139, 250, 0.1);
-            --cyan: #22d3ee;
-            --cyan-bg: rgba(34, 211, 238, 0.1);
+            --text: #1a1d2e;
+            --text-muted: #5f6478;
+            --accent: #3b5bdb;
+            --accent-glow: rgba(59, 91, 219, 0.08);
+            --green: #0ca678;
+            --green-bg: rgba(12, 166, 120, 0.08);
+            --amber: #e67700;
+            --amber-bg: rgba(230, 119, 0, 0.07);
+            --rose: #e03131;
+            --rose-bg: rgba(224, 49, 49, 0.07);
+            --purple: #7048e8;
+            --purple-bg: rgba(112, 72, 232, 0.07);
+            --cyan: #1098ad;
+            --cyan-bg: rgba(16, 152, 173, 0.07);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -41,6 +41,7 @@
         .header {
             background: var(--surface);
             border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
             padding: 1.5rem 2rem;
             position: sticky;
             top: 0;
@@ -274,6 +275,7 @@
             border-radius: 12px;
             overflow: hidden;
             transition: all 0.3s;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
 
         .section-card.highlight {
@@ -391,7 +393,7 @@
         .section-content strong { color: var(--text); font-weight: 600; }
 
         .section-content code {
-            background: var(--bg);
+            background: #eef0f6;
             padding: 0.15rem 0.4rem;
             border-radius: 4px;
             font-size: 0.82rem;
@@ -429,7 +431,7 @@
         .detail-table th {
             text-align: left;
             padding: 0.6rem 0.75rem;
-            background: var(--bg);
+            background: #eef0f6;
             color: var(--text-muted);
             font-weight: 600;
             font-size: 0.75rem;
@@ -480,7 +482,7 @@
 
         /* Folder tree */
         .folder-tree {
-            background: var(--bg);
+            background: #eef0f6;
             border-radius: 8px;
             padding: 1rem 1.25rem;
             font-family: 'SF Mono', 'Fira Code', monospace;
@@ -492,7 +494,7 @@
         }
 
         .folder-tree .highlight-file { color: var(--green); font-weight: 600; }
-        .folder-tree .muted-file { color: var(--text-muted); opacity: 0.5; }
+        .folder-tree .muted-file { color: var(--text-muted); opacity: 0.6; }
 
         /* Footer */
         .footer {
