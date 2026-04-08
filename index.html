@@ -930,7 +930,7 @@
                         <li><strong>Drag to Drafting</strong> when you're ready for Claude to build &mdash; this triggers the pipeline</li>
                         <li><strong>Review</strong> when the ticket lands in Draft Review (Claude auto-advances it)</li>
                         <li><strong>Submit for lead review</strong> via <code>/move-to-review</code> when your edits are done</li>
-                        <li><strong>Lead reviews</strong> and either sends back (via <code>/revisions</code>) or finalizes (via <code>/move-to-final</code>)</li>
+                        <li><strong>Lead reviews</strong> and either sends back for revisions (via <code>/revisions</code> &mdash; reassigns ticket to author with feedback) or finalizes (via <code>/move-to-final</code>)</li>
                     </ol>
                 </div>
             </div>
@@ -1220,8 +1220,12 @@
                     <ol>
                         <li><strong>Author edits</strong> the draft (direct edits, Claude assistance, or <code>/edit-draft</code>)</li>
                         <li><strong>Author submits</strong> via <code>/move-to-review</code> &mdash; generates a change summary and routes to your lead</li>
-                        <li><strong>Lead reviews</strong> in <code>review_ready/</code> and makes any final adjustments</li>
-                        <li><strong>Lead finalizes</strong> via <code>/move-to-final</code> &mdash; captures feedback, generates changelog, moves to transformation</li>
+                        <li><strong>Lead reviews</strong> in <code>review_ready/</code> and either:
+                            <ul>
+                                <li><strong>Sends back for revisions</strong> via <code>/revisions</code> &mdash; reassigns the Jira ticket to the author with specific feedback and an @mention notification (supports a priority flag for urgent items)</li>
+                                <li><strong>Finalizes</strong> via <code>/move-to-final</code> &mdash; captures feedback, generates changelog, moves to transformation</li>
+                            </ul>
+                        </li>
                     </ol>
 
                     <h3>Adding Content Blocks</h3>
