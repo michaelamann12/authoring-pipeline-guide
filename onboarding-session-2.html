@@ -232,10 +232,10 @@
                 <h3>What Claude Reads</h3>
                 <ul style="font-size:0.95rem;color:var(--text-muted);padding-left:1.25rem;margin-top:0.5rem;line-height:1.8;">
                     <li><strong>Activity ID</strong> — what to build (must match Jira ticket name)</li>
-                    <li><strong>Question counts</strong> — how many of each type</li>
-                    <li><strong>Question types</strong> — LCQ, TDQ, VOC, etc.</li>
-                    <li><strong>Excerpt references</strong> — which text to use</li>
-                    <li><strong>Verbatim content</strong> — exact wording requirements</li>
+                    <li><strong>Question counts &amp; types</strong> — LCQ, TDQ, VOC, etc.</li>
+                    <li><strong>Excerpt references</strong> — which text to use (e.g., Ch. 2, pp. 15&ndash;18)</li>
+                    <li><strong>Verbatim content</strong> — exact wording you want used as-is (from curriculum or your own)</li>
+                    <li><strong>Planning Notes</strong> — anything you want Claude to know for this build</li>
                 </ul>
             </div>
             <div class="card card-green">
@@ -243,9 +243,9 @@
                 <ul style="font-size:0.95rem;color:var(--text-muted);padding-left:1.25rem;margin-top:0.5rem;line-height:1.8;">
                     <li>Activity ID present and correct</li>
                     <li>Specific question types (not just "3 questions")</li>
-                    <li>Clear excerpt references (paragraph numbers)</li>
-                    <li>Any verbatim text spelled out exactly</li>
-                    <li>The more specific you are, the better the draft</li>
+                    <li>Clear excerpt references (page or paragraph numbers)</li>
+                    <li>Verbatim vs. Outline — use one or the other per element</li>
+                    <li>Planning notes with any context Claude should know</li>
                 </ul>
             </div>
         </div>
@@ -339,16 +339,16 @@
         <h2>What <span>You</span> Actually Do</h2>
 
         <ol class="steps">
-            <li><strong>Finalize your module plan</strong> — make sure Activity IDs are present and specs are detailed</li>
+            <li><strong>Finalize your module plan</strong> — Activity IDs present, specs detailed, shared with your lead for review</li>
             <li><strong>Confirm source materials are in place</strong> — check with Steven if unsure</li>
-            <li><strong>Move your ticket</strong> to "Draft Activity with Claude" on the Jira board</li>
-            <li><strong>Wait ~15-20 minutes</strong> — the ticket moves to Draft Review when the draft is ready</li>
-            <li><strong>Open the draft in Claude Code</strong> and edit it — ask Claude questions, make changes</li>
+            <li><strong>Pull your full module</strong> from Backlog to Ready for Authoring on the Jira board &mdash; assign tickets to yourself</li>
+            <li><strong>Drag to Drafting</strong> when ready &mdash; this triggers the pipeline (~15-20 min build)</li>
+            <li><strong>Open the draft in Claude Code</strong> and edit it — edit directly, ask Claude questions, or run <span class="skill-badge">/edit-draft</span> for a quality pass</li>
             <li><strong>Run <span class="skill-badge">/move-to-review</span></strong> when you're done — picks the reviewer, notifies them automatically</li>
         </ol>
 
         <div class="callout callout-green" style="margin-top:1.5rem;text-align:center;">
-            You never manually drag tickets past "Draft Activity with Claude" — the skills handle everything.
+            After you submit for review, the skills handle everything &mdash; your lead finalizes via /move-to-final.
         </div>
     </div>
 </div>
@@ -383,26 +383,37 @@
 <!-- SLIDE 9: The Skills -->
 <div class="slide" id="s9">
     <div class="slide-inner">
-        <h2>Three <span>Skills</span> You'll Use</h2>
+        <h2><span>Skills</span> in Your Workflow</h2>
         <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1.5rem;">Type these commands in Claude Code. They handle Jira + files + notifications for you.</p>
 
-        <div class="card-grid" style="grid-template-columns:1fr;">
+        <p style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--green);margin-bottom:0.5rem;">Your skills</p>
+        <div class="card-grid" style="grid-template-columns:1fr;margin-bottom:1.25rem;">
+            <div class="card card-green" style="display:flex;align-items:center;gap:1.5rem;">
+                <div style="min-width:180px;"><span class="skill-badge" style="border-color:var(--green);color:var(--green);background:var(--green-bg);">/edit-draft</span></div>
+                <div>
+                    <p style="font-size:1rem;"><strong>Want a quality check?</strong> Runs the 11-point validation on your draft and auto-fixes issues.</p>
+                </div>
+            </div>
             <div class="card card-accent" style="display:flex;align-items:center;gap:1.5rem;">
                 <div style="min-width:180px;"><span class="skill-badge">/move-to-review</span></div>
                 <div>
-                    <p style="font-size:1rem;"><strong>Done editing?</strong> This asks you who should review it (Meg or Eric), moves the ticket, and notifies them.</p>
+                    <p style="font-size:1rem;"><strong>Done editing?</strong> Asks who should review (Meg or Eric), moves the ticket, and notifies them.</p>
                 </div>
             </div>
+        </div>
+
+        <p style="font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--purple);margin-bottom:0.5rem;">Lead skills (what happens after you submit)</p>
+        <div class="card-grid" style="grid-template-columns:1fr;">
             <div class="card card-purple" style="display:flex;align-items:center;gap:1.5rem;">
                 <div style="min-width:180px;"><span class="skill-badge" style="border-color:var(--purple);color:var(--purple);background:var(--purple-bg);">/revisions</span></div>
                 <div>
-                    <p style="font-size:1rem;"><strong>Lead sends it back?</strong> They run this to tell you what needs fixing. You get a notification with their notes.</p>
+                    <p style="font-size:1rem;"><strong>Needs changes?</strong> Lead sends it back with specific feedback. You get a Jira notification with their notes.</p>
                 </div>
             </div>
-            <div class="card card-amber" style="display:flex;align-items:center;gap:1.5rem;">
-                <div style="min-width:180px;"><span class="skill-badge" style="border-color:var(--amber);color:var(--amber);background:var(--amber-bg);">/move-to-final</span></div>
+            <div class="card card-purple" style="display:flex;align-items:center;gap:1.5rem;">
+                <div style="min-width:180px;"><span class="skill-badge" style="border-color:var(--purple);color:var(--purple);background:var(--purple-bg);">/move-to-final</span></div>
                 <div>
-                    <p style="font-size:1rem;"><strong>Lead approves?</strong> This finalizes the activity and notifies the transformation team. You're done.</p>
+                    <p style="font-size:1rem;"><strong>Approved?</strong> Lead finalizes the activity and notifies the transformation team. You're done.</p>
                 </div>
             </div>
         </div>
