@@ -104,7 +104,12 @@
             background: var(--surface-hover);
             border: 1px solid var(--border);
             border-bottom: 3px solid var(--border);
-            white-space: nowrap;
+            white-space: normal;
+            word-wrap: break-word;
+            min-height: 2.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .board-col-header.manual { border-bottom-color: var(--text-muted); }
@@ -278,9 +283,9 @@
             </div>
         </div>
 
-        <div class="card">
-            <h3>25-26 Boards — Additional Columns</h3>
-            <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:0.75rem;">The 10 legacy boards (Amplify, EL, HMH, Wit & Wisdom, MyPerspectives, Fishtank, Test Prep, HISD, TX_BBO, MG) also include these columns after In Transformation:</p>
+        <div class="card" style="border-left:3px solid var(--text-muted);background:var(--surface-hover);">
+            <h3 style="color:var(--text-muted);">25-26 Boards — Legacy Transformation Columns</h3>
+            <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:0.75rem;">These columns are <strong>not part of the authoring workflow</strong>. They exist only on the 10 legacy 25-26 boards (Amplify, EL, HMH, Wit &amp; Wisdom, MyPerspectives, Fishtank, Test Prep, HISD, TX_BBO, MG) to preserve visibility of tickets already in those stages. They appear after In Transformation and are not used by any skills or automation.</p>
             <table>
                 <tr><th>Column</th><th>Status Name</th><th>Status ID</th></tr>
                 <tr><td>Transformation Backlog</td><td>Transformation Backlog</td><td>10562</td></tr>
@@ -311,7 +316,7 @@
                         <td>Author picks up the ticket for manual authoring work</td>
                     </tr>
                     <tr>
-                        <td>Backlog &rarr; Draft Activity with Claude</td>
+                        <td>Authoring &rarr; Draft Activity with Claude</td>
                         <td>Author or Product (manual drag)</td>
                         <td>111</td>
                         <td>Ticket queued for automated drafting. Must have <span class="tag tag-blue">26-27-pipeline</span> label.</td>
