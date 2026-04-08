@@ -765,7 +765,7 @@
                     <p>For each row, use <strong>one or the other</strong> for a given element: if you have exact wording for the target task, put it in Target Task (Verbatim). If you want Claude to generate the target task from your guidance, put direction in the Outline column instead. You can mix across elements &mdash; e.g., verbatim target task + outline driving questions.</p>
 
                     <h3>Novel Curricula &mdash; Excerpt Numbering</h3>
-                    <p>For novel curricula (WW, EL, Fishtank), the <code>/pick-excerpt</code> skill extracts your specified pages and applies <strong>sequential paragraph numbering</strong> &mdash; (1), (2), (3), etc. This numbered excerpt is what students see and what questions reference. You don't need to number paragraphs yourself; just specify the page range in the Text Excerpt column.</p>
+                    <p>For novel curricula, the <code>/pick-excerpt</code> skill extracts your specified pages and applies <strong>paragraph numbering based on specified rules</strong> (these rules are still being finalized). This numbered excerpt is what students see and what questions reference. You don't need to number paragraphs yourself; just specify the page range in the Text Excerpt column.</p>
                 </div>
             </div>
         </div>
@@ -821,7 +821,7 @@
 
                     <h3>Common Questions</h3>
                     <ul>
-                        <li><strong>Materials used across multiple lessons:</strong> No need to copy files into each lesson folder. Source materials stay in their canonical Hub location and Claude references them from there.</li>
+                        <li><strong>Materials used across multiple lessons:</strong> No need to copy files into each lesson folder. Source materials stay in their canonical Hub location and Claude references them from there. If a novel is already sourced from another curriculum, Claude will copy it over to the relevant text folders for the lesson it's working on.</li>
                         <li><strong>Rubrics and writing task resources:</strong> Same &mdash; keep them in the Hub once. Claude finds them when referenced in the plan.</li>
                         <li><strong>Multiple file formats (PDF, TXT, etc.):</strong> Claude reads whatever is available, preferring text files when both exist. You don't need to worry about duplicates.</li>
                         <li><strong>Using only part of a text:</strong> Don't edit source files directly. Instead, specify the exact pages or section in your module plan's Text Excerpt column (e.g., <code>Chapter 2, pp. 15&ndash;18</code>). The <code>/pick-excerpt</code> skill handles extraction.</li>
