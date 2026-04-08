@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Author Onboarding — Session 2</title>
+    <style>
+        :root {
+            --bg: #f5f6fa;
+            --surface: #ffffff;
+            --border: #e2e4ec;
+            --text: #1a1d2e;
+            --text-muted: #5f6478;
+            --accent: #3b5bdb;
+            --accent-glow: rgba(59, 91, 219, 0.08);
+            --green: #0ca678;
+            --green-bg: rgba(12, 166, 120, 0.06);
+            --amber: #e67700;
+            --amber-bg: rgba(230, 119, 0, 0.06);
+            --rose: #e03131;
+            --rose-bg: rgba(224, 49, 49, 0.06);
+            --purple: #7048e8;
+            --purple-bg: rgba(112, 72, 232, 0.06);
+            --cyan: #1098ad;
+            --cyan-bg: rgba(16, 152, 173, 0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        /* Slide system */
+        .slide {
+            display: none;
+            min-height: 100vh;
+            padding: 3rem 4rem;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .slide.active { display: flex; }
+        .slide-inner { max-width: 1000px; margin: 0 auto; width: 100%; }
+
+        /* Navigation */
+        .nav {
+            position: fixed; bottom: 2rem; right: 2rem; z-index: 100;
+            display: flex; gap: 0.5rem;
+        }
+        .nav button {
+            background: var(--surface); border: 1.5px solid var(--border);
+            border-radius: 8px; padding: 0.5rem 1rem; font-size: 0.85rem;
+            font-weight: 600; cursor: pointer; color: var(--text);
+            transition: all 0.2s;
+        }
+        .nav button:hover { border-color: var(--accent); color: var(--accent); }
+
+        .slide-counter {
+            position: fixed; bottom: 2.2rem; left: 2rem; z-index: 100;
+            font-size: 0.8rem; color: var(--text-muted); font-weight: 600;
+        }
+
+        /* Typography */
+        h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
+        h1 span { color: var(--accent); }
+        h2 { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        h2 span { color: var(--accent); }
+        h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem; }
+
+        .subtitle { font-size: 1.15rem; color: var(--text-muted); margin-top: 0.75rem; }
+        .big-text { font-size: 1.3rem; line-height: 1.7; }
+
+        /* Cards */
+        .card-grid { display: grid; gap: 1rem; margin-top: 1.5rem; }
+        .card-grid-2 { grid-template-columns: 1fr 1fr; }
+        .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+        .card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.5rem;
+        }
+        .card-accent { border-left: 4px solid var(--accent); }
+        .card-green { border-left: 4px solid var(--green); background: var(--green-bg); }
+        .card-amber { border-left: 4px solid var(--amber); background: var(--amber-bg); }
+        .card-rose { border-left: 4px solid var(--rose); background: var(--rose-bg); }
+        .card-purple { border-left: 4px solid var(--purple); background: var(--purple-bg); }
+
+        .card h3 { font-size: 1rem; }
+        .card p { font-size: 0.95rem; color: var(--text-muted); margin-top: 0.5rem; }
+
+        /* Board visual */
+        .board-flow {
+            display: flex; align-items: stretch; gap: 3px;
+            margin: 1.5rem 0; overflow-x: auto;
+        }
+        .board-lane {
+            flex: 1; min-width: 0; text-align: center;
+            border-radius: 10px; padding: 1rem 0.5rem;
+            background: var(--surface); border: 2px solid var(--border);
+            display: flex; flex-direction: column; justify-content: center;
+            transition: all 0.3s;
+        }
+        .board-lane.highlight { border-color: var(--accent); background: var(--accent-glow); transform: scale(1.03); }
+        .board-lane.highlight-green { border-color: var(--green); background: var(--green-bg); }
+        .board-lane.highlight-purple { border-color: var(--purple); background: var(--purple-bg); }
+        .board-lane.highlight-amber { border-color: var(--amber); background: var(--amber-bg); }
+        .board-lane.dim { opacity: 0.35; }
+
+        .board-lane-name { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; }
+        .board-lane-who { font-size: 0.68rem; color: var(--text-muted); margin-top: 0.3rem; }
+        .board-arrow-sm { display: flex; align-items: center; font-size: 0.8rem; color: var(--text-muted); padding: 0 2px; }
+
+        /* Callout */
+        .callout {
+            background: var(--rose-bg); border: 2px solid var(--rose);
+            border-radius: 10px; padding: 1.25rem 1.5rem; margin: 1.5rem 0;
+            font-size: 1.05rem; font-weight: 600;
+        }
+        .callout-green {
+            background: var(--green-bg); border-color: var(--green);
+        }
+
+        /* Numbered steps */
+        .steps { list-style: none; counter-reset: step; margin-top: 1rem; }
+        .steps li {
+            counter-increment: step; position: relative;
+            padding-left: 3rem; margin-bottom: 1.25rem; font-size: 1.05rem;
+        }
+        .steps li::before {
+            content: counter(step);
+            position: absolute; left: 0; top: 0;
+            width: 2rem; height: 2rem; border-radius: 50%;
+            background: var(--accent); color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.9rem;
+        }
+
+        /* Skill badge */
+        .skill-badge {
+            display: inline-block; background: var(--accent-glow);
+            border: 1.5px solid var(--accent); color: var(--accent);
+            font-family: 'SF Mono', monospace; font-size: 0.9rem; font-weight: 700;
+            padding: 0.3rem 0.8rem; border-radius: 6px;
+        }
+
+        /* Emoji icon */
+        .icon { font-size: 1.5rem; margin-bottom: 0.5rem; display: block; }
+
+        @media (max-width: 768px) {
+            .slide { padding: 2rem 1.5rem; }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.4rem; }
+            .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SLIDE 1: Title -->
+<div class="slide active" id="s1">
+    <div class="slide-inner" style="text-align:center;">
+        <h1>Your Work in the <span>Pipeline</span></h1>
+        <p class="subtitle">Author Onboarding — Session 2</p>
+        <p style="color:var(--text-muted);margin-top:2rem;font-size:0.95rem;">From module plan to classroom-ready activity</p>
+    </div>
+</div>
+
+<!-- SLIDE 2: Live Demo Intro -->
+<div class="slide" id="s2">
+    <div class="slide-inner">
+        <h2>Let's Start with a <span>Live Build</span></h2>
+        <p class="big-text">Watch a ticket move through the board in real time.</p>
+
+        <div class="card-grid card-grid-3" style="margin-top:2rem;">
+            <div class="card card-accent">
+                <span class="icon">1</span>
+                <h3>Move the ticket</h3>
+                <p>Drag it to "Draft Activity with Claude"</p>
+            </div>
+            <div class="card card-accent">
+                <span class="icon">2</span>
+                <h3>Claude takes over</h3>
+                <p>The pipeline picks it up and starts building</p>
+            </div>
+            <div class="card card-accent">
+                <span class="icon">3</span>
+                <h3>Draft appears</h3>
+                <p>~15-20 minutes later, it lands in Draft Review</p>
+            </div>
+        </div>
+
+        <p style="color:var(--text-muted);font-size:0.95rem;margin-top:2rem;text-align:center;">We'll check back on this at the end of the session.</p>
+    </div>
+</div>
+
+<!-- SLIDE 3: Two Things That Matter -->
+<div class="slide" id="s3">
+    <div class="slide-inner">
+        <h2>For This to Work, <span>Two Things</span> Must Be Right</h2>
+
+        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+            <div class="card card-rose" style="padding:2rem;">
+                <h3 style="font-size:1.15rem;">1. Module Plan</h3>
+                <p style="font-size:1rem;">Claude reads your module plan as its blueprint. The <strong>Activity ID</strong> is how it knows what to build.</p>
+                <p style="font-size:0.9rem;margin-top:0.75rem;font-weight:600;color:var(--rose);">No Activity ID = nothing happens.</p>
+            </div>
+            <div class="card card-rose" style="padding:2rem;">
+                <h3 style="font-size:1.15rem;">2. Source Materials</h3>
+                <p style="font-size:1rem;">Claude looks for texts, lesson plans, and teacher materials in the Curriculum Hub. If the folder is empty, the build fails.</p>
+                <p style="font-size:0.9rem;margin-top:0.75rem;font-weight:600;color:var(--rose);">Missing materials = failed build.</p>
+            </div>
+        </div>
+
+        <div class="callout" style="margin-top:2rem;text-align:center;">
+            These are the #1 and #2 reasons builds fail. Your prep work is what makes Claude's drafts good.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 4: Module Plan Deep Dive -->
+<div class="slide" id="s4">
+    <div class="slide-inner">
+        <h2>The <span>Module Plan</span> Is Claude's Blueprint</h2>
+
+        <p class="big-text" style="margin-bottom:1.5rem;">Everything Claude builds comes from what you put in the module plan.</p>
+
+        <div class="card-grid card-grid-2">
+            <div class="card card-accent">
+                <h3>What Claude Reads</h3>
+                <ul style="font-size:0.95rem;color:var(--text-muted);padding-left:1.25rem;margin-top:0.5rem;line-height:1.8;">
+                    <li><strong>Activity ID</strong> — what to build (must match Jira ticket name)</li>
+                    <li><strong>Question counts</strong> — how many of each type</li>
+                    <li><strong>Question types</strong> — LCQ, TDQ, VOC, etc.</li>
+                    <li><strong>Excerpt references</strong> — which text to use</li>
+                    <li><strong>Verbatim content</strong> — exact wording requirements</li>
+                </ul>
+            </div>
+            <div class="card card-green">
+                <h3>What Makes a Great Plan</h3>
+                <ul style="font-size:0.95rem;color:var(--text-muted);padding-left:1.25rem;margin-top:0.5rem;line-height:1.8;">
+                    <li>Activity ID present and correct</li>
+                    <li>Specific question types (not just "3 questions")</li>
+                    <li>Clear excerpt references (paragraph numbers)</li>
+                    <li>Any verbatim text spelled out exactly</li>
+                    <li>The more specific you are, the better the draft</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 5: Source Materials -->
+<div class="slide" id="s5">
+    <div class="slide-inner">
+        <h2><span>Source Materials</span> in the Curriculum Hub</h2>
+
+        <p class="big-text" style="margin-bottom:1.5rem;">Claude searches specific folders for your curriculum's texts and lesson plans.</p>
+
+        <div class="card card-amber" style="padding:1.75rem;">
+            <h3>What Claude Needs to Find</h3>
+            <div class="card-grid card-grid-3" style="margin-top:1rem;">
+                <div style="text-align:center;">
+                    <span style="font-size:2rem;">&#128214;</span>
+                    <p style="font-size:0.9rem;font-weight:600;margin-top:0.5rem;">Source Texts</p>
+                    <p style="font-size:0.82rem;color:var(--text-muted);">The actual reading passages students will work with</p>
+                </div>
+                <div style="text-align:center;">
+                    <span style="font-size:2rem;">&#128221;</span>
+                    <p style="font-size:0.9rem;font-weight:600;margin-top:0.5rem;">Lesson Plans</p>
+                    <p style="font-size:0.82rem;color:var(--text-muted);">Teacher guides for the lesson</p>
+                </div>
+                <div style="text-align:center;">
+                    <span style="font-size:2rem;">&#128203;</span>
+                    <p style="font-size:0.9rem;font-weight:600;margin-top:0.5rem;">Assessments</p>
+                    <p style="font-size:0.82rem;color:var(--text-muted);">Unit assessments and teacher materials</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="callout" style="margin-top:1.5rem;">
+            If you're unsure whether source materials are ready for your curriculum, check with Steven before moving your ticket.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 6: The Board Overview -->
+<div class="slide" id="s6">
+    <div class="slide-inner">
+        <h2>The <span>Jira Board</span> — Your Work at a Glance</h2>
+        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1rem;">Each column represents a stage. Your ticket moves left to right as work progresses.</p>
+
+        <div class="board-flow">
+            <div class="board-lane">
+                <div class="board-lane-name">Backlog</div>
+                <div class="board-lane-who">Ops creates</div>
+            </div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane">
+                <div class="board-lane-name">Authoring</div>
+                <div class="board-lane-who">You (manual)</div>
+            </div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane highlight">
+                <div class="board-lane-name">Draft Activity with Claude</div>
+                <div class="board-lane-who">Automated</div>
+            </div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane highlight-green">
+                <div class="board-lane-name">Draft Review</div>
+                <div class="board-lane-who">You edit</div>
+            </div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane highlight-purple">
+                <div class="board-lane-name">Needs Lead Review</div>
+                <div class="board-lane-who">Meg / Eric</div>
+            </div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane">
+                <div class="board-lane-name">Final Review</div>
+                <div class="board-lane-who">Lead approves</div>
+            </div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane highlight-amber">
+                <div class="board-lane-name">In Transformation</div>
+                <div class="board-lane-who">Jennifer / Sabrina</div>
+            </div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane">
+                <div class="board-lane-name">Done</div>
+                <div class="board-lane-who">&check;</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 7: Your Part -->
+<div class="slide" id="s7">
+    <div class="slide-inner">
+        <h2>What <span>You</span> Actually Do</h2>
+
+        <ol class="steps">
+            <li><strong>Finalize your module plan</strong> — make sure Activity IDs are present and specs are detailed</li>
+            <li><strong>Confirm source materials are in place</strong> — check with Steven if unsure</li>
+            <li><strong>Move your ticket</strong> to "Draft Activity with Claude" on the Jira board</li>
+            <li><strong>Wait ~15-20 minutes</strong> — the ticket moves to Draft Review when the draft is ready</li>
+            <li><strong>Open the draft in Claude Code</strong> and edit it — ask Claude questions, make changes</li>
+            <li><strong>Run <span class="skill-badge">/move-to-review</span></strong> when you're done — picks the reviewer, notifies them automatically</li>
+        </ol>
+
+        <div class="callout callout-green" style="margin-top:1.5rem;text-align:center;">
+            You never manually drag tickets past "Draft Activity with Claude" — the skills handle everything.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 8: Notifications -->
+<div class="slide" id="s8">
+    <div class="slide-inner">
+        <h2>How You <span>Know</span> What's Happening</h2>
+        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1.5rem;">The board and Jira notifications keep you in the loop automatically.</p>
+
+        <div class="card-grid card-grid-2">
+            <div class="card card-green">
+                <h3>Draft is ready</h3>
+                <p>Your ticket moves to <strong>Draft Review</strong>. Open draft_outputs/ on the shared drive to find it.</p>
+            </div>
+            <div class="card card-purple">
+                <h3>Lead sends it back</h3>
+                <p>You get a <strong>Jira notification</strong> with specific revision notes. Ticket moves back to Draft Review.</p>
+            </div>
+            <div class="card card-accent">
+                <h3>Build failed</h3>
+                <p>Ticket stays in Draft Activity with Claude. A <strong>Jira comment</strong> explains what went wrong (usually missing source materials).</p>
+            </div>
+            <div class="card card-amber">
+                <h3>Activity finalized</h3>
+                <p>Transformation team gets notified automatically. You're done with that activity.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 9: The Skills -->
+<div class="slide" id="s9">
+    <div class="slide-inner">
+        <h2>Three <span>Skills</span> You'll Use</h2>
+        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1.5rem;">Type these commands in Claude Code. They handle Jira + files + notifications for you.</p>
+
+        <div class="card-grid" style="grid-template-columns:1fr;">
+            <div class="card card-accent" style="display:flex;align-items:center;gap:1.5rem;">
+                <div style="min-width:180px;"><span class="skill-badge">/move-to-review</span></div>
+                <div>
+                    <p style="font-size:1rem;"><strong>Done editing?</strong> This asks you who should review it (Meg or Eric), moves the ticket, and notifies them.</p>
+                </div>
+            </div>
+            <div class="card card-purple" style="display:flex;align-items:center;gap:1.5rem;">
+                <div style="min-width:180px;"><span class="skill-badge" style="border-color:var(--purple);color:var(--purple);background:var(--purple-bg);">/revisions</span></div>
+                <div>
+                    <p style="font-size:1rem;"><strong>Lead sends it back?</strong> They run this to tell you what needs fixing. You get a notification with their notes.</p>
+                </div>
+            </div>
+            <div class="card card-amber" style="display:flex;align-items:center;gap:1.5rem;">
+                <div style="min-width:180px;"><span class="skill-badge" style="border-color:var(--amber);color:var(--amber);background:var(--amber-bg);">/move-to-final</span></div>
+                <div>
+                    <p style="font-size:1rem;"><strong>Lead approves?</strong> This finalizes the activity and notifies the transformation team. You're done.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 10: Editing Demo Intro -->
+<div class="slide" id="s10">
+    <div class="slide-inner" style="text-align:center;">
+        <h2>Let's Look at <span>a Draft</span></h2>
+        <p class="big-text" style="max-width:700px;margin:1rem auto;">What does a Claude-generated activity look like, and how do you edit it?</p>
+        <p style="color:var(--text-muted);margin-top:2rem;font-size:0.95rem;">Switching to Claude Code for a live walkthrough...</p>
+    </div>
+</div>
+
+<!-- SLIDE 11: Check Back -->
+<div class="slide" id="s11">
+    <div class="slide-inner" style="text-align:center;">
+        <h2>Let's Check Our <span>Live Build</span></h2>
+        <p class="big-text" style="max-width:700px;margin:1rem auto;">Remember the ticket we kicked off at the start? Let's see where it is now.</p>
+        <p style="color:var(--text-muted);margin-top:2rem;font-size:0.95rem;">Switching to Jira board...</p>
+    </div>
+</div>
+
+<!-- SLIDE 12: Key Takeaways -->
+<div class="slide" id="s12">
+    <div class="slide-inner">
+        <h2>Key <span>Takeaways</span></h2>
+
+        <div class="card-grid" style="grid-template-columns:1fr;gap:1.25rem;margin-top:1.5rem;">
+            <div class="card card-rose" style="font-size:1.1rem;font-weight:600;padding:1.25rem 1.5rem;">
+                Your module plan quality and source material readiness are what make Claude's drafts good.
+            </div>
+            <div class="card card-accent" style="font-size:1.1rem;font-weight:600;padding:1.25rem 1.5rem;">
+                The Jira board is your single source of truth for where everything stands.
+            </div>
+            <div class="card card-green" style="font-size:1.1rem;font-weight:600;padding:1.25rem 1.5rem;">
+                You don't need to understand the technical details — just drag tickets, edit drafts, and run skills.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 13: Resources -->
+<div class="slide" id="s13">
+    <div class="slide-inner">
+        <h2><span>Resources</span> — Bookmark These</h2>
+
+        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+            <a href="https://michaelamann12.github.io/authoring-pipeline-guide/" target="_blank" class="card card-accent" style="text-decoration:none;color:inherit;">
+                <h3 style="color:var(--accent);">Pipeline Guide</h3>
+                <p>Full overview of how the pipeline works, folder structure, and skill reference</p>
+            </a>
+            <a href="https://michaelamann12.github.io/authoring-pipeline-guide/jira-pipeline.html" target="_blank" class="card card-accent" style="text-decoration:none;color:inherit;">
+                <h3 style="color:var(--accent);">Jira Pipeline Reference</h3>
+                <p>Technical details — board layout, transition IDs, labels, API reference</p>
+            </a>
+            <a href="https://michaelamann12.github.io/authoring-pipeline-guide/author-workflow.html" target="_blank" class="card card-accent" style="text-decoration:none;color:inherit;">
+                <h3 style="color:var(--accent);">Author Walkthrough</h3>
+                <p>Step-by-step guide for your daily workflow</p>
+            </a>
+            <a href="https://michaelamann12.github.io/procurement-dashboard/" target="_blank" class="card card-accent" style="text-decoration:none;color:inherit;">
+                <h3 style="color:var(--accent);">Procurement Dashboard</h3>
+                <p>Which curricula and modules are ready for authoring</p>
+            </a>
+        </div>
+
+        <p style="color:var(--text-muted);text-align:center;margin-top:2rem;font-size:1rem;">Questions? Reach out to Michaela anytime.</p>
+    </div>
+</div>
+
+<!-- Navigation -->
+<div class="slide-counter"><span id="current-slide">1</span> / <span id="total-slides"></span></div>
+<div class="nav">
+    <button onclick="prevSlide()">&larr; Back</button>
+    <button onclick="nextSlide()">Next &rarr;</button>
+</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    let current = 0;
+
+    document.getElementById('total-slides').textContent = slides.length;
+
+    function showSlide(n) {
+        slides[current].classList.remove('active');
+        current = Math.max(0, Math.min(n, slides.length - 1));
+        slides[current].classList.add('active');
+        document.getElementById('current-slide').textContent = current + 1;
+    }
+
+    function nextSlide() { showSlide(current + 1); }
+    function prevSlide() { showSlide(current - 1); }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+</script>
+
+</body>
+</html>
