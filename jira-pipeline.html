@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jira Pipeline — Technical Reference</title>
+    <style>
+        :root {
+            --bg: #f5f6fa;
+            --surface: #ffffff;
+            --surface-hover: #f0f1f5;
+            --border: #e2e4ec;
+            --border-active: #4a6cf7;
+            --text: #1a1d2e;
+            --text-muted: #5f6478;
+            --accent: #3b5bdb;
+            --accent-glow: rgba(59, 91, 219, 0.08);
+            --green: #0ca678;
+            --green-bg: rgba(12, 166, 120, 0.08);
+            --amber: #e67700;
+            --amber-bg: rgba(230, 119, 0, 0.07);
+            --rose: #e03131;
+            --rose-bg: rgba(224, 49, 49, 0.07);
+            --purple: #7048e8;
+            --purple-bg: rgba(112, 72, 232, 0.07);
+            --cyan: #1098ad;
+            --cyan-bg: rgba(16, 152, 173, 0.07);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+        .header h1 span { color: var(--accent); }
+        .header-subtitle { color: var(--text-muted); font-size: 0.85rem; }
+
+        .nav-links { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+        .nav-links a {
+            font-size: 0.82rem; font-weight: 600; color: var(--accent); text-decoration: none;
+            border: 1.5px solid var(--accent); padding: 0.35rem 0.85rem; border-radius: 20px;
+            transition: all 0.2s;
+        }
+        .nav-links a:hover { background: var(--accent-glow); }
+
+        .main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+        /* Board visualization */
+        .board-visual {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+
+        .board-columns {
+            display: flex;
+            gap: 2px;
+            min-width: 900px;
+        }
+
+        .board-col {
+            flex: 1;
+            min-width: 0;
+            text-align: center;
+            position: relative;
+        }
+
+        .board-col-header {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 0.6rem 0.3rem;
+            border-radius: 8px 8px 0 0;
+            background: var(--surface-hover);
+            border: 1px solid var(--border);
+            border-bottom: 3px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .board-col-header.manual { border-bottom-color: var(--text-muted); }
+        .board-col-header.automated { border-bottom-color: var(--accent); }
+        .board-col-header.review { border-bottom-color: var(--purple); }
+        .board-col-header.transform { border-bottom-color: var(--amber); }
+        .board-col-header.done { border-bottom-color: var(--green); }
+
+        .board-col-meta {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            padding: 0.5rem 0.2rem;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            background: var(--surface);
+            min-height: 52px;
+        }
+
+        .board-arrow {
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; color: var(--text-muted);
+            padding-top: 0.6rem;
+            min-width: 18px; flex-shrink: 0;
+        }
+
+        /* Section cards */
+        .section { margin-bottom: 2rem; }
+        .section-title {
+            font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem;
+            padding-bottom: 0.5rem; border-bottom: 2px solid var(--border);
+        }
+
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; }
+        .card h4 { font-size: 0.85rem; font-weight: 600; margin: 1rem 0 0.5rem; color: var(--text-muted); }
+
+        .card-accent { border-left: 3px solid var(--accent); }
+        .card-green { border-left: 3px solid var(--green); }
+        .card-purple { border-left: 3px solid var(--purple); }
+        .card-amber { border-left: 3px solid var(--amber); }
+        .card-rose { border-left: 3px solid var(--rose); }
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 0.75rem 0; }
+        th, td { padding: 0.5rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+        th { font-weight: 600; background: var(--surface-hover); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.03em; }
+
+        /* Code */
+        code {
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 0.82rem; background: var(--surface-hover);
+            padding: 0.15rem 0.4rem; border-radius: 4px;
+        }
+
+        pre {
+            background: #1e1e2e; color: #cdd6f4; padding: 1rem;
+            border-radius: 8px; overflow-x: auto; font-size: 0.8rem;
+            line-height: 1.5; margin: 0.75rem 0;
+        }
+        pre code { background: transparent; padding: 0; color: inherit; }
+
+        /* Flow diagrams */
+        .flow { display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin: 1rem 0; }
+        .flow-step {
+            background: var(--surface-hover); border: 1px solid var(--border);
+            border-radius: 6px; padding: 0.4rem 0.75rem; font-size: 0.8rem; font-weight: 600;
+            white-space: nowrap;
+        }
+        .flow-step.skill { background: var(--accent-glow); border-color: var(--accent); color: var(--accent); }
+        .flow-step.jira { background: var(--cyan-bg); border-color: var(--cyan); color: var(--cyan); }
+        .flow-step.notify { background: var(--purple-bg); border-color: var(--purple); color: var(--purple); }
+        .flow-arrow { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* Tags */
+        .tag {
+            display: inline-block; font-size: 0.72rem; font-weight: 600;
+            padding: 0.2rem 0.5rem; border-radius: 4px; margin: 0.1rem 0.2rem 0.1rem 0;
+        }
+        .tag-blue { background: var(--accent-glow); color: var(--accent); }
+        .tag-green { background: var(--green-bg); color: var(--green); }
+        .tag-amber { background: var(--amber-bg); color: var(--amber); }
+        .tag-rose { background: var(--rose-bg); color: var(--rose); }
+        .tag-purple { background: var(--purple-bg); color: var(--purple); }
+
+        .status-table td:first-child { font-weight: 600; white-space: nowrap; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .main { padding: 1rem; }
+            .board-visual { padding: 1rem; }
+        }
+
+        .footer {
+            text-align: center; padding: 2rem; color: var(--text-muted);
+            font-size: 0.82rem; border-top: 1px solid var(--border); margin-top: 2rem;
+        }
+        .footer a { color: var(--accent); text-decoration: none; }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <div>
+            <h1><span>Jira Pipeline</span> — Technical Reference</h1>
+            <p class="header-subtitle">How Jira boards, skills, and automation work together</p>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">&larr; Pipeline Guide</a>
+            <a href="author-workflow.html">Author Walkthrough</a>
+        </div>
+    </div>
+</header>
+
+<main class="main">
+
+    <!-- BOARD LAYOUT -->
+    <div class="section">
+        <h2 class="section-title">Board Layout</h2>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1rem;">All 15 boards in the <strong>Activity Creation Space (ET26)</strong> project share this column layout. Columns are color-coded by who owns the work at that stage.</p>
+
+        <div class="board-visual">
+            <div class="board-columns">
+                <div class="board-col">
+                    <div class="board-col-header manual">Backlog</div>
+                    <div class="board-col-meta">Status: <code>To Do</code><br>ID: 10013</div>
+                </div>
+                <div class="board-arrow">&rarr;</div>
+                <div class="board-col">
+                    <div class="board-col-header manual">Authoring</div>
+                    <div class="board-col-meta">Status: <code>Authoring</code><br>ID: 10561</div>
+                </div>
+                <div class="board-arrow">&rarr;</div>
+                <div class="board-col">
+                    <div class="board-col-header automated">Draft Activity with Claude</div>
+                    <div class="board-col-meta">Status: <code>Ready for Authoring</code><br>ID: 10636</div>
+                </div>
+                <div class="board-arrow">&rarr;</div>
+                <div class="board-col">
+                    <div class="board-col-header review">Draft Review</div>
+                    <div class="board-col-meta">Status: <code>Draft Review</code><br>ID: 10637</div>
+                </div>
+                <div class="board-arrow">&rarr;</div>
+                <div class="board-col">
+                    <div class="board-col-header review">Needs Lead Review</div>
+                    <div class="board-col-meta">Status: <code>Needs Lead Review</code><br>ID: 10671</div>
+                </div>
+                <div class="board-arrow">&rarr;</div>
+                <div class="board-col">
+                    <div class="board-col-header review">Final Review</div>
+                    <div class="board-col-meta">Status: <code>Final Review</code><br>ID: 10638</div>
+                </div>
+                <div class="board-arrow">&rarr;</div>
+                <div class="board-col">
+                    <div class="board-col-header transform">In Transformation</div>
+                    <div class="board-col-meta">Status: <code>In Transformation</code><br>ID: 10525</div>
+                </div>
+                <div class="board-arrow">&rarr;</div>
+                <div class="board-col">
+                    <div class="board-col-header done">Done</div>
+                    <div class="board-col-meta">Status: <code>Done</code><br>ID: 10014, 10563</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>25-26 Boards — Additional Columns</h3>
+            <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:0.75rem;">The 10 legacy boards (Amplify, EL, HMH, Wit & Wisdom, MyPerspectives, Fishtank, Test Prep, HISD, TX_BBO, MG) also include these columns after In Transformation:</p>
+            <table>
+                <tr><th>Column</th><th>Status Name</th><th>Status ID</th></tr>
+                <tr><td>Transformation Backlog</td><td>Transformation Backlog</td><td>10562</td></tr>
+                <tr><td>Testing</td><td>Testing</td><td>10526</td></tr>
+                <tr><td>Retransform</td><td>Retransform</td><td>10527</td></tr>
+                <tr><td>Ready to Publish</td><td>Ready to Publish</td><td>10564</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- TICKET LIFECYCLE -->
+    <div class="section">
+        <h2 class="section-title">Ticket Lifecycle</h2>
+
+        <div class="card card-accent">
+            <h3>How a Ticket Moves Across the Board</h3>
+            <p style="font-size:0.88rem;margin-bottom:1rem;">Each transition is triggered by either a human action, a Claude Code skill, or the automated polling pipeline. Jira's simplified workflow allows any status &rarr; any status (global transitions).</p>
+
+            <table class="status-table">
+                <thead>
+                    <tr><th>Transition</th><th>Triggered By</th><th>Transition ID</th><th>What Happens</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Backlog &rarr; Authoring</td>
+                        <td>Author (manual drag)</td>
+                        <td>71</td>
+                        <td>Author picks up the ticket for manual authoring work</td>
+                    </tr>
+                    <tr>
+                        <td>Backlog &rarr; Draft Activity with Claude</td>
+                        <td>Author or Product (manual drag)</td>
+                        <td>111</td>
+                        <td>Ticket queued for automated drafting. Must have <span class="tag tag-blue">26-27-pipeline</span> label.</td>
+                    </tr>
+                    <tr>
+                        <td>Draft Activity with Claude &rarr; Draft Review</td>
+                        <td><code>process-tickets.sh</code> (automated)</td>
+                        <td>121</td>
+                        <td>Pipeline completes draft, moves ticket, removes <span class="tag tag-amber">pipeline_queued</span> label</td>
+                    </tr>
+                    <tr>
+                        <td>Draft Review &rarr; Needs Lead Review</td>
+                        <td><code>/move-to-review</code> skill</td>
+                        <td>141</td>
+                        <td>Assigns to lead reviewer, @mentions them in comment</td>
+                    </tr>
+                    <tr>
+                        <td>Needs Lead Review &rarr; Draft Review</td>
+                        <td><code>/revisions</code> skill</td>
+                        <td>121</td>
+                        <td>Lead sends back for revisions, @mentions original author, reassigns to them</td>
+                    </tr>
+                    <tr>
+                        <td>Needs Lead Review &rarr; Final Review</td>
+                        <td>Lead (manual drag)</td>
+                        <td>131</td>
+                        <td>Lead approves the draft for final QA pass</td>
+                    </tr>
+                    <tr>
+                        <td>Final Review &rarr; In Transformation</td>
+                        <td><code>/move-to-final</code> skill</td>
+                        <td>41</td>
+                        <td>Activity finalized, @mentions Jennifer Chien and Sabrina Rourke Frost</td>
+                    </tr>
+                    <tr>
+                        <td>In Transformation &rarr; Done</td>
+                        <td>Transformation team (manual)</td>
+                        <td>31</td>
+                        <td>CSV/JSON delivered and verified</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- LABELS -->
+    <div class="section">
+        <h2 class="section-title">Labels &amp; Tags</h2>
+
+        <div class="card card-green">
+            <h3>Jira Labels Used by the Pipeline</h3>
+            <table>
+                <thead>
+                    <tr><th>Label</th><th>Purpose</th><th>Added By</th><th>Removed By</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="tag tag-blue">26-27-pipeline</span></td>
+                        <td>Required for the polling pipeline to pick up a ticket. Without this label, a ticket in "Draft Activity with Claude" status will be ignored.</td>
+                        <td>Author or Product (manual)</td>
+                        <td>Never removed</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-amber">pipeline_queued</span></td>
+                        <td>Marks a ticket as currently being processed by the pipeline. Prevents duplicate processing on the next polling cycle.</td>
+                        <td><code>process-tickets.sh</code></td>
+                        <td><code>process-tickets.sh</code> (on success or failure)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-rose">source_text_missing</span></td>
+                        <td>Pipeline ran but couldn't find the source text for this lesson. Draft is incomplete. Requires manual intervention to add source materials.</td>
+                        <td><code>process-tickets.sh</code></td>
+                        <td>Manual (after source text added)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-purple">priority_revision</span></td>
+                        <td>Lead flagged this revision as urgent — needs author attention today.</td>
+                        <td><code>/revisions</code> skill</td>
+                        <td>Manual (after revisions complete)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-green">25-26</span></td>
+                        <td>Legacy label on 25-26 tickets. Pipeline ignores these (only looks for <code>26-27-pipeline</code>).</td>
+                        <td>Historical</td>
+                        <td>N/A</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- SKILLS & JIRA INTEGRATION -->
+    <div class="section">
+        <h2 class="section-title">Skills &amp; Jira Integration</h2>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1rem;">Claude Code skills are the primary interface for moving tickets through the authoring pipeline. Each skill handles both the file operations AND the Jira state changes, so authors never need to manually drag tickets or tag people.</p>
+
+        <div class="card card-accent">
+            <h3><code>/move-to-review</code></h3>
+            <p style="font-size:0.88rem;margin-bottom:0.75rem;">Contractor submits an edited draft for lead review.</p>
+
+            <div class="flow">
+                <span class="flow-step skill">/move-to-review</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step">Asks: "Who should review?"</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step">Generates change summary</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step">Moves files to review_ready/</span>
+            </div>
+            <div class="flow">
+                <span class="flow-step jira">Transition &rarr; Needs Lead Review</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step jira">Assign to lead</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step notify">@mention lead in comment</span>
+            </div>
+
+            <h4>Jira Actions</h4>
+            <table>
+                <tr><th>Action</th><th>Detail</th></tr>
+                <tr><td>Transition</td><td>ID <code>141</code> &rarr; Needs Lead Review (status 10671)</td></tr>
+                <tr><td>Assignee</td><td>Set to selected lead's accountId</td></tr>
+                <tr><td>Comment</td><td>ADF format with <code>mention</code> node @tagging the lead + change summary + contractor notes</td></tr>
+            </table>
+
+            <h4>Lead Reviewer Lookup</h4>
+            <table>
+                <tr><th>Lead</th><th>Jira Account ID</th></tr>
+                <tr><td>Megan Quick</td><td><code>712020:bc68b907-b790-4c99-afb7-913271e6f778</code></td></tr>
+                <tr><td>Eric Snider</td><td><code>712020:d43aadf7-2652-4133-a017-8ad4d372a114</code></td></tr>
+            </table>
+        </div>
+
+        <div class="card card-purple">
+            <h3><code>/revisions</code></h3>
+            <p style="font-size:0.88rem;margin-bottom:0.75rem;">Lead sends a draft back to the author for revisions.</p>
+
+            <div class="flow">
+                <span class="flow-step skill">/revisions</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step">Asks: "What revisions needed?"</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step">Looks up original author from changelog</span>
+            </div>
+            <div class="flow">
+                <span class="flow-step jira">Transition &rarr; Draft Review</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step jira">Reassign to original author</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step notify">@mention author with revision notes</span>
+            </div>
+
+            <h4>Jira Actions</h4>
+            <table>
+                <tr><th>Action</th><th>Detail</th></tr>
+                <tr><td>Transition</td><td>ID <code>121</code> &rarr; Draft Review (status 10637)</td></tr>
+                <tr><td>Assignee</td><td>Set to original author (discovered from ticket changelog — who transitioned into Needs Lead Review)</td></tr>
+                <tr><td>Comment</td><td>ADF format with <code>mention</code> node @tagging the author + lead's revision notes + priority flag</td></tr>
+                <tr><td>Label (if urgent)</td><td>Adds <span class="tag tag-purple">priority_revision</span></td></tr>
+            </table>
+
+            <h4>Author Discovery</h4>
+            <p style="font-size:0.85rem;color:var(--text-muted);">The skill reads the ticket's <code>?expand=changelog</code> and finds the most recent transition into status 10671 (Needs Lead Review). The <code>author</code> field of that changelog entry is the person who submitted the draft — that's who gets tagged and reassigned.</p>
+        </div>
+
+        <div class="card card-amber">
+            <h3><code>/move-to-final</code></h3>
+            <p style="font-size:0.88rem;margin-bottom:0.75rem;">Lead finalizes the activity and hands off to the transformation team.</p>
+
+            <div class="flow">
+                <span class="flow-step skill">/move-to-final</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step">Generates changelog</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step">Author interview (3 Qs)</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step">Saves to final_outputs/</span>
+            </div>
+            <div class="flow">
+                <span class="flow-step jira">Transition &rarr; In Transformation</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step notify">@mention Jennifer + Sabrina</span>
+            </div>
+
+            <h4>Jira Actions</h4>
+            <table>
+                <tr><th>Action</th><th>Detail</th></tr>
+                <tr><td>Transition</td><td>ID <code>41</code> &rarr; In Transformation (status 10525)</td></tr>
+                <tr><td>Comment</td><td>ADF format with two <code>mention</code> nodes @tagging both transformation team members + file location</td></tr>
+            </table>
+
+            <h4>Transformation Team Lookup</h4>
+            <table>
+                <tr><th>Person</th><th>Jira Account ID</th></tr>
+                <tr><td>Jennifer Chien</td><td><code>615b5b4d198b4f0068660784</code></td></tr>
+                <tr><td>Sabrina Rourke Frost</td><td><code>712020:e512795f-d7ec-4da3-a461-cefa0852fd21</code></td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- AUTOMATED POLLING PIPELINE -->
+    <div class="section">
+        <h2 class="section-title">Automated Polling Pipeline</h2>
+
+        <div class="card card-accent">
+            <h3>How <code>process-tickets.sh</code> Works</h3>
+            <p style="font-size:0.88rem;margin-bottom:1rem;">The pipeline runs locally on a Mac via a LaunchAgent. It polls Jira for tickets that are ready for automated drafting.</p>
+
+            <h4>Polling Query (JQL)</h4>
+            <pre><code>project = ET26
+AND status = "Ready for Authoring"
+AND labels = "26-27-pipeline"
+AND labels NOT IN ("pipeline_queued")</code></pre>
+
+            <p style="font-size:0.85rem;color:var(--text-muted);margin:0.75rem 0;">The status name in Jira is "Ready for Authoring" (ID 10636) — this maps to the board column "Draft Activity with Claude." The query requires the <code>26-27-pipeline</code> label and excludes tickets already being processed.</p>
+
+            <h4>Pipeline Sequence Per Ticket</h4>
+            <div class="flow">
+                <span class="flow-step jira">Add pipeline_queued label</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step skill">/populate-lesson</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step skill">/pick-excerpt</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step skill">/draft-activity</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step skill">/edit-draft</span>
+            </div>
+
+            <h4>Outcome Handling</h4>
+            <table>
+                <thead><tr><th>Outcome</th><th>Jira Action</th><th>Label Changes</th></tr></thead>
+                <tbody>
+                    <tr>
+                        <td style="color:var(--green);font-weight:600;">Success</td>
+                        <td>Transition &rarr; Draft Review (ID 121)</td>
+                        <td>Remove <span class="tag tag-amber">pipeline_queued</span></td>
+                    </tr>
+                    <tr>
+                        <td style="color:var(--amber);font-weight:600;">Source text missing</td>
+                        <td>Stays in Draft Activity with Claude + Jira comment explaining what's missing</td>
+                        <td>Remove <span class="tag tag-amber">pipeline_queued</span>, Add <span class="tag tag-rose">source_text_missing</span></td>
+                    </tr>
+                    <tr>
+                        <td style="color:var(--rose);font-weight:600;">Failure</td>
+                        <td>Stays in Draft Activity with Claude + Jira comment with failure summary (generated by Claude)</td>
+                        <td>Remove <span class="tag tag-amber">pipeline_queued</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4>Operational Parameters</h4>
+            <table>
+                <tr><th>Parameter</th><th>Value</th></tr>
+                <tr><td>Polling interval</td><td>Every 30 minutes</td></tr>
+                <tr><td>Business hours</td><td>10:30 AM &ndash; 5:00 PM ET</td></tr>
+                <tr><td>Max tickets per cycle</td><td>20</td></tr>
+                <tr><td>Max tickets per day</td><td>25</td></tr>
+                <tr><td>Launch stagger</td><td>60 seconds between parallel launches</td></tr>
+                <tr><td>Script location</td><td><code>.claude/scripts/process-tickets.sh</code></td></tr>
+                <tr><td>Log location</td><td><code>~/.activity-pipeline/logs/</code></td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div class="section">
+        <h2 class="section-title">Notification Model</h2>
+
+        <div class="card card-green">
+            <h3>How People Get Notified</h3>
+            <p style="font-size:0.88rem;margin-bottom:1rem;">All notifications use Jira's native @mention system via ADF (Atlassian Document Format) <code>mention</code> nodes in comments. Plain text "@Name" does NOT trigger notifications. When @mentioned, users receive:</p>
+
+            <table>
+                <tr><th>Channel</th><th>Default</th><th>Note</th></tr>
+                <tr><td>Jira bell notification</td><td>Always on</td><td>In-app, visible on all Jira pages</td></tr>
+                <tr><td>Email notification</td><td>On by default</td><td>Can be disabled per-user in Jira notification settings</td></tr>
+            </table>
+
+            <h4>Who Gets Notified When</h4>
+            <table>
+                <thead><tr><th>Event</th><th>Who</th><th>Via</th></tr></thead>
+                <tbody>
+                    <tr><td>Draft ready for review</td><td>Selected lead (Meg or Eric)</td><td><code>/move-to-review</code> &rarr; @mention + assign</td></tr>
+                    <tr><td>Revisions requested</td><td>Original author/contractor</td><td><code>/revisions</code> &rarr; @mention + reassign</td></tr>
+                    <tr><td>Ready for transformation</td><td>Jennifer Chien + Sabrina Rourke Frost</td><td><code>/move-to-final</code> &rarr; @mention both</td></tr>
+                    <tr><td>Pipeline failure</td><td>Visible on ticket</td><td><code>process-tickets.sh</code> &rarr; Jira comment (no @mention) + macOS notification to pipeline operator</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- AUTHENTICATION -->
+    <div class="section">
+        <h2 class="section-title">Authentication</h2>
+
+        <div class="card card-rose">
+            <h3>Jira API Credentials</h3>
+            <p style="font-size:0.88rem;margin-bottom:0.75rem;">All Jira-integrated skills require a <code>~/.jira-config</code> file on the user's machine. This uses each person's own Jira API token so comments and assignments are attributed to the right person.</p>
+
+            <pre><code># ~/.jira-config
+JIRA_DOMAIN=coursemojo.atlassian.net
+JIRA_EMAIL=your.email@coursemojo.com
+JIRA_API_TOKEN=your_token_here</code></pre>
+
+            <h4>Setup Steps</h4>
+            <ol style="font-size:0.88rem;padding-left:1.5rem;margin-top:0.5rem;">
+                <li>Go to <a href="https://id.atlassian.com/manage-profile/security/api-tokens" style="color:var(--accent);">Atlassian API Token Manager</a></li>
+                <li>Click "Create API token" &mdash; name it anything (e.g., "Claude Code")</li>
+                <li>Create <code>~/.jira-config</code> with the three lines above</li>
+                <li>Verify: <code>source ~/.jira-config && curl -s -u "$JIRA_EMAIL:$JIRA_API_TOKEN" "https://$JIRA_DOMAIN/rest/api/3/myself"</code></li>
+            </ol>
+
+            <p style="font-size:0.85rem;color:var(--text-muted);margin-top:0.75rem;"><strong>Cost:</strong> Free. API tokens are included with every Jira account.<br><strong>If missing:</strong> Skills will warn the user and skip Jira updates. File operations still complete normally.</p>
+        </div>
+    </div>
+
+    <!-- ALL BOARDS -->
+    <div class="section">
+        <h2 class="section-title">Board Inventory</h2>
+
+        <div class="card">
+            <h3>All Boards in Activity Creation Space (ET26)</h3>
+            <table>
+                <thead><tr><th>Board ID</th><th>Name</th><th>Type</th><th>Extra Columns</th></tr></thead>
+                <tbody>
+                    <tr><td>372</td><td>26-27 Activity Creation Workflow</td><td>Kanban</td><td>Reference board</td></tr>
+                    <tr><td>405</td><td>26-27 Arts &amp; Letters</td><td>Kanban</td><td>&mdash;</td></tr>
+                    <tr><td>407</td><td>26-27 O'Dell</td><td>Kanban</td><td>&mdash;</td></tr>
+                    <tr><td>406</td><td>26-27 Guidebooks</td><td>Kanban</td><td>&mdash;</td></tr>
+                    <tr><td>186</td><td>26-27 CKLA-BBO</td><td>Kanban</td><td>&mdash;</td></tr>
+                    <tr><td>295</td><td>25-26 Amplify</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
+                    <tr><td>296</td><td>25-26 EL</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
+                    <tr><td>299</td><td>25-26 HMH</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
+                    <tr><td>298</td><td>25-26 Wit &amp; Wisdom</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
+                    <tr><td>301</td><td>25-26 MyPerspectives</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
+                    <tr><td>297</td><td>25-26 Fishtank</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
+                    <tr><td>302</td><td>25-26 Test Prep</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
+                    <tr><td>304</td><td>25-26 HISD</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
+                    <tr><td>303</td><td>25-26 TX_BBO</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
+                    <tr><td>300</td><td>25-26 MG</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
+                </tbody>
+            </table>
+            <p style="font-size:0.82rem;color:var(--text-muted);margin-top:0.75rem;">Board columns are managed via the GreenHopper API (<code>PUT /rest/greenhopper/1.0/rapidviewconfig/columns</code>). The Agile REST API is read-only for board configuration. Jira Automation rules are UI-only — no API access.</p>
+        </div>
+    </div>
+
+    <!-- API REFERENCE -->
+    <div class="section">
+        <h2 class="section-title">API Quick Reference</h2>
+
+        <div class="card">
+            <h3>Key Endpoints Used</h3>
+            <table>
+                <thead><tr><th>Operation</th><th>Method</th><th>Endpoint</th></tr></thead>
+                <tbody>
+                    <tr><td>Search tickets (JQL)</td><td>GET</td><td><code>/rest/api/3/search/jql?jql=...</code></td></tr>
+                    <tr><td>Transition a ticket</td><td>POST</td><td><code>/rest/api/3/issue/{key}/transitions</code></td></tr>
+                    <tr><td>Update fields (assign, labels)</td><td>PUT</td><td><code>/rest/api/3/issue/{key}</code></td></tr>
+                    <tr><td>Add comment</td><td>POST</td><td><code>/rest/api/3/issue/{key}/comment</code></td></tr>
+                    <tr><td>Get ticket + changelog</td><td>GET</td><td><code>/rest/api/3/issue/{key}?expand=changelog</code></td></tr>
+                    <tr><td>Read board columns</td><td>GET</td><td><code>/rest/agile/1.0/board/{id}/configuration</code></td></tr>
+                    <tr><td>Write board columns</td><td>PUT</td><td><code>/rest/greenhopper/1.0/rapidviewconfig/columns</code></td></tr>
+                </tbody>
+            </table>
+
+            <h4>Transition ID Lookup</h4>
+            <table>
+                <thead><tr><th>ID</th><th>Name</th><th>Target Status</th></tr></thead>
+                <tbody>
+                    <tr><td>11</td><td>To Do</td><td>To Do (10013)</td></tr>
+                    <tr><td>21</td><td>In Progress</td><td>In Progress (3)</td></tr>
+                    <tr><td>31</td><td>Done</td><td>Done (10014)</td></tr>
+                    <tr><td>41</td><td>In Transformation</td><td>In Transformation (10525)</td></tr>
+                    <tr><td>51</td><td>Testing</td><td>Testing (10526)</td></tr>
+                    <tr><td>61</td><td>Retransform</td><td>Retransform (10527)</td></tr>
+                    <tr><td>71</td><td>Authoring</td><td>Authoring (10561)</td></tr>
+                    <tr><td>81</td><td>Transformation Backlog</td><td>Transformation Backlog (10562)</td></tr>
+                    <tr><td>91</td><td>Unpublished</td><td>Unpublished (10563)</td></tr>
+                    <tr><td>101</td><td>Ready to Publish</td><td>Ready to Publish (10564)</td></tr>
+                    <tr><td>111</td><td>Ready for Authoring</td><td>Ready for Authoring (10636)</td></tr>
+                    <tr><td>121</td><td>Draft Review</td><td>Draft Review (10637)</td></tr>
+                    <tr><td>131</td><td>Final Review</td><td>Final Review (10638)</td></tr>
+                    <tr><td>141</td><td>Needs Lead Review</td><td>Needs Lead Review (10671)</td></tr>
+                </tbody>
+            </table>
+
+            <h4>@mention Comment Format (ADF)</h4>
+            <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.5rem;">Plain text "@Name" does NOT trigger Jira notifications. Comments must use ADF <code>mention</code> nodes:</p>
+            <pre><code>{
+  "body": {
+    "type": "doc", "version": 1,
+    "content": [{
+      "type": "paragraph",
+      "content": [
+        {
+          "type": "mention",
+          "attrs": {
+            "id": "ACCOUNT_ID",
+            "text": "@Display Name",
+            "accessLevel": ""
+          }
+        },
+        {"type": "text", "text": " — your message here."}
+      ]
+    }]
+  }
+}</code></pre>
+        </div>
+    </div>
+
+</main>
+
+<footer class="footer">
+    <p>Jira Pipeline Technical Reference &mdash; CourseMojo &middot; Last updated <span id="last-updated"></span></p>
+    <p style="margin-top: 0.5rem;">
+        <a href="index.html">Pipeline Guide</a> &middot;
+        <a href="author-workflow.html">Author Walkthrough</a> &middot;
+        <a href="https://michaelamann12.github.io/procurement-dashboard/" target="_blank">Procurement Dashboard</a>
+    </p>
+</footer>
+
+<script>
+    document.getElementById('last-updated').textContent = new Date().toLocaleDateString('en-US', {
+        year: 'numeric', month: 'long', day: 'numeric'
+    });
+</script>
+
+</body>
+</html>
