@@ -343,6 +343,31 @@
         .tag-transformation { background: var(--amber-bg); color: var(--amber); }
         .tag-product { background: var(--cyan-bg); color: var(--cyan); }
 
+        /* Automation badges */
+        .automation-badge {
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 0.2rem 0.55rem;
+            border-radius: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .automation-badge::before {
+            font-size: 0.7rem;
+            line-height: 1;
+        }
+
+        .auto-automated { background: var(--accent-glow); color: var(--accent); }
+        .auto-automated::before { content: '\u2699'; }
+        .auto-manual { background: var(--green-bg); color: var(--green); }
+        .auto-manual::before { content: '\u270B'; }
+        .auto-hybrid { background: var(--purple-bg); color: var(--purple); }
+        .auto-hybrid::before { content: '\u21C4'; }
+
         .section-chevron {
             color: var(--text-muted);
             transition: transform 0.3s;
@@ -657,6 +682,7 @@
                     <div class="section-subtitle">Authors define what each activity should look like</div>
                 </div>
                 <div class="section-tags">
+                    <span class="automation-badge auto-manual">Manual</span>
                     <span class="tag tag-author">Author</span>
                     <span class="tag tag-lead">Lead</span>
                 </div>
@@ -756,6 +782,7 @@
                     <div class="section-subtitle">The inputs that make the assembly line work</div>
                 </div>
                 <div class="section-tags">
+                    <span class="automation-badge auto-hybrid">Hybrid</span>
                     <span class="tag tag-author">Author</span>
                     <span class="tag tag-product">Product</span>
                 </div>
@@ -810,6 +837,7 @@
                     <div class="section-subtitle">How work gets tracked from backlog to done</div>
                 </div>
                 <div class="section-tags">
+                    <span class="automation-badge auto-manual">Manual</span>
                     <span class="tag tag-product">Product</span>
                 </div>
                 <div class="section-chevron">&#9654;</div>
@@ -848,14 +876,14 @@
                                 <td>Created by Product / Ops</td>
                             </tr>
                             <tr>
-                                <td><strong>Ready for Authoring</strong></td>
-                                <td>Module plan + source materials confirmed in place</td>
-                                <td>Author confirms readiness</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Drafting</strong></td>
+                                <td><strong>Draft Activity with Claude</strong></td>
                                 <td>Claude is generating or has generated a draft</td>
                                 <td>Pipeline picks it up (automated)</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Authoring</strong></td>
+                                <td>Human author is actively working on the activity</td>
+                                <td>Author moves ticket when working manually</td>
                             </tr>
                             <tr>
                                 <td><strong>Draft Review</strong></td>
@@ -863,9 +891,14 @@
                                 <td>Automated on draft completion</td>
                             </tr>
                             <tr>
-                                <td><strong>Final Review</strong></td>
+                                <td><strong>Needs Lead Review</strong></td>
                                 <td>Lead is reviewing the edited draft</td>
                                 <td>Author submits via <code>/move-to-review</code></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Final Review</strong></td>
+                                <td>Lead has approved; final QA pass</td>
+                                <td>Lead approves</td>
                             </tr>
                             <tr>
                                 <td><strong>In Transformation</strong></td>
@@ -895,6 +928,7 @@
                     <div class="section-subtitle">The automated steps that turn a plan into a draft</div>
                 </div>
                 <div class="section-tags">
+                    <span class="automation-badge auto-automated">Automated</span>
                     <span class="tag tag-author">Author</span>
                     <span class="tag tag-lead">Lead</span>
                     <span class="tag tag-product">Product</span>
@@ -904,7 +938,7 @@
             <div class="section-body">
                 <div class="section-content">
                     <h3>How It Works</h3>
-                    <p>When a Jira ticket moves to <strong>Drafting</strong>, Claude executes a sequence of specialized skills. Each skill handles one stage of the build, running in order:</p>
+                    <p>When a Jira ticket moves to <strong>Draft Activity with Claude</strong>, Claude executes a sequence of specialized skills. Each skill handles one stage of the build, running in order:</p>
 
                     <table class="detail-table">
                         <thead>
@@ -994,6 +1028,7 @@
                     <div class="section-subtitle">11-point validation catches what the first pass might miss</div>
                 </div>
                 <div class="section-tags">
+                    <span class="automation-badge auto-automated">Automated</span>
                     <span class="tag tag-author">Author</span>
                     <span class="tag tag-lead">Lead</span>
                     <span class="tag tag-product">Product</span>
@@ -1036,6 +1071,7 @@
                     <div class="section-subtitle">Expert review, not expert assembly</div>
                 </div>
                 <div class="section-tags">
+                    <span class="automation-badge auto-manual">Manual</span>
                     <span class="tag tag-author">Author</span>
                     <span class="tag tag-lead">Lead</span>
                 </div>
@@ -1180,6 +1216,7 @@
                     <div class="section-subtitle">Locking in the approved draft and capturing feedback</div>
                 </div>
                 <div class="section-tags">
+                    <span class="automation-badge auto-hybrid">Hybrid</span>
                     <span class="tag tag-author">Author</span>
                     <span class="tag tag-lead">Lead</span>
                     <span class="tag tag-product">Product</span>
@@ -1240,6 +1277,7 @@
                     <div class="section-subtitle">Converting finalized activities into deliverable format</div>
                 </div>
                 <div class="section-tags">
+                    <span class="automation-badge auto-automated">Automated</span>
                     <span class="tag tag-transformation">Transformation</span>
                     <span class="tag tag-product">Product</span>
                 </div>
@@ -1281,6 +1319,7 @@
                     <div class="section-subtitle">Where everything lives on the shared drive</div>
                 </div>
                 <div class="section-tags">
+                    <span class="automation-badge auto-automated">Automated</span>
                     <span class="tag tag-author">Author</span>
                     <span class="tag tag-lead">Lead</span>
                     <span class="tag tag-transformation">Transformation</span>
