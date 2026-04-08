@@ -523,12 +523,21 @@
                 <li><strong>Activity ID</strong> &mdash; the unique identifier that tracks this activity through the entire pipeline</li>
                 <li><strong>Activity Objective</strong> &mdash; what students will learn or do</li>
                 <li><strong>Anchor Text</strong> &mdash; the source text for this lesson</li>
-                <li><strong>Exact Text Excerpt</strong> &mdash; the specific section of the text (e.g., "Ch. 6" or "paragraphs 58&ndash;120"). When filled in, Claude goes directly to this section.</li>
+                <li><strong>Exact Text Excerpt</strong> &mdash; the specific section of the text (e.g., "Ch. 6" or "paragraphs 58&ndash;120"). For partial-page excerpts: <code>Chapter 2, pp. 15&ndash;18</code> or <code>Chapter 2, from p.15 "opening words" to p.18 "closing words"</code>. When filled in, Claude goes directly to this section.</li>
                 <li><strong>Text Segment</strong> &mdash; broader reading range with guidance (e.g., "Excerpts from Chs. 1&ndash;3; 700&ndash;900 words; focus on the idea of being 'ordinary' vs 'extraordinary'"). Claude selects the best excerpt within this range.</li>
-                <li><strong>Target Task (Verbatim)</strong> &mdash; the assessment question, word-for-word from the curriculum</li>
-                <li><strong>Driving Questions (Verbatim &amp; Outline)</strong> &mdash; scaffolding questions and guidance</li>
-                <li><strong>Planning Notes</strong> &mdash; how closely Claude should follow the original curriculum</li>
+                <li><strong>Target Task (Verbatim)</strong> &mdash; the assessment question exactly as you want it used, whether from the curriculum or your own wording. <em>Use this OR an outline &mdash; not both</em></li>
+                <li><strong>Driving Questions (Verbatim &amp; Outline)</strong> &mdash; verbatim = exact wording Claude must use; outline = your creative direction for Claude to interpret. Use one or the other per question</li>
+                <li><strong>Planning Notes</strong> &mdash; anything you want Claude to know when building this activity (context, guidance, constraints, connections, specific content to paste in)</li>
             </ul>
+
+            <h3>Working with Multi-Module Sheets</h3>
+            <p>All modules for a curriculum/grade live in a single spreadsheet. When filling in your plan, make sure you're working in the correct rows for the module you're building. Each row = one activity, and rows are grouped by module.</p>
+
+            <h3>Before You Save</h3>
+            <ol>
+                <li><strong>Confirm Activity IDs</strong> are present and correct for every row you're building &mdash; these must be in place before tickets can be created or files converted</li>
+                <li><strong>Share your completed module overview with your lead</strong> (Eric or Megan) for review before converting to CSV</li>
+            </ol>
 
             <h3>Where to Save It</h3>
             <p>Save your completed module plan CSV to the Curriculum Hub inside of <code>00. Curriculum &amp; Text - Raw Materials</code>, under the correct <strong>curriculum</strong> and <strong>grade</strong> folder.</p>
@@ -604,8 +613,9 @@
             <h3>What You Do</h3>
             <ol>
                 <li>Open the APT Jira board</li>
-                <li>Find the ticket in <strong>Backlog</strong> that matches the Activity ID you're working on (e.g., <code>OE_SLP_XX_G9_1.1_7_v1</code>)</li>
-                <li>Drag it to <strong>Ready for Authoring</strong> to signal that you've verified the plan and source materials are in place</li>
+                <li>Find the tickets for your <strong>full module/unit</strong> in Backlog &mdash; pull the whole set at once rather than one at a time</li>
+                <li>Drag them to <strong>Ready for Authoring</strong> to signal that you've verified the plan and source materials are in place</li>
+                <li><strong>Assign each ticket to yourself</strong> &mdash; this makes your activities easy to locate on the board</li>
             </ol>
 
             <div class="trigger-flow">
@@ -860,7 +870,7 @@
         </div>
         <div class="step-body">
             <h3>Option A: Edit Directly</h3>
-            <p>For small changes &mdash; typos, rewording, adjusting criteria &mdash; just edit the markdown file in VS Code and save.</p>
+            <p>For any change you know how to make yourself &mdash; from fixing a typo to rewriting an entire question or adjusting difficulty &mdash; just edit the markdown file in VS Code and save.</p>
 
             <h3>Option B: Ask Claude</h3>
             <p>For larger structural changes, describe what you want in the Claude panel. Be specific:</p>
@@ -890,13 +900,13 @@
         <div class="step-header">
             <div class="step-number" style="background:var(--purple-bg);color:var(--purple);">8</div>
             <div class="step-header-text">
-                <div class="step-title">Submit for Review (If Applicable)</div>
-                <div class="step-subtitle">Route to your lead if two-tier review is in place</div>
+                <div class="step-title">Submit for Lead Review</div>
+                <div class="step-subtitle">Route your edited draft to your lead for review</div>
             </div>
             <span class="step-actor-badge badge-lead">Lead Review</span>
         </div>
         <div class="step-body">
-            <p>If your curriculum uses two-tier review (author edits, then lead reviews), submit your edited draft:</p>
+            <p>When you're done editing, submit your draft for lead review:</p>
 
             <div class="action-card">
                 <div class="action-label">In Claude Code</div>
@@ -935,7 +945,7 @@
                 </div>
             </div>
 
-            <p>Your lead reviews in the <code>review_ready/</code> folder and makes any final adjustments. If your workflow doesn't require lead review, skip to Step 8.</p>
+            <p>Your lead reviews in the <code>review_ready/</code> folder and makes any final adjustments.</p>
         </div>
     </div>
 
@@ -944,10 +954,10 @@
         <div class="step-header">
             <div class="step-number" style="background:var(--green-bg);color:var(--green);">9</div>
             <div class="step-header-text">
-                <div class="step-title">Finalize</div>
-                <div class="step-subtitle">Lock it in, capture feedback, move to transformation</div>
+                <div class="step-title">Finalize (Lead)</div>
+                <div class="step-subtitle">Lead locks it in, captures feedback, moves to transformation</div>
             </div>
-            <span class="step-actor-badge badge-you">You / Lead</span>
+            <span class="step-actor-badge badge-lead">Lead</span>
         </div>
         <div class="step-body">
             <div class="action-card">
@@ -1100,7 +1110,7 @@
                     <tr><td><strong>Make a bigger change</strong></td><td>Ask Claude in the panel &mdash; describe what you want in plain English</td></tr>
                     <tr><td><strong>Run a full quality check</strong></td><td>Type <code>/edit-draft</code> in the Claude panel</td></tr>
                     <tr><td><strong>Submit for lead review</strong></td><td>Type <code>/move-to-review</code></td></tr>
-                    <tr><td><strong>Finish and submit</strong></td><td>Type <code>/move-to-final</code></td></tr>
+                    <tr><td><strong>Finalize (leads only)</strong></td><td>Type <code>/move-to-final</code> after lead review is complete</td></tr>
                     <tr><td><strong>Check a stalled ticket</strong></td><td>Look at Jira comments for error info, fix inputs, re-trigger by dragging back then forward</td></tr>
                     <tr><td><strong>Something looks wrong</strong></td><td>Ask Claude in the panel &mdash; or reach out to Michaela</td></tr>
                 </tbody>

@@ -716,17 +716,17 @@
                             </tr>
                             <tr>
                                 <td><strong>Text Excerpt</strong></td>
-                                <td>Reference to the source text and which section to use</td>
-                                <td>Claude retrieves the text from the Curriculum Hub</td>
+                                <td>Reference to the source text and which section to use. For partial-page excerpts, specify boundaries: e.g., <code>Chapter 2, pp. 15&ndash;18</code> or <code>Chapter 2, from p.15 "opening words" to p.18 "closing words"</code></td>
+                                <td>Claude retrieves the text from the Curriculum Hub and extracts the specified section</td>
                             </tr>
                             <tr>
                                 <td><strong>Target Task (Verbatim)</strong></td>
-                                <td>The assessment question &mdash; exact wording from the curriculum</td>
-                                <td>Used <strong>word-for-word</strong> as the final assessment; Claude does not modify this</td>
+                                <td>The assessment question exactly as you want it used &mdash; whether from the curriculum or your own wording</td>
+                                <td>Used <strong>word-for-word</strong> as the final assessment; Claude does not modify this. <em>Use this OR Target Task Outline &mdash; not both.</em></td>
                             </tr>
                             <tr>
                                 <td><strong>Driving Questions (Verbatim)</strong></td>
-                                <td>Scaffolding questions specified by the curriculum</td>
+                                <td>Scaffolding questions you want used exactly as written &mdash; from the curriculum or your own</td>
                                 <td>Used <strong>word-for-word</strong> in the question sequence</td>
                             </tr>
                             <tr>
@@ -741,23 +741,31 @@
                             </tr>
                             <tr>
                                 <td><strong>Planning Notes</strong></td>
-                                <td>How closely to follow the original curriculum lesson</td>
-                                <td>Controls Claude's creative latitude (see below)</td>
+                                <td>Anything you want Claude to know when building this activity &mdash; context, guidance, constraints, connections</td>
+                                <td>Claude reads these notes as direct input. The more specific, the better the draft.</td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <h3>Planning Notes Shape the Output</h3>
-                    <p>Your planning notes directly control how closely Claude follows the original curriculum materials:</p>
+                    <h3>Planning Notes &mdash; Your Direct Line to Claude</h3>
+                    <p>Planning notes are a freeform field where you tell Claude anything relevant to this build. The more specific you are, the better the draft. Examples of what authors include:</p>
                     <ul>
-                        <li><strong>"Hit those TDQs closely"</strong> &mdash; Claude treats the original lesson's analytical demands as a checklist. Every move gets covered.</li>
-                        <li><strong>"Use your judgement"</strong> &mdash; Claude uses the original lesson as a reference but adapts freely for better scaffolding.</li>
-                        <li><strong>No note</strong> &mdash; Claude focuses on the assessment target and builds toward it.</li>
+                        <li><strong>Curriculum alignment:</strong> "Hit those TDQs closely" or "Use your judgement &mdash; adapt freely for better scaffolding"</li>
+                        <li><strong>Excerpt guidance:</strong> "The excerpt should emphasize the dialogue in chapter 5" or "Skip the first two pages &mdash; start where the conflict begins"</li>
+                        <li><strong>Connections:</strong> "This lesson needs to connect back to the module 2 assessment" or "Students will have already read chapters 1&ndash;4 in class"</li>
+                        <li><strong>Scope adjustments:</strong> "Skip the vocabulary focus" or "We need more scaffolding than usual &mdash; this is a challenging text for this grade level"</li>
+                        <li><strong>Specific content to include:</strong> Paste questions, tasks, or prompts you want Claude to use directly &mdash; anything pasted here will be treated as author intent</li>
                     </ul>
-                    <p>Be specific in your planning notes. They're the most direct way to shape what Claude produces.</p>
+                    <div class="callout">
+                        <p><strong>What to paste vs. what not to paste:</strong> DO paste specific questions, tasks, and prompts you want used in the activity. DON'T paste entire teacher edition pages or background context &mdash; Claude can find that in the source materials itself.</p>
+                    </div>
 
-                    <h3>Verbatim vs. Outline &mdash; Why Both Matter</h3>
-                    <p><strong>Verbatim</strong> columns contain exact wording from the curriculum that Claude must use word-for-word. <strong>Outline</strong> columns are the author's creative direction &mdash; guidance that Claude interprets to build scaffolding questions, transitions, and instructional framing. The interplay between the two is what makes each activity both curriculum-faithful and pedagogically effective.</p>
+                    <h3>Verbatim vs. Outline &mdash; When to Use Each</h3>
+                    <p><strong>Verbatim</strong> columns contain exact wording &mdash; from the curriculum or your own &mdash; that Claude must use word-for-word. <strong>Outline</strong> columns are your creative direction &mdash; guidance that Claude interprets to generate questions, transitions, and instructional framing.</p>
+                    <p>For each row, use <strong>one or the other</strong> for a given element: if you have exact wording for the target task, put it in Target Task (Verbatim). If you want Claude to generate the target task from your guidance, put direction in the Outline column instead. You can mix across elements &mdash; e.g., verbatim target task + outline driving questions.</p>
+
+                    <h3>Novel Curricula &mdash; Excerpt Numbering</h3>
+                    <p>For novel curricula (WW, EL, Fishtank), the <code>/pick-excerpt</code> skill extracts your specified pages and applies <strong>sequential paragraph numbering</strong> &mdash; (1), (2), (3), etc. This numbered excerpt is what students see and what questions reference. You don't need to number paragraphs yourself; just specify the page range in the Text Excerpt column.</p>
                 </div>
             </div>
         </div>
@@ -808,7 +816,16 @@
                     <ul>
                         <li>The full text (or relevant excerpt) in the correct Hub folder</li>
                         <li>Any supplemental materials referenced in the plan (student handouts, tool pages, etc.)</li>
-                        <li>File names and folder paths that match the curriculum's standard naming convention</li>
+                        <li>File names that follow the naming convention: <code>{Title}_{Excerpt or Full Text}.txt</code> (e.g., <code>Farewell to Manzanar_Full Text.txt</code> or <code>Dark They Were and Golden-Eyed_Excerpt.txt</code>)</li>
+                    </ul>
+
+                    <h3>Common Questions</h3>
+                    <ul>
+                        <li><strong>Materials used across multiple lessons:</strong> No need to copy files into each lesson folder. Source materials stay in their canonical Hub location and Claude references them from there.</li>
+                        <li><strong>Rubrics and writing task resources:</strong> Same &mdash; keep them in the Hub once. Claude finds them when referenced in the plan.</li>
+                        <li><strong>Multiple file formats (PDF, TXT, etc.):</strong> Claude reads whatever is available, preferring text files when both exist. You don't need to worry about duplicates.</li>
+                        <li><strong>Using only part of a text:</strong> Don't edit source files directly. Instead, specify the exact pages or section in your module plan's Text Excerpt column (e.g., <code>Chapter 2, pp. 15&ndash;18</code>). The <code>/pick-excerpt</code> skill handles extraction.</li>
+                        <li><strong>Anthology texts:</strong> The full text stays in the Hub even if you're only using part of it. Specify which section in your plan.</li>
                     </ul>
 
                     <h3>When Sources Are Missing</h3>
@@ -904,6 +921,17 @@
 
                     <h3>How Tickets Get Created</h3>
                     <p>Tickets are created when procurement is complete for a module. Ops (Steven) confirms that source materials are ready, and tickets are created in bulk for the module. Each ticket's name is the Activity ID.</p>
+
+                    <h3>Your Jira Workflow (Authors &amp; Leads)</h3>
+                    <p>Here's what you do with tickets day-to-day:</p>
+                    <ol>
+                        <li><strong>Pull a full module/unit</strong> from Backlog into Ready for Authoring at once (not one ticket at a time)</li>
+                        <li><strong>Assign tickets to yourself</strong> &mdash; this makes them easy to find on the board</li>
+                        <li><strong>Drag to Drafting</strong> when you're ready for Claude to build &mdash; this triggers the pipeline</li>
+                        <li><strong>Review</strong> when the ticket lands in Draft Review (Claude auto-advances it)</li>
+                        <li><strong>Submit for lead review</strong> via <code>/move-to-review</code> when your edits are done</li>
+                        <li><strong>Lead reviews</strong> and either sends back (via <code>/revisions</code>) or finalizes (via <code>/move-to-final</code>)</li>
+                    </ol>
                 </div>
             </div>
         </div>
@@ -1038,7 +1066,7 @@
                         <li><strong>Excerpt completeness</strong> &mdash; no placeholders, full text present</li>
                         <li><strong>Line number accuracy</strong> &mdash; for poetry and drama</li>
                         <li><strong>Criteria quality</strong> &mdash; text-specific, not generic</li>
-                        <li><strong>Brevity limits</strong> &mdash; question word counts within spec</li>
+                        <li><strong>Brevity limits</strong> &mdash; question stems, criteria, and content blocks stay concise and within word count guidelines</li>
                         <li><strong>Format compliance</strong> &mdash; no excluded fields, required sections present</li>
                         <li><strong>MC formatting</strong> &mdash; proper option formatting for multiple choice</li>
                         <li><strong>Content blocks</strong> &mdash; Introduction, Transition, Conclusion all present</li>
@@ -1114,12 +1142,12 @@
                         <tbody>
                             <tr>
                                 <td><strong>Edit directly</strong></td>
-                                <td>Small changes &mdash; typos, rewording, adjusting criteria</td>
+                                <td>Any change you know how to make yourself &mdash; from fixing a typo to rewriting an entire question or swapping question order</td>
                                 <td>Edit the markdown file directly in VS Code and save</td>
                             </tr>
                             <tr>
                                 <td><strong>Ask Claude</strong></td>
-                                <td>Larger structural changes</td>
+                                <td>When you want Claude's help thinking through or executing a change</td>
                                 <td>Describe what you want in plain English in the Claude panel. Examples:<br>
                                 <em>"Question 3 feels too easy &mdash; make it more analytically demanding"</em><br>
                                 <em>"Swap Questions 2 and 3 &mdash; students need vocabulary context first"</em><br>
@@ -1187,11 +1215,17 @@
                         <li><strong>You can't break anything.</strong> The <code>_DO_NOT_EDIT/</code> folder has a backup of the original</li>
                     </ul>
 
-                    <h3>Two Review Paths</h3>
-                    <ul>
-                        <li><strong>Direct path:</strong> Author edits &rarr; <code>/move-to-final</code> (single-stage)</li>
-                        <li><strong>With lead review:</strong> Author edits &rarr; <code>/move-to-review</code> &rarr; Lead reviews in <code>review_ready/</code> &rarr; <code>/move-to-final</code> (two-stage, with automated change summaries at each handoff)</li>
-                    </ul>
+                    <h3>Review Path</h3>
+                    <p>After editing, submit your draft for lead review:</p>
+                    <ol>
+                        <li><strong>Author edits</strong> the draft (direct edits, Claude assistance, or <code>/edit-draft</code>)</li>
+                        <li><strong>Author submits</strong> via <code>/move-to-review</code> &mdash; generates a change summary and routes to your lead</li>
+                        <li><strong>Lead reviews</strong> in <code>review_ready/</code> and makes any final adjustments</li>
+                        <li><strong>Lead finalizes</strong> via <code>/move-to-final</code> &mdash; captures feedback, generates changelog, moves to transformation</li>
+                    </ol>
+
+                    <h3>Adding Content Blocks</h3>
+                    <p>If you need to add content blocks (Introduction, Transition, Conclusion, etc.) that aren't in the draft, you can either add them directly in the markdown following the existing format, or ask Claude: <em>"Add a transition block before Question 4 that bridges the vocabulary discussion to the analytical focus."</em></p>
                 </div>
             </div>
         </div>
@@ -1215,7 +1249,7 @@
             <div class="section-body">
                 <div class="section-content">
                     <h3>Running /move-to-final</h3>
-                    <p>Once you're satisfied with the activity, type <code>/move-to-final</code> in the Claude panel. This skill:</p>
+                    <p>After lead review is complete, the lead types <code>/move-to-final</code> in the Claude panel. This skill:</p>
                     <ol>
                         <li><strong>Asks you for feedback</strong> &mdash; What worked well? What needed the most editing? Any patterns you're seeing across drafts?</li>
                         <li><strong>Generates a changelog</strong> &mdash; Compares your edited version against the original draft to document every change (two-layer diff if lead review was used)</li>
@@ -1249,7 +1283,7 @@
                             <tr><td><strong>Make a bigger change</strong></td><td>Ask Claude in the panel (describe what you want in plain English)</td></tr>
                             <tr><td><strong>Run a full quality check</strong></td><td>Type <code>/edit-draft</code> in the Claude panel</td></tr>
                             <tr><td><strong>Submit for lead review</strong></td><td>Type <code>/move-to-review</code></td></tr>
-                            <tr><td><strong>Finish and submit</strong></td><td>Type <code>/move-to-final</code></td></tr>
+                            <tr><td><strong>Finalize (leads)</strong></td><td>Type <code>/move-to-final</code> after lead review is complete</td></tr>
                             <tr><td><strong>Something looks wrong</strong></td><td>Ask Claude &mdash; or reach out to Michaela</td></tr>
                         </tbody>
                     </table>
