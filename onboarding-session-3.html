@@ -302,33 +302,49 @@
 <!-- SLIDE 6: Folder Tour -->
 <div class="slide" id="s6">
     <div class="slide-inner">
-        <h2>Your <span>Draft Outputs</span> Folder Tour</h2>
-        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1rem;">This is where Claude's drafts land and where you'll do your editing.</p>
+        <h2>Inside Your <span>Draft Folder</span></h2>
+        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1.25rem;">Every time Claude finishes a draft, you'll find a folder with these items inside. Here's what each one is for.</p>
 
-        <div class="tree">
-<span class="folder">draft_outputs/</span>
-&nbsp;&nbsp;├── <span class="folder">2026-04-13_GM_AAL_XX_G6_1.0_3_v1/</span> &nbsp;<span class="muted">← one folder per draft, dated</span>
-&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file">GM_AAL_XX_G6_1.0_3_v1_Activity_Content.md</span> &nbsp;<span class="muted">← the draft (edit this)</span>
-&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file">GM_AAL_XX_G6_1.0_3_v1_Match_Report.md</span> &nbsp;<span class="muted">← Claude's plan (read this)</span>
-&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file">excerpt_selection.md</span> &nbsp;<span class="muted">← how the excerpt was picked</span>
-&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── <span class="danger">_DO_NOT_EDIT/</span> &nbsp;<span class="muted">← hands off — snapshots used by the pipeline</span>
-&nbsp;&nbsp;├── <span class="folder">review_ready/</span> &nbsp;<span class="muted">← your draft lands here after /move-to-review</span>
-&nbsp;&nbsp;└── <span class="folder">_examples/</span> &nbsp;<span class="muted">← reference examples only</span>
+        <div class="card-grid" style="grid-template-columns:1fr;gap:0.85rem;">
+            <div class="card card-green" style="display:flex;align-items:center;gap:1.25rem;padding:1.1rem 1.4rem;">
+                <div style="font-size:1.75rem;">📝</div>
+                <div style="flex:1;">
+                    <h3 style="font-size:1rem;">The Activity Draft</h3>
+                    <p style="font-size:0.92rem;margin-top:0.2rem;">This is the draft itself — what you'll open, read, and edit. It's the main file you'll spend your time in.</p>
+                </div>
+                <div style="font-size:0.78rem;font-weight:700;color:var(--green);text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap;">Edit this</div>
+            </div>
+
+            <div class="card card-accent" style="display:flex;align-items:center;gap:1.25rem;padding:1.1rem 1.4rem;">
+                <div style="font-size:1.75rem;">📋</div>
+                <div style="flex:1;">
+                    <h3 style="font-size:1rem;">The Match Report</h3>
+                    <p style="font-size:0.92rem;margin-top:0.2rem;">Claude's plan for the activity — what it analyzed, what it was aiming for, and why. Read it first to understand the strategy.</p>
+                </div>
+                <div style="font-size:0.78rem;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap;">Read for context</div>
+            </div>
+
+            <div class="card card-cyan" style="display:flex;align-items:center;gap:1.25rem;padding:1.1rem 1.4rem;">
+                <div style="font-size:1.75rem;">📖</div>
+                <div style="flex:1;">
+                    <h3 style="font-size:1rem;">The Excerpt Selection Notes</h3>
+                    <p style="font-size:0.92rem;margin-top:0.2rem;">A short note explaining which paragraphs of the source text Claude picked, and why. Helpful if you're deciding whether to change the excerpt.</p>
+                </div>
+                <div style="font-size:0.78rem;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap;">Reference</div>
+            </div>
+
+            <div class="card card-rose" style="display:flex;align-items:center;gap:1.25rem;padding:1.1rem 1.4rem;">
+                <div style="font-size:1.75rem;">🚫</div>
+                <div style="flex:1;">
+                    <h3 style="font-size:1rem;">A "Do Not Edit" folder</h3>
+                    <p style="font-size:0.92rem;margin-top:0.2rem;">A small sub-folder Claude uses to keep backups of the original draft. The pipeline needs these to work — leave them alone.</p>
+                </div>
+                <div style="font-size:0.78rem;font-weight:700;color:var(--rose);text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap;">Hands off</div>
+            </div>
         </div>
 
-        <div class="card-grid card-grid-3" style="margin-top:1.25rem;">
-            <div class="card card-green">
-                <h3>Edit freely</h3>
-                <p style="font-size:0.9rem;">The <code class="inline">*_Activity_Content.md</code> file — this is your draft.</p>
-            </div>
-            <div class="card card-accent">
-                <h3>Read for context</h3>
-                <p style="font-size:0.9rem;"><code class="inline">*_Match_Report.md</code> and <code class="inline">excerpt_selection.md</code> — reference, not output.</p>
-            </div>
-            <div class="card card-rose">
-                <h3>Never touch</h3>
-                <p style="font-size:0.9rem;"><code class="inline">_DO_NOT_EDIT/</code> — contains snapshots the pipeline needs to diff your edits later.</p>
-            </div>
+        <div class="callout callout-green" style="margin-top:1.25rem;">
+            When you're done editing and run <span class="skill-badge" style="border-color:var(--green);color:var(--green);background:var(--green-bg);">/move-to-review</span>, everything moves automatically to a <strong>"review ready"</strong> folder for your lead. You don't move anything by hand.
         </div>
     </div>
 </div>
