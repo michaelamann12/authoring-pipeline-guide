@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Author Onboarding — Session 3</title>
+    <style>
+        :root {
+            --bg: #f5f6fa;
+            --surface: #ffffff;
+            --border: #e2e4ec;
+            --text: #1a1d2e;
+            --text-muted: #5f6478;
+            --accent: #3b5bdb;
+            --accent-glow: rgba(59, 91, 219, 0.08);
+            --green: #0ca678;
+            --green-bg: rgba(12, 166, 120, 0.06);
+            --amber: #e67700;
+            --amber-bg: rgba(230, 119, 0, 0.06);
+            --rose: #e03131;
+            --rose-bg: rgba(224, 49, 49, 0.06);
+            --purple: #7048e8;
+            --purple-bg: rgba(112, 72, 232, 0.06);
+            --cyan: #1098ad;
+            --cyan-bg: rgba(16, 152, 173, 0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        /* Slide system */
+        .slide {
+            display: none;
+            min-height: 100vh;
+            padding: 3rem 4rem;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .slide.active { display: flex; }
+        .slide-inner { max-width: 1000px; margin: 0 auto; width: 100%; }
+
+        /* Navigation */
+        .nav {
+            position: fixed; bottom: 2rem; right: 2rem; z-index: 100;
+            display: flex; gap: 0.5rem;
+        }
+        .nav button {
+            background: var(--surface); border: 1.5px solid var(--border);
+            border-radius: 8px; padding: 0.5rem 1rem; font-size: 0.85rem;
+            font-weight: 600; cursor: pointer; color: var(--text);
+            transition: all 0.2s;
+        }
+        .nav button:hover { border-color: var(--accent); color: var(--accent); }
+
+        .slide-counter {
+            position: fixed; bottom: 2.2rem; left: 2rem; z-index: 100;
+            font-size: 0.8rem; color: var(--text-muted); font-weight: 600;
+        }
+
+        /* Typography */
+        h1 { font-size: 2.5rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1.2; }
+        h1 span { color: var(--accent); }
+        h2 { font-size: 1.8rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        h2 span { color: var(--accent); }
+        h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.75rem; }
+
+        .subtitle { font-size: 1.15rem; color: var(--text-muted); margin-top: 0.75rem; }
+        .big-text { font-size: 1.3rem; line-height: 1.7; }
+
+        /* Cards */
+        .card-grid { display: grid; gap: 1rem; margin-top: 1.5rem; }
+        .card-grid-2 { grid-template-columns: 1fr 1fr; }
+        .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+        .card {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 12px; padding: 1.5rem;
+        }
+        .card-accent { border-left: 4px solid var(--accent); }
+        .card-green { border-left: 4px solid var(--green); background: var(--green-bg); }
+        .card-amber { border-left: 4px solid var(--amber); background: var(--amber-bg); }
+        .card-rose { border-left: 4px solid var(--rose); background: var(--rose-bg); }
+        .card-purple { border-left: 4px solid var(--purple); background: var(--purple-bg); }
+        .card-cyan { border-left: 4px solid var(--cyan); background: var(--cyan-bg); }
+
+        .card h3 { font-size: 1rem; }
+        .card p { font-size: 0.95rem; color: var(--text-muted); margin-top: 0.5rem; }
+
+        /* Callout */
+        .callout {
+            background: var(--rose-bg); border: 2px solid var(--rose);
+            border-radius: 10px; padding: 1.25rem 1.5rem; margin: 1.5rem 0;
+            font-size: 1.05rem; font-weight: 600;
+        }
+        .callout-green {
+            background: var(--green-bg); border-color: var(--green);
+        }
+        .callout-accent {
+            background: var(--accent-glow); border-color: var(--accent);
+        }
+
+        /* Numbered steps */
+        .steps { list-style: none; counter-reset: step; margin-top: 1rem; }
+        .steps li {
+            counter-increment: step; position: relative;
+            padding-left: 3rem; margin-bottom: 1.25rem; font-size: 1.05rem;
+        }
+        .steps li::before {
+            content: counter(step);
+            position: absolute; left: 0; top: 0;
+            width: 2rem; height: 2rem; border-radius: 50%;
+            background: var(--accent); color: white;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.9rem;
+        }
+
+        /* Skill badge */
+        .skill-badge {
+            display: inline-block; background: var(--accent-glow);
+            border: 1.5px solid var(--accent); color: var(--accent);
+            font-family: 'SF Mono', monospace; font-size: 0.9rem; font-weight: 700;
+            padding: 0.3rem 0.8rem; border-radius: 6px;
+        }
+
+        /* Code / key */
+        .key {
+            display: inline-block;
+            background: var(--surface); border: 1.5px solid var(--border);
+            border-bottom-width: 3px;
+            border-radius: 5px; padding: 0.15rem 0.55rem;
+            font-family: 'SF Mono', monospace; font-size: 0.85rem;
+            font-weight: 600; color: var(--text);
+        }
+
+        code.inline {
+            background: var(--accent-glow); color: var(--accent);
+            font-family: 'SF Mono', monospace; font-size: 0.88rem;
+            padding: 0.12rem 0.45rem; border-radius: 4px; font-weight: 600;
+        }
+
+        /* Folder tree */
+        .tree {
+            background: var(--surface); border: 1px solid var(--border);
+            border-radius: 10px; padding: 1.25rem 1.5rem;
+            font-family: 'SF Mono', monospace; font-size: 0.88rem;
+            line-height: 1.8;
+        }
+        .tree .folder { color: var(--accent); font-weight: 700; }
+        .tree .file { color: var(--text); }
+        .tree .danger { color: var(--rose); font-weight: 700; }
+        .tree .muted { color: var(--text-muted); font-style: italic; }
+
+        /* Emoji icon */
+        .icon { font-size: 1.5rem; margin-bottom: 0.5rem; display: block; }
+
+        /* Do/Don't columns */
+        .vs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1rem; }
+        .vs-grid h3 { font-size: 1rem; margin-bottom: 0.75rem; }
+        .vs-grid ul { font-size: 0.95rem; color: var(--text-muted); padding-left: 1.25rem; line-height: 1.8; }
+
+        @media (max-width: 768px) {
+            .slide { padding: 2rem 1.5rem; }
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.4rem; }
+            .card-grid-2, .card-grid-3 { grid-template-columns: 1fr; }
+            .vs-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- SLIDE 1: Title -->
+<div class="slide active" id="s1">
+    <div class="slide-inner" style="text-align:center;">
+        <h1>Working in <span>Claude Code</span></h1>
+        <p class="subtitle">Author Onboarding — Session 3</p>
+        <p style="color:var(--text-muted);margin-top:2rem;font-size:0.95rem;">Navigating, editing, and submitting drafts — a hands-on reference</p>
+    </div>
+</div>
+
+<!-- SLIDE 2: Today's Goal -->
+<div class="slide" id="s2">
+    <div class="slide-inner">
+        <h2>What You'll Walk Away With</h2>
+        <p class="big-text" style="margin-bottom:1.5rem;">By the end of this session, you'll be comfortable doing four things on your own:</p>
+
+        <div class="card-grid card-grid-2">
+            <div class="card card-accent">
+                <h3>1. Move around in VS Code</h3>
+                <p>Open folders, save a workspace, switch between them without losing your place.</p>
+            </div>
+            <div class="card card-accent">
+                <h3>2. Edit an activity file</h3>
+                <p>Type directly, or ask Claude to make changes — and know when to pick which.</p>
+            </div>
+            <div class="card card-accent">
+                <h3>3. Read both outputs strategically</h3>
+                <p>Use the match report and the activity content together to catch issues a single view would miss.</p>
+            </div>
+            <div class="card card-accent">
+                <h3>4. Submit for review</h3>
+                <p>Run <span class="skill-badge">/move-to-review</span> to hand the draft off to your lead.</p>
+            </div>
+        </div>
+
+        <p style="color:var(--text-muted);text-align:center;margin-top:2rem;font-size:0.95rem;">This deck is a reference — come back to it anytime.</p>
+    </div>
+</div>
+
+<!-- SLIDE 3: Mental Model -->
+<div class="slide" id="s3">
+    <div class="slide-inner">
+        <h2>Three Things to <span>Keep in Mind</span></h2>
+        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1rem;">If you only remember three things about how Claude Code works, make it these.</p>
+
+        <div class="card-grid" style="grid-template-columns:1fr;">
+            <div class="card card-accent" style="padding:1.5rem;">
+                <h3>1. The folder you open = Claude's entire world</h3>
+                <p style="font-size:0.98rem;">Claude can only see files inside the folder you opened in VS Code. Switch folders to switch what it sees. If Claude says "I can't find that file," it usually means you need to open the right folder first.</p>
+            </div>
+            <div class="card card-green" style="padding:1.5rem;">
+                <h3>2. One conversation per lesson</h3>
+                <p style="font-size:0.98rem;">Start a fresh chat for each activity. Long, mega-conversations that span multiple lessons get confused about which context matters. Clean slate = cleaner output.</p>
+            </div>
+            <div class="card card-rose" style="padding:1.5rem;">
+                <h3>3. <span class="key">Esc</span> is your friend</h3>
+                <p style="font-size:0.98rem;">If Claude starts going in the wrong direction, interrupt it. You don't have to let it finish a bad answer. Press <span class="key">Esc</span>, then redirect — "actually, let's do X instead."</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 4: VS Code Workspace -->
+<div class="slide" id="s4">
+    <div class="slide-inner">
+        <h2>Your <span>VS Code Workspace</span></h2>
+        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1rem;">A workspace is just "the folder that's open right now." Saving it means you can jump back to it in one click.</p>
+
+        <div class="card-grid card-grid-2">
+            <div class="card card-accent">
+                <h3>Opening a folder</h3>
+                <p style="font-size:0.95rem;">
+                    <strong>File &rarr; Open Folder</strong> &nbsp;(<span class="key">Cmd</span> + <span class="key">O</span>)<br>
+                    Navigate to <em>Google Drive &rarr; Shared drives &rarr; 2026-27 Activity Creation</em> and click Open.
+                </p>
+            </div>
+            <div class="card card-green">
+                <h3>Saving it as a workspace</h3>
+                <p style="font-size:0.95rem;">
+                    <strong>File &rarr; Save Workspace As...</strong><br>
+                    Save the <code class="inline">.code-workspace</code> file somewhere easy (Desktop or Documents). Double-click it next time to reopen everything exactly as you left it.
+                </p>
+            </div>
+            <div class="card card-purple">
+                <h3>Switching workspaces</h3>
+                <p style="font-size:0.95rem;">
+                    <strong>File &rarr; Open Recent</strong><br>
+                    Your recent folders and workspaces are listed here. Click one to jump to it.
+                </p>
+            </div>
+            <div class="card card-amber">
+                <h3>Why it matters</h3>
+                <p style="font-size:0.95rem;">
+                    Each time you switch workspaces, Claude's "world" changes. You can have one workspace per curriculum and keep context cleanly separated.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 5: Two Ways to Talk to Claude -->
+<div class="slide" id="s5">
+    <div class="slide-inner">
+        <h2>Two Ways to <span>Talk to Claude</span></h2>
+        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1rem;">You'll use both. They're not competing — they do different jobs.</p>
+
+        <div class="card-grid card-grid-2">
+            <div class="card card-accent">
+                <h3>Slash commands (skills)</h3>
+                <p style="font-size:0.95rem;">Pre-built workflows. Type <code class="inline">/</code> to see the list. Example: <span class="skill-badge">/move-to-review</span></p>
+                <p style="font-size:0.9rem;margin-top:0.75rem;"><strong>Use for:</strong> pipeline actions — submitting, editing, finalizing. These run multi-step processes and update Jira for you.</p>
+            </div>
+            <div class="card card-green">
+                <h3>Freeform requests</h3>
+                <p style="font-size:0.95rem;">Just type what you want in plain English. Example: <em>"Rewrite Q3 so it targets the climax instead of the rising action."</em></p>
+                <p style="font-size:0.9rem;margin-top:0.75rem;"><strong>Use for:</strong> edits, questions, explanations. Treat Claude like a colleague you're talking to.</p>
+            </div>
+        </div>
+
+        <div class="callout callout-accent" style="margin-top:1.5rem;">
+            Skills are a subset of requests, not a replacement. Most of your work will be freeform conversation; you'll only run one skill (<span class="skill-badge">/move-to-review</span>) per draft.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 6: Folder Tour -->
+<div class="slide" id="s6">
+    <div class="slide-inner">
+        <h2>Your <span>Draft Outputs</span> Folder Tour</h2>
+        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1rem;">This is where Claude's drafts land and where you'll do your editing.</p>
+
+        <div class="tree">
+<span class="folder">draft_outputs/</span>
+&nbsp;&nbsp;├── <span class="folder">2026-04-13_GM_AAL_XX_G6_1.0_3_v1/</span> &nbsp;<span class="muted">← one folder per draft, dated</span>
+&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file">GM_AAL_XX_G6_1.0_3_v1_Activity_Content.md</span> &nbsp;<span class="muted">← the draft (edit this)</span>
+&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file">GM_AAL_XX_G6_1.0_3_v1_Match_Report.md</span> &nbsp;<span class="muted">← Claude's plan (read this)</span>
+&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;├── <span class="file">excerpt_selection.md</span> &nbsp;<span class="muted">← how the excerpt was picked</span>
+&nbsp;&nbsp;│&nbsp;&nbsp;&nbsp;└── <span class="danger">_DO_NOT_EDIT/</span> &nbsp;<span class="muted">← hands off — snapshots used by the pipeline</span>
+&nbsp;&nbsp;├── <span class="folder">review_ready/</span> &nbsp;<span class="muted">← your draft lands here after /move-to-review</span>
+&nbsp;&nbsp;└── <span class="folder">_examples/</span> &nbsp;<span class="muted">← reference examples only</span>
+        </div>
+
+        <div class="card-grid card-grid-3" style="margin-top:1.25rem;">
+            <div class="card card-green">
+                <h3>Edit freely</h3>
+                <p style="font-size:0.9rem;">The <code class="inline">*_Activity_Content.md</code> file — this is your draft.</p>
+            </div>
+            <div class="card card-accent">
+                <h3>Read for context</h3>
+                <p style="font-size:0.9rem;"><code class="inline">*_Match_Report.md</code> and <code class="inline">excerpt_selection.md</code> — reference, not output.</p>
+            </div>
+            <div class="card card-rose">
+                <h3>Never touch</h3>
+                <p style="font-size:0.9rem;"><code class="inline">_DO_NOT_EDIT/</code> — contains snapshots the pipeline needs to diff your edits later.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 7: Anatomy of an Activity File -->
+<div class="slide" id="s7">
+    <div class="slide-inner">
+        <h2>Anatomy of an <span>Activity File</span></h2>
+        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1rem;">Every <code class="inline">*_Activity_Content.md</code> file has the same four sections. Knowing where to look saves time.</p>
+
+        <div class="card-grid" style="grid-template-columns:1fr;">
+            <div class="card card-accent" style="display:flex;align-items:flex-start;gap:1.5rem;padding:1.25rem 1.5rem;">
+                <div style="min-width:220px;font-family:'SF Mono',monospace;font-size:0.85rem;font-weight:700;color:var(--accent);">## ACTIVITY-LEVEL INFORMATION</div>
+                <div>
+                    <p style="font-size:0.95rem;">Metadata + alignment + summary + <strong>reader content</strong> (the numbered text students see). You'll rarely edit this — and <strong>don't touch the numbered paragraphs</strong>, the question criteria point at them.</p>
+                </div>
+            </div>
+            <div class="card card-cyan" style="display:flex;align-items:flex-start;gap:1.5rem;padding:1.25rem 1.5rem;">
+                <div style="min-width:220px;font-family:'SF Mono',monospace;font-size:0.85rem;font-weight:700;color:var(--cyan);">## CONTENT BLOCKS: INTRODUCTION</div>
+                <div>
+                    <p style="font-size:0.95rem;">The Mojo-character intro bubbles students see at the start. Usually one or two short messages. Edit the wording freely if it feels off for the lesson.</p>
+                </div>
+            </div>
+            <div class="card card-green" style="display:flex;align-items:flex-start;gap:1.5rem;padding:1.25rem 1.5rem;">
+                <div style="min-width:220px;font-family:'SF Mono',monospace;font-size:0.85rem;font-weight:700;color:var(--green);">## QUESTIONS</div>
+                <div>
+                    <p style="font-size:0.95rem;"><strong>Where ~90% of your editing will happen.</strong> Each question has a type, prompt, answer/criteria, and (for highlight questions) paragraph ranges. This is the heart of the activity.</p>
+                </div>
+            </div>
+            <div class="card card-purple" style="display:flex;align-items:flex-start;gap:1.5rem;padding:1.25rem 1.5rem;">
+                <div style="min-width:220px;font-family:'SF Mono',monospace;font-size:0.85rem;font-weight:700;color:var(--purple);">## CONTENT BLOCKS: TYPE 3</div>
+                <div>
+                    <p style="font-size:0.95rem;">The closing/conclusion block. A short wrap-up after the final question. Edit freely.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 8: Editing a Markdown File -->
+<div class="slide" id="s8">
+    <div class="slide-inner">
+        <h2>Editing a <span>Markdown File</span></h2>
+        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1rem;">Markdown (<code class="inline">.md</code>) is just plain text with a few formatting symbols. You can edit it like any document.</p>
+
+        <ol class="steps">
+            <li><strong>Click in the editor and type.</strong> You can edit anything — change words, rewrite questions, delete lines. No special syntax needed for small edits.</li>
+            <li><strong>Save with <span class="key">Cmd</span> + <span class="key">S</span>.</strong> A white dot on the file tab means unsaved changes. After save, the dot disappears.</li>
+            <li><strong>Or ask Claude to edit for you.</strong> "Change Q3 from a TDQ to an LCQ" or "Tighten the criteria on Q2." Claude will make the edit directly in the file — you'll see it happen.</li>
+            <li><strong>Review Claude's edits before saving.</strong> Claude saves as it goes. If something's wrong, just tell it — "actually, revert that" or "make it shorter."</li>
+        </ol>
+
+        <div class="callout callout-green" style="margin-top:1.5rem;">
+            You don't need to memorize markdown syntax. Headings (##), bold (**), and lists (-) are the only things you'll see often, and Claude handles them.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 9: When to Ask Claude vs Edit by Hand -->
+<div class="slide" id="s9">
+    <div class="slide-inner">
+        <h2>Ask Claude vs. <span>Edit by Hand</span></h2>
+        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1rem;">Both are valid. Picking the right one saves time. Rule of thumb: <strong>big or repetitive &rarr; Claude; small &amp; surgical &rarr; just type it</strong>.</p>
+
+        <div class="vs-grid">
+            <div class="card card-accent">
+                <h3 style="color:var(--accent);">Ask Claude when...</h3>
+                <ul>
+                    <li>You're rewriting a question or changing its type</li>
+                    <li>You need to apply the same fix to multiple questions</li>
+                    <li>You want to rework the criteria to match the match report</li>
+                    <li>You need to check or adjust paragraph references</li>
+                    <li>You're not sure how to phrase something — describe what you want</li>
+                    <li>You want a sanity check ("does this match the learning goal?")</li>
+                </ul>
+            </div>
+            <div class="card card-green">
+                <h3 style="color:var(--green);">Just type it when...</h3>
+                <ul>
+                    <li>You're fixing a typo or changing one word</li>
+                    <li>You already know the exact wording you want</li>
+                    <li>You're deleting something small</li>
+                    <li>You're adjusting formatting (bold, bullet, heading)</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="callout" style="margin-top:1.5rem;">
+            If you're manually rewriting most of the draft, something's off with the inputs (module plan or source materials) — not the output. Flag it to Michaela so the skill can be improved.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 10: The Feedback Loop -->
+<div class="slide" id="s10">
+    <div class="slide-inner">
+        <h2>Correcting Claude <span>Mid-Task</span></h2>
+        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1rem;">You don't have to wait for Claude to finish before redirecting it. The feedback loop is always open.</p>
+
+        <div class="card-grid card-grid-2">
+            <div class="card card-rose">
+                <h3>Interrupt when it's wrong</h3>
+                <p style="font-size:0.95rem;">Press <span class="key">Esc</span> to stop Claude mid-response. Then redirect: "wait, that's not what I meant — let's try again with X."</p>
+            </div>
+            <div class="card card-accent">
+                <h3>Be specific</h3>
+                <p style="font-size:0.95rem;">"Make Q3 shorter" is vague. "Cut Q3's prompt to one sentence and keep the criteria the same" is actionable. The more specific you are, the less guessing Claude does.</p>
+            </div>
+            <div class="card card-green">
+                <h3>Show, don't just describe</h3>
+                <p style="font-size:0.95rem;">Pasting an example or pointing at a line is faster than explaining. "Make Q3 more like Q1" works because Claude can read Q1 directly.</p>
+            </div>
+            <div class="card card-purple">
+                <h3>Ask "why" any time</h3>
+                <p style="font-size:0.95rem;">"Why did you pick a TDQ here?" is a valid question. Claude will explain its reasoning — and sometimes you'll realize the reasoning was off.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 11: Output 1 - Match Report -->
+<div class="slide" id="s11">
+    <div class="slide-inner">
+        <h2>Output #1: The <span>Match Report</span></h2>
+        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1rem;">Claude's <strong>plan</strong> for the activity — what it analyzed, what it decided to target, and why. Read this <em>before</em> diving into the draft.</p>
+
+        <div class="card-grid card-grid-2">
+            <div class="card card-accent">
+                <h3>What you'll find</h3>
+                <ul style="font-size:0.92rem;color:var(--text-muted);padding-left:1.25rem;line-height:1.7;">
+                    <li><strong>Lesson Requirements</strong> — activity type, grade, learning goal, verbatim inputs from your plan</li>
+                    <li><strong>Pedagogical Intent Analysis</strong> — analytical inventory, emphasis hierarchy (primary vs. supporting), key text sections</li>
+                    <li><strong>Excerpt Selection</strong> — which paragraphs and why</li>
+                    <li><strong>Time Budget</strong> — question count &amp; estimated minutes vs. the lesson section replaced</li>
+                </ul>
+            </div>
+            <div class="card card-green">
+                <h3>What to look for</h3>
+                <ul style="font-size:0.92rem;color:var(--text-muted);padding-left:1.25rem;line-height:1.7;">
+                    <li><strong>Assessment target</strong> — does it match the module plan's learning task?</li>
+                    <li><strong>Emphasis hierarchy</strong> — is Claude pointing at the right concept as PRIMARY?</li>
+                    <li><strong>Paragraph ranges</strong> — are the key text sections the ones you'd pick?</li>
+                    <li><strong>Time budget</strong> — does the question count fit the replaced section?</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="callout callout-accent" style="margin-top:1.25rem;">
+            Match reports vary in length and format — some are lean, some dense with regeneration notes. Focus on what's there, not whether the shape matches every other report.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 12: Output 2 - Activity Content -->
+<div class="slide" id="s12">
+    <div class="slide-inner">
+        <h2>Output #2: The <span>Activity Content</span></h2>
+        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1rem;">The actual draft Claude built. This is what you edit and what the student will see.</p>
+
+        <div class="card-grid card-grid-2">
+            <div class="card card-green">
+                <h3>Where to focus your eye</h3>
+                <ul style="font-size:0.92rem;color:var(--text-muted);padding-left:1.25rem;line-height:1.7;">
+                    <li><strong>Questions section</strong> — prompts, criteria, and question types</li>
+                    <li><strong>Criteria lines</strong> — do they point at the right paragraphs? Are they calibrated (not too loose, not too strict)?</li>
+                    <li><strong>Question sequence</strong> — does the cognitive demand build up sensibly?</li>
+                    <li><strong>Content block intro</strong> — does it orient students to the concept without giving away answers?</li>
+                </ul>
+            </div>
+            <div class="card card-amber">
+                <h3>Common issues to watch for</h3>
+                <ul style="font-size:0.92rem;color:var(--text-muted);padding-left:1.25rem;line-height:1.7;">
+                    <li>Questions that describe <em>what happens</em> but don't name the concept</li>
+                    <li>Criteria that are too vague ("correct response mentions...")</li>
+                    <li>Paragraph references that don't actually contain the evidence</li>
+                    <li>Question counts that drift off the time budget</li>
+                    <li>Verbatim content from the plan not appearing in the draft</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 13: Strategic Reading -->
+<div class="slide" id="s13">
+    <div class="slide-inner">
+        <h2>Strategic Reading: <span>Use Both Together</span></h2>
+        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1rem;">The gold is in the comparison. Either document alone won't catch drift — but reading them side-by-side will.</p>
+
+        <div class="card-grid card-grid-2">
+            <div class="card card-accent" style="padding:1.5rem;">
+                <h3 style="font-size:1.05rem;">Match report = the plan</h3>
+                <p style="font-size:0.95rem;">What Claude <em>intended</em> to build. The strategy, the targets, the reasoning.</p>
+            </div>
+            <div class="card card-green" style="padding:1.5rem;">
+                <h3 style="font-size:1.05rem;">Activity content = the execution</h3>
+                <p style="font-size:0.95rem;">What Claude <em>actually</em> built. The questions, criteria, and text students see.</p>
+            </div>
+        </div>
+
+        <div class="card card-rose" style="margin-top:1.25rem;padding:1.5rem;">
+            <h3>Questions the comparison answers</h3>
+            <ul style="font-size:0.95rem;color:var(--text-muted);padding-left:1.25rem;line-height:1.8;margin-top:0.5rem;">
+                <li>Does the activity hit the <strong>primary emphasis</strong> the match report identified?</li>
+                <li>Are the <strong>question types</strong> the ones the report said would work — or did the draft drift?</li>
+                <li>Do the <strong>criteria point at the same paragraphs</strong> the report listed as key text sections?</li>
+                <li>Does the <strong>question count</strong> match the time budget the report planned for?</li>
+                <li>If the report says "PRIMARY: 4 highlight questions," does the draft actually have 4 highlights — or did it swap in free-response?</li>
+            </ul>
+        </div>
+
+        <div class="callout callout-green" style="margin-top:1.25rem;">
+            If the plan and the execution disagree, your edits should usually bring the execution in line with the plan — not the other way around.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 14: Submitting with /move-to-review -->
+<div class="slide" id="s14">
+    <div class="slide-inner">
+        <h2>Submitting With <span>/move-to-review</span></h2>
+        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1rem;">When your edits are done, run this one skill. It's a short conversation, not a button press.</p>
+
+        <ol class="steps">
+            <li><strong>Type <span class="skill-badge">/move-to-review</span></strong> in Claude Code.</li>
+            <li><strong>Confirm which draft</strong> — Claude lists the activities in <code class="inline">draft_outputs/</code> and asks which one you're submitting.</li>
+            <li><strong>Answer "Any notes for the reviewer?"</strong> — this is your chance to flag uncertainty, ask a specific question, or give context the diff can't show. If you have nothing to add, just say so.</li>
+            <li><strong>Pick a reviewer</strong> — Meg Quick or Eric Snider. Claude will assign them in Jira.</li>
+            <li><strong>Claude handles the rest</strong> — it generates a change summary, moves files to <code class="inline">review_ready/</code>, transitions the Jira ticket to "Needs Lead Review," and @mentions your reviewer in the ticket comment so they get a notification.</li>
+        </ol>
+
+        <div class="callout callout-accent" style="margin-top:1.25rem;">
+            The "notes for the reviewer" field is load-bearing. A one-sentence note like "I'm unsure if Q3 is too hard for grade 6 — thoughts?" gets way better review feedback than an empty submission.
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 15: Best Practices & Pitfalls -->
+<div class="slide" id="s15">
+    <div class="slide-inner">
+        <h2>Best Practices &amp; <span>Pitfalls</span></h2>
+
+        <div class="card-grid card-grid-2">
+            <div class="card card-green">
+                <h3 style="color:var(--green);">Do</h3>
+                <ul style="font-size:0.92rem;color:var(--text-muted);padding-left:1.25rem;line-height:1.7;">
+                    <li>Trust but verify — skim the match report first, then the draft</li>
+                    <li>Be specific when correcting Claude</li>
+                    <li>Start a fresh conversation per lesson</li>
+                    <li>Save often (<span class="key">Cmd</span> + <span class="key">S</span>) — or let Claude save for you</li>
+                    <li>Flag recurring issues to Michaela so skills can improve</li>
+                    <li>Use "why did you..." to understand Claude's reasoning</li>
+                </ul>
+            </div>
+            <div class="card card-rose">
+                <h3 style="color:var(--rose);">Don't</h3>
+                <ul style="font-size:0.92rem;color:var(--text-muted);padding-left:1.25rem;line-height:1.7;">
+                    <li>Manually rewrite everything — if you are, the inputs were wrong</li>
+                    <li>Touch <code class="inline">_DO_NOT_EDIT/</code> folders</li>
+                    <li>Edit the numbered reader content paragraphs</li>
+                    <li>Run one mega-conversation across many drafts</li>
+                    <li>Let Claude run to a bad end — interrupt with <span class="key">Esc</span></li>
+                    <li>Submit with an empty "notes for reviewer" if you have real questions</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 16: Cheat Sheet -->
+<div class="slide" id="s16">
+    <div class="slide-inner">
+        <h2><span>Cheat Sheet</span></h2>
+        <p style="color:var(--text-muted);font-size:1rem;margin-bottom:1rem;">The keyboard shortcuts and commands you'll use daily.</p>
+
+        <div class="card-grid card-grid-2">
+            <div class="card card-accent">
+                <h3>Keyboard shortcuts</h3>
+                <p style="font-size:0.95rem;line-height:2;">
+                    <span class="key">Cmd</span> + <span class="key">O</span> &nbsp;&mdash; Open folder<br>
+                    <span class="key">Cmd</span> + <span class="key">S</span> &nbsp;&mdash; Save file<br>
+                    <span class="key">Cmd</span> + <span class="key">P</span> &nbsp;&mdash; Quick open file by name<br>
+                    <span class="key">Cmd</span> + <span class="key">F</span> &nbsp;&mdash; Find in current file<br>
+                    <span class="key">Esc</span> &nbsp;&mdash; Interrupt Claude mid-response
+                </p>
+            </div>
+            <div class="card card-green">
+                <h3>The one skill you need</h3>
+                <p style="font-size:0.95rem;margin-top:0.5rem;">
+                    <span class="skill-badge">/move-to-review</span>
+                </p>
+                <p style="font-size:0.9rem;margin-top:0.75rem;">Run it when your edits are done. Everything else is freeform conversation with Claude.</p>
+            </div>
+            <div class="card card-purple">
+                <h3>File naming to recognize</h3>
+                <p style="font-size:0.9rem;line-height:1.8;">
+                    <code class="inline">*_Activity_Content.md</code> &nbsp;&mdash; edit<br>
+                    <code class="inline">*_Match_Report.md</code> &nbsp;&mdash; read<br>
+                    <code class="inline">_DO_NOT_EDIT/</code> &nbsp;&mdash; skip
+                </p>
+            </div>
+            <div class="card card-amber">
+                <h3>When stuck, ask Claude</h3>
+                <p style="font-size:0.92rem;">
+                    "Explain what this question is testing."<br>
+                    "Why did you pick this paragraph?"<br>
+                    "Does this match the match report?"<br>
+                    "What would you change if you were me?"
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- SLIDE 17: Resources -->
+<div class="slide" id="s17">
+    <div class="slide-inner">
+        <h2><span>Resources</span> — Bookmark These</h2>
+
+        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+            <a href="https://michaelamann12.github.io/authoring-pipeline-guide/onboarding-session-2.html" target="_blank" class="card card-accent" style="text-decoration:none;color:inherit;">
+                <h3 style="color:var(--accent);">Session 2 — The Pipeline</h3>
+                <p>Last week's deck on how the pipeline works end to end</p>
+            </a>
+            <a href="https://michaelamann12.github.io/authoring-pipeline-guide/" target="_blank" class="card card-accent" style="text-decoration:none;color:inherit;">
+                <h3 style="color:var(--accent);">Pipeline Guide</h3>
+                <p>Full overview of folder structure and skill reference</p>
+            </a>
+            <a href="https://michaelamann12.github.io/authoring-pipeline-guide/author-workflow.html" target="_blank" class="card card-accent" style="text-decoration:none;color:inherit;">
+                <h3 style="color:var(--accent);">Author Walkthrough</h3>
+                <p>Step-by-step guide for your daily workflow</p>
+            </a>
+            <a href="https://michaelamann12.github.io/procurement-dashboard/" target="_blank" class="card card-accent" style="text-decoration:none;color:inherit;">
+                <h3 style="color:var(--accent);">Procurement Dashboard</h3>
+                <p>Which curricula and modules are ready for authoring</p>
+            </a>
+        </div>
+
+        <p style="color:var(--text-muted);text-align:center;margin-top:2rem;font-size:1rem;">Questions? Reach out to Michaela anytime.</p>
+    </div>
+</div>
+
+<!-- Navigation -->
+<div class="slide-counter"><span id="current-slide">1</span> / <span id="total-slides"></span></div>
+<div class="nav">
+    <button onclick="prevSlide()">&larr; Back</button>
+    <button onclick="nextSlide()">Next &rarr;</button>
+</div>
+
+<script>
+    const slides = document.querySelectorAll('.slide');
+    let current = 0;
+
+    document.getElementById('total-slides').textContent = slides.length;
+
+    function showSlide(n) {
+        slides[current].classList.remove('active');
+        current = Math.max(0, Math.min(n, slides.length - 1));
+        slides[current].classList.add('active');
+        document.getElementById('current-slide').textContent = current + 1;
+    }
+
+    function nextSlide() { showSlide(current + 1); }
+    function prevSlide() { showSlide(current - 1); }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); nextSlide(); }
+        if (e.key === 'ArrowLeft') { e.preventDefault(); prevSlide(); }
+    });
+</script>
+
+</body>
+</html>
