@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jira Refresher for Authors</title>
+    <style>
+        :root {
+            --bg: #f5f6fa;
+            --surface: #ffffff;
+            --surface-hover: #f0f1f5;
+            --border: #e2e4ec;
+            --text: #1a1d2e;
+            --text-muted: #5f6478;
+            --accent: #3b5bdb;
+            --accent-glow: rgba(59, 91, 219, 0.08);
+            --green: #0ca678;
+            --green-bg: rgba(12, 166, 120, 0.08);
+            --amber: #e67700;
+            --amber-bg: rgba(230, 119, 0, 0.07);
+            --rose: #e03131;
+            --rose-bg: rgba(224, 49, 49, 0.07);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.65;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            max-width: 920px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+        .header h1 span { color: var(--accent); }
+        .header-subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.15rem; }
+
+        .header a.back {
+            font-size: 0.82rem; font-weight: 600; color: var(--accent); text-decoration: none;
+            border: 1.5px solid var(--accent); padding: 0.35rem 0.85rem; border-radius: 20px;
+            transition: all 0.2s;
+        }
+        .header a.back:hover { background: var(--accent-glow); }
+
+        .main {
+            max-width: 920px;
+            margin: 0 auto;
+            padding: 2.5rem 2rem 5rem;
+        }
+
+        /* Table of contents */
+        .toc {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+        .toc-title {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            margin-bottom: 0.75rem;
+        }
+        .toc ol {
+            list-style: none;
+            counter-reset: toc;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.4rem 1.5rem;
+        }
+        .toc li {
+            counter-increment: toc;
+            font-size: 0.92rem;
+        }
+        .toc li::before {
+            content: counter(toc) ". ";
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+        .toc a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .toc a:hover { text-decoration: underline; }
+
+        /* Sections */
+        section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 2rem 2.25rem;
+            margin-bottom: 1.5rem;
+            scroll-margin-top: 6rem;
+        }
+
+        section h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
+        section h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-top: 1.5rem;
+            margin-bottom: 0.6rem;
+            color: var(--text);
+        }
+        section h3 .step {
+            display: inline-block;
+            background: var(--accent-glow);
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.15rem 0.55rem;
+            border-radius: 6px;
+            margin-right: 0.6rem;
+            vertical-align: middle;
+        }
+        section h3 .meta {
+            display: inline-block;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+            font-style: italic;
+            margin-left: 0.35rem;
+        }
+
+        p { margin-bottom: 0.8rem; color: var(--text); }
+        p:last-child { margin-bottom: 0; }
+
+        ul, ol.steps { padding-left: 1.4rem; margin-bottom: 0.8rem; }
+        ul li, ol.steps li { margin-bottom: 0.4rem; }
+
+        strong { font-weight: 700; }
+        em { font-style: italic; color: var(--text-muted); }
+
+        code {
+            font-family: 'SF Mono', Menlo, Consolas, monospace;
+            font-size: 0.88em;
+            background: var(--surface-hover);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            color: var(--accent);
+        }
+
+        .lane {
+            display: inline-block;
+            background: var(--accent-glow);
+            color: var(--accent);
+            font-weight: 600;
+            padding: 0.05rem 0.45rem;
+            border-radius: 5px;
+            font-size: 0.92em;
+        }
+
+        /* Mistakes / reminders list */
+        ul.mistakes { list-style: none; padding-left: 0; }
+        ul.mistakes li {
+            padding: 0.65rem 0.9rem 0.65rem 2.5rem;
+            margin-bottom: 0.5rem;
+            background: var(--rose-bg);
+            border-left: 3px solid var(--rose);
+            border-radius: 6px;
+            position: relative;
+        }
+        ul.mistakes li::before {
+            content: "✗";
+            position: absolute;
+            left: 0.9rem;
+            top: 0.65rem;
+            color: var(--rose);
+            font-weight: 700;
+        }
+        ul.mistakes li.good {
+            background: var(--green-bg);
+            border-left-color: var(--green);
+        }
+        ul.mistakes li.good::before {
+            content: "✓";
+            color: var(--green);
+        }
+
+        hr { display: none; }
+
+        @media (max-width: 720px) {
+            .toc ol { grid-template-columns: 1fr; }
+            section { padding: 1.5rem 1.25rem; }
+            .main { padding: 1.5rem 1rem 4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <div>
+            <h1><span>Jira Refresher</span> for Authors</h1>
+            <div class="header-subtitle">A practical, skimmable walkthrough of the pipeline</div>
+        </div>
+        <a class="back" href="index.html">&larr; Back to Guide</a>
+    </div>
+</header>
+
+<main class="main">
+
+    <nav class="toc">
+        <div class="toc-title">On this page</div>
+        <ol>
+            <li><a href="#overview">Quick Overview</a></li>
+            <li><a href="#rules">Key Rules</a></li>
+            <li><a href="#walkthrough">Step-by-Step Walkthrough</a></li>
+            <li><a href="#done">How Do I Know a Lesson Is Done?</a></li>
+            <li><a href="#mistakes">Common Mistakes &amp; Reminders</a></li>
+        </ol>
+    </nav>
+
+    <section id="overview">
+        <h2>Quick Overview</h2>
+        <p>Tickets are pre-created for you on your curriculum's Jira board. Your job is to find the lessons you want to work on, drag them through the early lanes, and let the pipeline handle the build. <strong>One Jira ticket = one lesson</strong>, named after the Activity ID.</p>
+    </section>
+
+    <section id="rules">
+        <h2>Key Rules</h2>
+        <p>A few things worth keeping in mind as you work:</p>
+        <ul>
+            <li><strong>One ticket = one lesson.</strong> Each ticket is named after the Activity ID (e.g. <code>OE_SLP_XX_G9_1.1_7_v1</code>). Try to keep tickets one-to-one with lessons so the pipeline stays in sync.</li>
+            <li><strong>Tickets are ready for you.</strong> Head to your curriculum's board to find them — no need to create your own.</li>
+            <li><strong>Work in whatever batch size feels right.</strong> Pull a full module or just one ticket — both work great. Assigning to yourself makes the board easier to filter later.</li>
+            <li><strong>Two things make builds happy:</strong> a matching Activity ID and source materials sitting in the Curriculum Hub. A quick check before you drag saves the most common failures.</li>
+            <li><strong>Once a build is in motion, give it space.</strong> When a ticket is in <span class="lane">Draft Activity with Claude</span>, the pipeline will move it for you — no need to nudge it.</li>
+            <li><strong>The module plan is your source of truth.</strong> Verbatim content flows through untouched, so the plan is the place to lock down anything that needs to read a specific way.</li>
+        </ul>
+    </section>
+
+    <section id="walkthrough">
+        <h2>Step-by-Step Pipeline Walkthrough</h2>
+
+        <h3><span class="step">1</span>Find your tickets <span class="meta">your curriculum's board</span></h3>
+        <p>Go to your curriculum's Jira board. Tickets for your lessons are already waiting in <span class="lane">Backlog</span>. Filter by assignee or Activity ID prefix to locate the ones you want.</p>
+
+        <h3><span class="step">2</span>Backlog → Authoring <span class="meta">optional — you drag</span></h3>
+        <p>If you'd like a staging lane for prep work — finalizing the module plan, confirming source materials in the Curriculum Hub, or just queueing up what you plan to build next — drag tickets into <span class="lane">Authoring</span> and assign them to yourself. If you're ready to build right away, you can skip this and go straight to step 3.</p>
+
+        <h3><span class="step">3</span>Backlog or Authoring → Draft Activity with Claude <span class="meta">you drag — this kicks off the build</span></h3>
+        <p>Dragging a ticket into <span class="lane">Draft Activity with Claude</span> triggers the automated build. Claude runs six skills in order:</p>
+        <ol class="steps">
+            <li><code>/populate-lesson</code> — pulls source materials into the lesson folder</li>
+            <li><code>/extract-requirements</code> — extracts lesson requirements and pedagogical intent</li>
+            <li><code>/find-exemplars</code> — searches the Activity Catalog for matching patterns</li>
+            <li><code>/pick-excerpt</code> — selects and extracts the text excerpt with correct numbering</li>
+            <li><code>/generate-activity</code> — generates the full activity content</li>
+            <li><code>/edit-draft</code> — runs a 17-point validation pass and silently fixes issues</li>
+        </ol>
+        <p>The original draft is snapshotted into a <code>_DO_NOT_EDIT/</code> folder before any edits, so you can always compare back to what Claude first produced.</p>
+        <p>Expect <strong>~45 minutes to an hour per ticket</strong>, and tickets are processed in a staggered queue — if you push a whole module at once, plan for a healthy stretch of time before the last one lands. Do not re-drag, re-assign, or move tickets while they're working.</p>
+
+        <h3><span class="step">4</span>Draft Activity with Claude → Draft Review <span class="meta">automatic</span></h3>
+        <p>When the build finishes, the pipeline moves the ticket to <span class="lane">Draft Review</span> on its own. The finished folder lands in <code>draft_outputs/[Curriculum]/[DATE]_[Lesson_ID]/</code>.</p>
+
+        <h3><span class="step">5</span>Draft Review <span class="meta">your core editing work</span></h3>
+        <p>Open the draft in VS Code. You have three ways to edit:</p>
+        <ul>
+            <li>Direct edits in the file</li>
+            <li>Ask Claude in plain English (e.g. <em>"Question 3 feels too easy — push it harder"</em>)</li>
+            <li>Re-run <code>/edit-draft</code> after your edits if you want another 17-check validation pass</li>
+        </ul>
+        <p>Check: curriculum alignment, scaffolding logic, paragraph references, verbatim preservation, grade-appropriate tone. The original draft is preserved in <code>_DO_NOT_EDIT/</code> — you can't break anything.</p>
+
+        <h3><span class="step">6</span>Draft Review → Needs Lead Review <span class="meta">you run <code>/move-to-review</code></span></h3>
+        <p>When you're satisfied, type <code>/move-to-review</code> in the Claude panel. It:</p>
+        <ul>
+            <li>Generates a change summary diffing your edits against the original</li>
+            <li>Asks for any notes you want to leave the reviewer</li>
+            <li>Saves a REVIEWED snapshot</li>
+            <li>Reconciles the Match Report and runs a final structural/numbering QA</li>
+            <li>Moves all files to <code>review_ready/[DATE]_[Lesson_ID]/</code></li>
+            <li>Transitions the Jira ticket to <span class="lane">Needs Lead Review</span> and @-mentions the lead</li>
+        </ul>
+        <p>Do <strong>not</strong> drag the ticket manually — the command handles it.</p>
+
+        <h3><span class="step">7</span>Lead handles the rest</h3>
+        <ul>
+            <li><strong>Lead approves</strong> → runs <code>/move-to-final</code> → generates a two-layer changelog (original → your edits → lead's edits), captures feedback, moves the file to <code>final_outputs/[Curriculum]/[Lesson_ID]/</code>, and transitions the ticket to <span class="lane">In Transformation</span> with an @-mention to the transformation team.</li>
+            <li><strong>Lead requests changes</strong> → runs <code>/revisions</code> → transitions the ticket back to <span class="lane">Draft Review</span>, reassigns it to you, and posts the revision notes (with a Priority flag if urgent). Edit, then run <code>/move-to-review</code> again.</li>
+        </ul>
+    </section>
+
+    <section id="done">
+        <h2>How Do I Know a Lesson Is Done?</h2>
+        <p><strong>Build step is complete when the ticket lands in the "Draft Review" lane.</strong> That's your signal that:</p>
+        <ul>
+            <li>All six pipeline skills finished</li>
+            <li>The folder exists in <code>draft_outputs/[Curriculum]/[DATE]_[Lesson_ID]/</code></li>
+            <li>The ticket is yours to edit</li>
+        </ul>
+        <p>Builds take <strong>~45 min to 1 hour each, staggered</strong> when you submit multiple. Don't be alarmed if a batch takes a while — check back periodically rather than watching one ticket. If a ticket is still in <span class="lane">Draft Activity with Claude</span> well past expected time (and earlier tickets in the same batch have already moved), the build likely failed — click the ticket and check the comments for any details about why it failed, or ping Michaela to take a look!</p>
+        <p><strong>Watch the board for these transitions:</strong></p>
+        <ul>
+            <li><span class="lane">Backlog</span> or <span class="lane">Authoring</span> → <span class="lane">Draft Activity with Claude</span>: you just triggered a build</li>
+            <li><span class="lane">Draft Activity with Claude</span> → <span class="lane">Draft Review</span>: build succeeded, draft is ready</li>
+            <li><span class="lane">Draft Review</span> → <span class="lane">Needs Lead Review</span>: <code>/move-to-review</code> ran cleanly</li>
+            <li><span class="lane">Needs Lead Review</span> → <span class="lane">Draft Review</span>: a lead sent it back for revisions</li>
+            <li><span class="lane">Needs Lead Review</span> → <span class="lane">In Transformation</span>: lead finalized via <code>/move-to-final</code></li>
+        </ul>
+    </section>
+
+    <section id="mistakes">
+        <h2>Common Mistakes &amp; Reminders</h2>
+        <ul class="mistakes">
+            <li><strong>Creating new tickets.</strong> You don't need to — they're already on the board. If you can't find a ticket you expect, ping ops rather than making one.</li>
+            <li><strong>Dragging a ticket out of <em>Draft Activity with Claude</em> manually.</strong> The pipeline moves it. If you drag it, you'll desync the ticket from the actual build state.</li>
+            <li><strong>Resist the urge to re-drag.</strong> Builds take 45 min to 1 hour each and run staggered — a full module will take a while. Re-triggering creates duplicate work and confuses the pipeline.</li>
+            <li><strong>Activity ID mismatch.</strong> The Jira ticket name must match the module plan Activity ID exactly. One typo = no build.</li>
+            <li><strong>Missing source materials.</strong> If the text isn't in the Curriculum Hub, the build fails. Verify before dragging.</li>
+            <li><strong>Moving Draft Review → Needs Lead Review by dragging.</strong> Use <code>/move-to-review</code> — it generates the change summary, snapshots, QA pass, and lead @-mention. Dragging skips all of it.</li>
+            <li><strong>Editing files in <code>_DO_NOT_EDIT/</code>.</strong> That's the original-draft backup for the audit trail. Edit the working file, not the snapshot.</li>
+            <li class="good"><strong>Trust the lane.</strong> If the ticket is in <em>Draft Review</em>, your draft is ready. If it's still in build, wait.</li>
+        </ul>
+    </section>
+
+</main>
+
+</body>
+</html>
