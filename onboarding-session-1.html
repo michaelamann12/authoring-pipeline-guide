@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Here — Author Onboarding</title>
+    <style>
+        :root {
+            --bg: #f5f6fa;
+            --surface: #ffffff;
+            --surface-hover: #f0f1f5;
+            --border: #e2e4ec;
+            --text: #1a1d2e;
+            --text-muted: #5f6478;
+            --accent: #3b5bdb;
+            --accent-glow: rgba(59, 91, 219, 0.08);
+            --green: #0ca678;
+            --green-bg: rgba(12, 166, 120, 0.08);
+            --amber: #e67700;
+            --amber-bg: rgba(230, 119, 0, 0.07);
+            --rose: #e03131;
+            --rose-bg: rgba(224, 49, 49, 0.07);
+            --purple: #7048e8;
+            --purple-bg: rgba(112, 72, 232, 0.07);
+            --cyan: #1098ad;
+            --cyan-bg: rgba(16, 152, 173, 0.07);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            padding: 1.25rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-inner {
+            max-width: 1100px; margin: 0 auto;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 0.75rem;
+        }
+        .header h1 { font-size: 1.35rem; font-weight: 800; letter-spacing: -0.02em; }
+        .header h1 span { color: var(--accent); }
+        .header-subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.15rem; }
+        .header-nav { display: flex; gap: 0.4rem; flex-wrap: wrap; }
+        .header-nav a {
+            padding: 0.35rem 0.8rem; border-radius: 20px; font-size: 0.78rem; font-weight: 600;
+            text-decoration: none; border: 1.5px solid var(--border); color: var(--text-muted); transition: all 0.2s;
+        }
+        .header-nav a:hover { border-color: var(--accent); color: var(--accent); }
+
+        /* Layout */
+        .main { max-width: 1100px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+        section { margin-bottom: 3.5rem; scroll-margin-top: 6rem; }
+
+        .eyebrow {
+            font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em;
+            color: var(--accent); margin-bottom: 0.4rem;
+        }
+        h2 { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+        h2 span { color: var(--accent); }
+        h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .lead { font-size: 1.15rem; color: var(--text-muted); margin-top: 0.6rem; max-width: 760px; }
+        p { font-size: 1rem; }
+        .section-intro { color: var(--text-muted); font-size: 1.02rem; margin: 0.5rem 0 1.25rem; max-width: 820px; }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, var(--accent-glow), var(--surface));
+            border: 1px solid var(--border); border-radius: 16px;
+            padding: 2.75rem 2.5rem; margin-bottom: 3.5rem;
+        }
+        .hero h2 { font-size: 2.3rem; }
+        .hero .lead { font-size: 1.2rem; }
+        .hero-points { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1.75rem; }
+        .hero-point {
+            flex: 1; min-width: 200px; background: var(--surface);
+            border: 1px solid var(--border); border-radius: 12px; padding: 1.1rem 1.25rem;
+        }
+        .hero-point .ic { font-size: 1.4rem; }
+        .hero-point h3 { font-size: 0.95rem; margin: 0.4rem 0 0.2rem; }
+        .hero-point p { font-size: 0.88rem; color: var(--text-muted); }
+
+        /* Cards */
+        .card-grid { display: grid; gap: 1rem; margin-top: 1.25rem; }
+        .card-grid-2 { grid-template-columns: 1fr 1fr; }
+        .card-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
+        .card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
+        .card-accent { border-left: 4px solid var(--accent); }
+        .card-green { border-left: 4px solid var(--green); background: var(--green-bg); }
+        .card-amber { border-left: 4px solid var(--amber); background: var(--amber-bg); }
+        .card-rose { border-left: 4px solid var(--rose); background: var(--rose-bg); }
+        .card-purple { border-left: 4px solid var(--purple); background: var(--purple-bg); }
+        .card-cyan { border-left: 4px solid var(--cyan); background: var(--cyan-bg); }
+        .card p { font-size: 0.95rem; color: var(--text-muted); margin-top: 0.4rem; }
+        .card ul { font-size: 0.93rem; color: var(--text-muted); padding-left: 1.2rem; margin-top: 0.5rem; line-height: 1.75; }
+        .ic { display: block; font-size: 1.5rem; margin-bottom: 0.4rem; }
+
+        /* Setup sub-panel */
+        .panel {
+            background: var(--surface); border: 1px solid var(--border); border-radius: 14px;
+            padding: 1.75rem 1.9rem; margin-top: 1.25rem;
+        }
+        .panel-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+        .panel-tag {
+            font-size: 0.72rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
+            color: var(--accent); background: var(--accent-glow); border: 1.5px solid var(--accent);
+            border-radius: 6px; padding: 0.2rem 0.55rem;
+        }
+        .panel-tag.green { color: var(--green); background: var(--green-bg); border-color: var(--green); }
+
+        /* Numbered steps */
+        .steps { list-style: none; counter-reset: step; margin-top: 1rem; }
+        .steps > li {
+            counter-increment: step; position: relative; padding-left: 3rem;
+            margin-bottom: 1.1rem; font-size: 1rem;
+        }
+        .steps > li::before {
+            content: counter(step); position: absolute; left: 0; top: -0.1rem;
+            width: 2rem; height: 2rem; border-radius: 50%; background: var(--accent); color: #fff;
+            display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem;
+        }
+        .steps.green > li::before { background: var(--green); }
+        .steps small { display: block; color: var(--text-muted); font-size: 0.88rem; margin-top: 0.2rem; }
+
+        /* Code block + copy */
+        .code-wrap { position: relative; margin: 0.9rem 0; }
+        pre {
+            background: #1a1d2e; color: #e8eaf2; border-radius: 10px;
+            padding: 1.1rem 1.25rem; overflow-x: auto; font-size: 0.85rem; line-height: 1.55;
+            font-family: 'SF Mono', ui-monospace, Menlo, Consolas, monospace;
+            white-space: pre-wrap; word-break: break-word;
+        }
+        pre .ph { color: #ffd43b; }
+        .copy-btn {
+            position: absolute; top: 0.6rem; right: 0.6rem; background: rgba(255,255,255,0.12);
+            color: #fff; border: 1px solid rgba(255,255,255,0.25); border-radius: 6px;
+            font-size: 0.72rem; font-weight: 600; padding: 0.3rem 0.6rem; cursor: pointer; transition: all 0.15s;
+        }
+        .copy-btn:hover { background: rgba(255,255,255,0.22); }
+        .copy-btn.copied { background: var(--green); border-color: var(--green); }
+        code.inline {
+            font-family: 'SF Mono', ui-monospace, Menlo, monospace; font-size: 0.88em;
+            background: var(--surface-hover); border: 1px solid var(--border);
+            border-radius: 5px; padding: 0.08rem 0.35rem;
+        }
+        .skill-badge {
+            display: inline-block; background: var(--accent-glow); border: 1.5px solid var(--accent); color: var(--accent);
+            font-family: 'SF Mono', ui-monospace, Menlo, monospace; font-size: 0.85rem; font-weight: 700;
+            padding: 0.18rem 0.55rem; border-radius: 6px; white-space: nowrap;
+        }
+        .skill-badge.green { color: var(--green); border-color: var(--green); background: var(--green-bg); }
+        .skill-badge.purple { color: var(--purple); border-color: var(--purple); background: var(--purple-bg); }
+
+        /* Board flow */
+        .board-flow { display: flex; align-items: stretch; gap: 3px; margin: 1.5rem 0; overflow-x: auto; padding-bottom: 0.5rem; }
+        .board-lane {
+            flex: 1; min-width: 96px; text-align: center; border-radius: 10px; padding: 0.9rem 0.5rem;
+            background: var(--surface); border: 2px solid var(--border);
+            display: flex; flex-direction: column; justify-content: flex-start;
+        }
+        .board-lane.you { border-color: var(--green); background: var(--green-bg); }
+        .board-lane.auto { border-color: var(--accent); background: var(--accent-glow); }
+        .board-lane.lead { border-color: var(--purple); background: var(--purple-bg); }
+        .board-lane.xform { border-color: var(--amber); background: var(--amber-bg); }
+        .board-lane-name { font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.03em; line-height: 1.25; }
+        .board-lane-who { font-size: 0.66rem; color: var(--text-muted); margin-top: 0.35rem; }
+        .board-arrow-sm { display: flex; align-items: center; font-size: 0.8rem; color: var(--text-muted); padding: 0 1px; }
+        .legend { display: flex; gap: 1.25rem; flex-wrap: wrap; font-size: 0.82rem; color: var(--text-muted); margin-top: 0.25rem; }
+        .legend span { display: inline-flex; align-items: center; gap: 0.4rem; }
+        .dot { width: 0.7rem; height: 0.7rem; border-radius: 3px; display: inline-block; }
+        .dot.you { background: var(--green); } .dot.auto { background: var(--accent); }
+        .dot.lead { background: var(--purple); } .dot.xform { background: var(--amber); }
+
+        /* Callouts */
+        .callout {
+            border-radius: 10px; padding: 1.15rem 1.4rem; margin: 1.25rem 0; font-size: 1rem; font-weight: 500;
+            background: var(--amber-bg); border: 2px solid var(--amber);
+        }
+        .callout.rose { background: var(--rose-bg); border-color: var(--rose); }
+        .callout.green { background: var(--green-bg); border-color: var(--green); }
+        .callout strong { font-weight: 800; }
+
+        /* Do / Don't */
+        .dd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.25rem; }
+        .dd { border-radius: 12px; padding: 1.4rem 1.5rem; }
+        .dd.do { background: var(--green-bg); border: 1px solid var(--green); }
+        .dd.dont { background: var(--rose-bg); border: 1px solid var(--rose); }
+        .dd h3 { display: flex; align-items: center; gap: 0.5rem; }
+        .dd.do h3 { color: var(--green); } .dd.dont h3 { color: var(--rose); }
+        .dd ul { list-style: none; margin-top: 0.6rem; }
+        .dd li { font-size: 0.93rem; padding-left: 1.5rem; position: relative; margin-bottom: 0.55rem; line-height: 1.5; }
+        .dd.do li::before { content: "\2713"; color: var(--green); position: absolute; left: 0; font-weight: 800; }
+        .dd.dont li::before { content: "\2715"; color: var(--rose); position: absolute; left: 0; font-weight: 800; }
+
+        /* File table */
+        .file-row { display: flex; gap: 1rem; align-items: flex-start; padding: 0.85rem 0; border-bottom: 1px solid var(--border); }
+        .file-row:last-child { border-bottom: none; }
+        .file-name { font-family: 'SF Mono', ui-monospace, Menlo, monospace; font-size: 0.85rem; font-weight: 700; min-width: 230px; }
+        .file-action { font-size: 0.78rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em; min-width: 88px; }
+        .file-action.edit { color: var(--green); } .file-action.read { color: var(--accent); } .file-action.skip { color: var(--text-muted); }
+        .file-row p { margin: 0; font-size: 0.92rem; }
+
+        .kbd { font-family: 'SF Mono', ui-monospace, Menlo, monospace; font-size: 0.8rem; font-weight: 700;
+            background: var(--surface); border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 5px; padding: 0.1rem 0.4rem; }
+
+        .resource-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.25rem; }
+        .resource-grid a { text-decoration: none; color: inherit; }
+        .resource-grid a:hover { border-color: var(--accent); }
+        .footer-note { text-align: center; color: var(--text-muted); margin-top: 2.5rem; font-size: 1rem; }
+
+        @media (max-width: 768px) {
+            .header { padding: 1rem 1.25rem; }
+            .main { padding: 1.75rem 1.25rem 4rem; }
+            h2 { font-size: 1.5rem; } .hero h2 { font-size: 1.7rem; }
+            .card-grid-2, .card-grid-3, .dd-grid, .resource-grid { grid-template-columns: 1fr; }
+            .file-row { flex-direction: column; gap: 0.25rem; } .file-name { min-width: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <div>
+            <h1>Start Here <span>&middot;</span> Author Onboarding</h1>
+            <div class="header-subtitle">Your first stop before you build your first activity</div>
+        </div>
+        <nav class="header-nav">
+            <a href="#setup">Setup</a>
+            <a href="#pipeline">The Pipeline</a>
+            <a href="#board">Your Board</a>
+            <a href="#loop">Daily Loop</a>
+            <a href="#editing">Editing</a>
+            <a href="#help">Help</a>
+        </nav>
+    </div>
+</header>
+
+<main class="main">
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="eyebrow">Welcome</div>
+        <h2>You turn plans into activities. <span>Claude does the heavy lifting.</span></h2>
+        <p class="lead">Your job is to be the expert. You plan what each activity should teach, Claude drafts it, and you refine it until it's classroom-ready. You don't need to be technical &mdash; you drag a ticket, review a draft, and send it on.</p>
+        <div class="hero-points">
+            <div class="hero-point">
+                <span class="ic">&#129513;</span>
+                <h3>You plan &amp; review</h3>
+                <p>The pedagogy and quality are yours. That's the part only a human can do.</p>
+            </div>
+            <div class="hero-point">
+                <span class="ic">&#9881;&#65039;</span>
+                <h3>The pipeline drafts</h3>
+                <p>Move a ticket on the board and Claude builds a full first draft for you.</p>
+            </div>
+            <div class="hero-point">
+                <span class="ic">&#128172;</span>
+                <h3>Claude Code is your tool</h3>
+                <p>You'll edit drafts and run a couple of simple commands inside VS Code.</p>
+            </div>
+        </div>
+        <p style="margin-top:1.75rem;font-size:0.95rem;color:var(--text-muted);">This page is your <strong>first onboarding session</strong>. Sessions 2 and 3 (linked at the bottom) go deeper on the pipeline and on working in Claude Code &mdash; come back to them after you've set up.</p>
+    </div>
+
+    <!-- SECTION 1: SETUP -->
+    <section id="setup">
+        <div class="eyebrow">Do this once</div>
+        <h2>Set up your <span>machine</span></h2>
+        <p class="section-intro">Two one-time setup steps and you're ready to author. Your team will have installed VS Code and Claude Code for you &mdash; these steps connect them to your work.</p>
+
+        <!-- 1A Claude Code -->
+        <div class="panel">
+            <div class="panel-head">
+                <span class="panel-tag green">Setup 1</span>
+                <h3 style="margin:0;">Claude Code in VS Code</h3>
+            </div>
+            <p style="color:var(--text-muted);">Claude Code lives inside <strong>VS Code</strong> (the program you'll edit in). Open it by clicking the Claude icon in the left sidebar. Three things to know on day one:</p>
+            <div class="card-grid card-grid-3">
+                <div class="card card-green">
+                    <span class="ic">&#128193;</span>
+                    <h3>The folder you open = Claude's whole world</h3>
+                    <p>Claude can only see files inside the folder you've opened. Open your curriculum's folder with <span class="kbd">Cmd</span> + <span class="kbd">O</span> (Mac) before you start.</p>
+                </div>
+                <div class="card card-green">
+                    <span class="ic">&#128172;</span>
+                    <h3>One conversation per lesson</h3>
+                    <p>Start a fresh chat for each activity so Claude doesn't mix up lessons. Past chats stay available if you need them.</p>
+                </div>
+                <div class="card card-green">
+                    <span class="ic">&#9099;&#65039;</span>
+                    <h3>Esc stops Claude</h3>
+                    <p>Press <span class="kbd">Esc</span> any time to interrupt and redirect &mdash; you never have to wait for it to finish.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1B Jira key -->
+        <div class="panel">
+            <div class="panel-head">
+                <span class="panel-tag">Setup 2</span>
+                <h3 style="margin:0;">Connect your Jira account (API key)</h3>
+            </div>
+            <p style="color:var(--text-muted);">This lets Claude move your tickets and notify reviewers on your behalf when you run <span class="skill-badge">/move-to-review</span>. You'll do it once.</p>
+
+            <ol class="steps">
+                <li>
+                    <strong>Create your Jira API token.</strong>
+                    <small>Go to <a href="https://id.atlassian.com/manage-profile/security/api-tokens" target="_blank">id.atlassian.com/manage-profile/security/api-tokens</a> &rarr; click <strong>Create API token</strong> &rarr; name it <em>Claude Code</em> &rarr; <strong>Create</strong> &rarr; <strong>Copy</strong>. Keep that browser tab open &mdash; you can't see the token again after you close it.</small>
+                </li>
+                <li>
+                    <strong>Save it to a config folder.</strong>
+                    <small><strong>Mac:</strong> On your Desktop, make a folder named <code class="inline">config</code>. Open TextEdit, click <strong>Format &rarr; Make Plain Text</strong> (important!), paste the two lines below, and save it inside <code class="inline">config</code> as <code class="inline">jira-token.txt</code>.<br><strong>Windows:</strong> Make a <code class="inline">config</code> folder on your Desktop, right-click inside &rarr; <strong>New &rarr; Text Document</strong> &rarr; name it <code class="inline">jira-token.txt</code>, open in Notepad, paste the two lines, save.</small>
+                    <div class="code-wrap">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre>email: <span class="ph">your.name@coursemojo.com</span>
+token: <span class="ph">&lt;paste the token you copied in step 1&gt;</span></pre>
+                    </div>
+                </li>
+                <li>
+                    <strong>Let Claude finish the setup.</strong>
+                    <small>Open Claude Code, paste the prompt below into the chat, and press <strong>Enter</strong>. Claude reads your token file, configures everything, and tests the connection &mdash; you'll see a success message in a few seconds.</small>
+                    <div class="code-wrap">
+                        <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+<pre>Please set up my Jira credentials for the move-to-review skill.
+
+Read the file at ~/Desktop/config/jira-token.txt &mdash; it contains two lines:
+  email: &lt;my email&gt;
+  token: &lt;my Jira API token&gt;
+
+Parse those values, then create (or overwrite) the file at ~/.jira-config with
+exactly this format, substituting my email and token:
+
+JIRA_DOMAIN=coursemojo.atlassian.net
+JIRA_EMAIL=&lt;my email&gt;
+JIRA_API_TOKEN=&lt;my token&gt;
+
+Then verify the credentials work by running:
+  curl -s -o /dev/null -w "%{http_code}" -u "&lt;email&gt;:&lt;token&gt;" https://coursemojo.atlassian.net/rest/api/3/myself
+
+If it returns 200, reply "Jira setup complete &mdash; you can now use /move-to-review."
+If it returns anything else, tell me the response code and what might be wrong
+so I can fix the token file.</pre>
+                    </div>
+                </li>
+            </ol>
+
+            <div class="callout rose">
+                <strong>Your token is a password.</strong> Don't share your <code class="inline">config</code> folder or the file inside it. If you think someone else has seen it, return to the Atlassian page in step 1 and revoke/recreate the token.
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 2: PIPELINE -->
+    <section id="pipeline">
+        <div class="eyebrow">The big picture</div>
+        <h2>How an activity <span>gets made</span></h2>
+        <p class="section-intro">Every activity travels the same path. Some stages are automated; some are yours. Knowing which is which is most of the job.</p>
+
+        <div class="card-grid card-grid-3">
+            <div class="card card-green">
+                <span class="ic">&#9999;&#65039;</span>
+                <h3>1. You plan it</h3>
+                <p>You write the <strong>module plan</strong> &mdash; the blueprint that says what each activity should teach, which text to use, and how many questions of which type. This is the single biggest driver of draft quality.</p>
+            </div>
+            <div class="card card-accent">
+                <span class="ic">&#9881;&#65039;</span>
+                <h3>2. Claude drafts it</h3>
+                <p>When you drag the ticket to <strong>Draft Activity with Claude</strong>, the pipeline reads your plan, gathers the source text, picks the excerpt, and writes a complete first draft &mdash; then runs an automatic quality pass.</p>
+            </div>
+            <div class="card card-green">
+                <span class="ic">&#128270;</span>
+                <h3>3. You refine it</h3>
+                <p>You review the draft in Claude Code, tighten questions and criteria, then send it to your lead. Your lead approves it, and it moves on to the transformation team.</p>
+            </div>
+        </div>
+
+        <div class="card card-cyan" style="margin-top:1.25rem;">
+            <h3>Two things must be right or the build fails</h3>
+            <div class="card-grid card-grid-2" style="margin-top:0.75rem;">
+                <div>
+                    <p style="color:var(--text);font-weight:700;margin:0;">1. The module plan</p>
+                    <p style="margin-top:0.25rem;">Claude reads it as its blueprint. The <strong>Activity ID</strong> is how it knows what to build &mdash; no Activity ID, nothing happens.</p>
+                </div>
+                <div>
+                    <p style="color:var(--text);font-weight:700;margin:0;">2. The source materials</p>
+                    <p style="margin-top:0.25rem;">The text and teacher materials must be in the Curriculum Hub. If Claude can't find them, the build flags it rather than inventing content &mdash; the draft comes back incomplete.</p>
+                </div>
+            </div>
+        </div>
+
+        <details style="margin-top:1.25rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1rem 1.4rem;">
+            <summary style="cursor:pointer;font-weight:700;color:var(--text-muted);">What happens "behind the scenes" when Claude drafts (optional &mdash; you never run these yourself)</summary>
+            <p style="margin-top:0.75rem;color:var(--text-muted);">When a ticket hits <strong>Draft Activity with Claude</strong>, the pipeline runs six steps in order &mdash; reading your plan, pulling out the requirements, finding similar high-quality examples, selecting the exact excerpt, writing the activity, and running a quality check. You don't trigger or manage any of this; it's listed only so the process isn't a black box.</p>
+        </details>
+    </section>
+
+    <!-- SECTION 3: BOARD -->
+    <section id="board">
+        <div class="eyebrow">Where work lives</div>
+        <h2>Your Jira board &amp; <span>moving tickets</span></h2>
+        <p class="section-intro">One ticket = one lesson, named after its Activity ID. Tickets are created for you &mdash; you never make them. You move a ticket left to right by dragging it between columns. Here's the full path and who owns each stage:</p>
+
+        <div class="board-flow">
+            <div class="board-lane"><div class="board-lane-name">Backlog</div><div class="board-lane-who">Ops creates</div></div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane you"><div class="board-lane-name">To-Do</div><div class="board-lane-who">You pull &amp; assign</div></div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane you"><div class="board-lane-name">Authoring</div><div class="board-lane-who">You prep (optional)</div></div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane auto"><div class="board-lane-name">Draft Activity with Claude</div><div class="board-lane-who">You drag &rarr; auto-builds</div></div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane you"><div class="board-lane-name">Draft Review</div><div class="board-lane-who">You edit</div></div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane lead"><div class="board-lane-name">Needs Lead Review</div><div class="board-lane-who">Meg / Eric</div></div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane lead"><div class="board-lane-name">Final Review</div><div class="board-lane-who">Lead approves</div></div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane xform"><div class="board-lane-name">In Transformation</div><div class="board-lane-who">Transformation team</div></div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane"><div class="board-lane-name">Done</div><div class="board-lane-who">&check;</div></div>
+        </div>
+        <div class="legend">
+            <span><span class="dot you"></span> You do this</span>
+            <span><span class="dot auto"></span> Automated</span>
+            <span><span class="dot lead"></span> Your lead</span>
+            <span><span class="dot xform"></span> Transformation team</span>
+        </div>
+
+        <div class="callout">
+            The one move that matters most: dragging a ticket into <strong>Draft Activity with Claude</strong> kicks off the build. Claude takes over and, about <strong>45 minutes to an hour later</strong> (longer if you start several at once), the ticket lands in <strong>Draft Review</strong> on its own. Give it space &mdash; once a build is in motion, the pipeline moves the ticket for you.
+        </div>
+
+        <div class="dd-grid">
+            <div class="dd do">
+                <h3><span>&#9989;</span> Do</h3>
+                <ul>
+                    <li>Pull tickets from Backlog/To-Do and assign them to yourself</li>
+                    <li>Confirm your module plan and source materials are ready before you drag to build</li>
+                    <li>Drag <em>into</em> Draft Activity with Claude to start a build</li>
+                    <li>Pull one ticket or a whole module &mdash; batch size is up to you</li>
+                    <li>Use <span class="skill-badge green">/move-to-review</span> to send a finished draft to your lead</li>
+                </ul>
+            </div>
+            <div class="dd dont">
+                <h3><span>&#9940;</span> Don't</h3>
+                <ul>
+                    <li>Create new tickets &mdash; they already exist on your board</li>
+                    <li>Manually drag a ticket <em>out of</em> Draft Activity with Claude &mdash; it desyncs the build</li>
+                    <li>Re-drag a ticket to "rebuild" &mdash; builds are staggered and take time</li>
+                    <li>Manually drag from Draft Review to Needs Lead Review &mdash; let <span class="skill-badge green">/move-to-review</span> do it</li>
+                    <li>Let the ticket name and the module plan's Activity ID disagree</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- SECTION 4: DAILY LOOP -->
+    <section id="loop">
+        <div class="eyebrow">Your rhythm</div>
+        <h2>Your <span>daily loop</span></h2>
+        <p class="section-intro">Once you're set up, every activity follows the same six steps.</p>
+        <ol class="steps green">
+            <li><strong>Find your tickets.</strong><small>Open your curriculum's Jira board and look in Backlog / To-Do. Filter by your name or the Activity ID prefix.</small></li>
+            <li><strong>Pull &amp; assign.</strong><small>Drag the ticket(s) to To-Do or Authoring and assign them to yourself. Use Authoring for any prep &mdash; finalizing the module plan, confirming source materials.</small></li>
+            <li><strong>Trigger the build.</strong><small>Drag the ticket to <strong>Draft Activity with Claude</strong>. Claude builds the draft (~45 min&ndash;1 hr) and moves it to <strong>Draft Review</strong> automatically.</small></li>
+            <li><strong>Review &amp; edit in Claude Code.</strong><small>Open the draft folder, read the activity against the plan, and refine. Edit directly, ask Claude in plain English, or run <span class="skill-badge green">/edit-draft</span> for an automated quality pass.</small></li>
+            <li><strong>Send it to your lead.</strong><small>Run <span class="skill-badge green">/move-to-review</span>. Claude asks which draft, asks for any notes for the reviewer, lets you pick <strong>Meg or Eric</strong>, then moves the ticket to Needs Lead Review and notifies them.</small></li>
+            <li><strong>Watch for the outcome.</strong><small>If your lead requests changes, you'll get a Jira notification with their notes and the ticket returns to Draft Review. If approved, your lead finalizes it &mdash; you're done with that activity.</small></li>
+        </ol>
+        <div class="callout green">
+            <strong>The "notes for reviewer" field is worth using.</strong> Even one sentence &mdash; "I'm unsure if Q3 is too hard for grade 6" &mdash; makes the review faster and better.
+        </div>
+    </section>
+
+    <!-- SECTION 5: EDITING -->
+    <section id="editing">
+        <div class="eyebrow">In Claude Code</div>
+        <h2>Reading &amp; editing <span>a draft</span></h2>
+        <p class="section-intro">When a draft lands, its folder holds a few files. You only edit one of them.</p>
+
+        <div class="card">
+            <div class="file-row">
+                <div class="file-name">*_Activity_Content.md</div>
+                <div class="file-action edit">Edit this</div>
+                <p>The actual activity students will see. This is where ~90% of your editing happens.</p>
+            </div>
+            <div class="file-row">
+                <div class="file-name">*_Match_Report.md</div>
+                <div class="file-action read">Read this</div>
+                <p>Claude's plan and reasoning &mdash; the target analysis, what to emphasize, and why. Read it to understand the draft's intent.</p>
+            </div>
+            <div class="file-row">
+                <div class="file-name">Excerpt selection notes</div>
+                <div class="file-action read">Reference</div>
+                <p>Why Claude chose the paragraphs it did. Handy if a paragraph reference looks off.</p>
+            </div>
+            <div class="file-row">
+                <div class="file-name">_DO_NOT_EDIT/</div>
+                <div class="file-action skip">Leave alone</div>
+                <p>Backups the pipeline uses to track your changes. Don't touch this folder.</p>
+            </div>
+        </div>
+
+        <div class="card-grid card-grid-2" style="margin-top:1.5rem;">
+            <div class="card card-green">
+                <h3>Edit by hand when&hellip;</h3>
+                <ul>
+                    <li>Fixing a typo or a single word</li>
+                    <li>You already know the exact wording</li>
+                    <li>Deleting a small piece or fixing formatting</li>
+                </ul>
+                <p style="margin-top:0.6rem;">Click into the file, type, and save with <span class="kbd">Cmd</span> + <span class="kbd">S</span>. A white dot on the tab means unsaved changes.</p>
+            </div>
+            <div class="card card-accent">
+                <h3>Ask Claude when&hellip;</h3>
+                <ul>
+                    <li>Rewriting a question or changing its type</li>
+                    <li>Applying the same fix across several questions</li>
+                    <li>Reworking criteria or adjusting paragraph references</li>
+                </ul>
+                <p style="margin-top:0.6rem;">Be specific: "Cut Q3's prompt to one sentence and keep the criteria" beats "make it shorter." Review Claude's changes before moving on.</p>
+            </div>
+        </div>
+
+        <div class="callout">
+            <strong>Read the Match Report and the activity together.</strong> The Match Report is the <em>plan</em>; the activity is the <em>execution</em>. Your edits should pull the execution toward the plan &mdash; check that the draft hits the main emphasis, the question types match, the criteria point at real evidence, and the question count fits the time budget.
+        </div>
+    </section>
+
+    <!-- SECTION 6: HELP -->
+    <section id="help">
+        <div class="eyebrow">When something's off</div>
+        <h2>If a build fails or you're <span>stuck</span></h2>
+        <div class="card-grid card-grid-3">
+            <div class="card card-rose">
+                <span class="ic">&#9888;&#65039;</span>
+                <h3>A build failed</h3>
+                <p>The ticket stays in Draft Activity with Claude and a Jira comment explains why &mdash; almost always missing source materials or an Activity ID mismatch. Fix the cause, then re-drag.</p>
+            </div>
+            <div class="card card-accent">
+                <span class="ic">&#128221;</span>
+                <h3>Draft issue vs. tool pattern</h3>
+                <p>Just this draft? Fix it in Claude Code. Noticing Claude get the <em>same</em> thing wrong across lessons? That's a tool pattern &mdash; flag it so the skill improves for everyone.</p>
+            </div>
+            <div class="card card-cyan">
+                <span class="ic">&#128172;</span>
+                <h3>Not sure?</h3>
+                <p>Ask. A quick question to Michaela or your lead beats guessing &mdash; especially in your first few activities.</p>
+            </div>
+        </div>
+
+        <h3 style="margin-top:2.5rem;">Bookmark these</h3>
+        <div class="resource-grid">
+            <a class="card card-accent" href="https://michaelamann12.github.io/authoring-pipeline-guide/onboarding-session-2.html" target="_blank">
+                <h3 style="color:var(--accent);">Onboarding &mdash; Session 2</h3>
+                <p>The pipeline in depth: module plans, source materials, and the board, with a live build.</p>
+            </a>
+            <a class="card card-accent" href="https://michaelamann12.github.io/authoring-pipeline-guide/onboarding-session-3.html" target="_blank">
+                <h3 style="color:var(--accent);">Onboarding &mdash; Session 3</h3>
+                <p>Working in Claude Code: navigating VS Code, editing drafts, and submitting for review.</p>
+            </a>
+            <a class="card card-accent" href="https://michaelamann12.github.io/authoring-pipeline-guide/" target="_blank">
+                <h3 style="color:var(--accent);">Pipeline Guide</h3>
+                <p>Full reference for how the pipeline works, folder structure, and skills.</p>
+            </a>
+            <a class="card card-accent" href="https://michaelamann12.github.io/authoring-pipeline-guide/author-workflow.html" target="_blank">
+                <h3 style="color:var(--accent);">Author Walkthrough</h3>
+                <p>Step-by-step guide to your daily workflow.</p>
+            </a>
+            <a class="card card-accent" href="https://michaelamann12.github.io/authoring-pipeline-guide/jira-refresher.html" target="_blank">
+                <h3 style="color:var(--accent);">Jira Refresher</h3>
+                <p>A one-page reminder of the board, the lanes, and the do's and don'ts.</p>
+            </a>
+            <a class="card card-accent" href="https://michaelamann12.github.io/procurement-dashboard/" target="_blank">
+                <h3 style="color:var(--accent);">Procurement Dashboard</h3>
+                <p>Which curricula and modules are ready for authoring.</p>
+            </a>
+        </div>
+
+        <p class="footer-note">Questions? Reach out to <strong>Michaela</strong> anytime. Welcome to the team. &#127881;</p>
+    </section>
+
+</main>
+
+<script>
+    function copyCode(btn) {
+        var pre = btn.parentElement.querySelector('pre');
+        var text = pre.innerText;
+        navigator.clipboard.writeText(text).then(function () {
+            var original = btn.textContent;
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(function () { btn.textContent = original; btn.classList.remove('copied'); }, 1600);
+        });
+    }
+</script>
+
+</body>
+</html>
