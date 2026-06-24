@@ -476,7 +476,7 @@
         <div class="progress-line"></div>
         <div class="progress-step" data-target="step-4">
             <div class="progress-dot">4</div>
-            <span class="progress-label">Drag to Drafting</span>
+            <span class="progress-label">Drag to Build</span>
         </div>
         <div class="progress-line"></div>
         <div class="progress-step" data-target="step-5">
@@ -566,7 +566,7 @@
             </ul>
 
             <div class="callout warning">
-                <p><strong>If source materials are missing, the build will fail.</strong> Claude will not fabricate content. The ticket will stall in Drafting and show an error. Better to catch this now than after the build runs.</p>
+                <p><strong>If source materials are missing, the build will fail.</strong> Claude will not fabricate content. The ticket will stall in Draft Activity with Claude and show an error. Better to catch this now than after the build runs.</p>
             </div>
 
             <h3>Your Jira Ticket at This Point</h3>
@@ -582,7 +582,7 @@
                     </div>
                 </div>
                 <div class="jira-lane">
-                    <div class="jira-lane-title">Drafting</div>
+                    <div class="jira-lane-title">Draft Activity with Claude</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Draft Review</div>
@@ -644,7 +644,7 @@
                     </div>
                 </div>
                 <div class="jira-lane">
-                    <div class="jira-lane-title">Drafting</div>
+                    <div class="jira-lane-title">Draft Activity with Claude</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Draft Review</div>
@@ -668,16 +668,16 @@
         <div class="step-header">
             <div class="step-number" style="background:var(--green-bg);color:var(--green);">4</div>
             <div class="step-header-text">
-                <div class="step-title">Drag Your Ticket to "Drafting"</div>
+                <div class="step-title">Drag Your Ticket to "Draft Activity with Claude"</div>
                 <div class="step-subtitle">This is the trigger &mdash; the pipeline picks it up from here</div>
             </div>
             <span class="step-actor-badge badge-you">You</span>
         </div>
         <div class="step-body">
-            <p>In Jira, drag your ticket from <strong>Backlog</strong> (or Ready for Authoring) to the <strong>Drafting</strong> lane. This is the signal that tells the pipeline: "This activity is ready to be built."</p>
+            <p>In Jira, drag your ticket from <strong>Backlog</strong> (or Ready for Authoring) to the <strong>Draft Activity with Claude</strong> lane. This is the signal that tells the pipeline: "This activity is ready to be built."</p>
 
             <div class="trigger-flow">
-                <div class="trigger-box you-do">You drag ticket to Drafting</div>
+                <div class="trigger-box you-do">You drag ticket to Draft Activity with Claude</div>
                 <span class="trigger-arrow">&rarr;</span>
                 <div class="trigger-box system-does">Pipeline detects ticket</div>
                 <span class="trigger-arrow">&rarr;</span>
@@ -685,12 +685,11 @@
             </div>
 
             <h3>What Happens Behind the Scenes</h3>
-            <p>The pipeline polls Jira every 30 minutes during business hours. When it finds your ticket in "Drafting," it:</p>
+            <p>The pipeline polls Jira every 30 minutes during business hours. When it finds your ticket in "Draft Activity with Claude," it:</p>
             <ol>
                 <li>Tags the ticket as <code>pipeline_queued</code> so it doesn't get picked up twice</li>
                 <li>Reads your module plan row for this Activity ID</li>
-                <li>Runs the three-skill build sequence: <strong>Populate</strong> &rarr; <strong>Pick Excerpt</strong> &rarr; <strong>Draft Activity</strong></li>
-                <li>Runs the 11-point quality check</li>
+                <li>Runs the six-skill build sequence: <strong>populate-lesson</strong> &rarr; <strong>extract-requirements</strong> &rarr; <strong>find-exemplars</strong> &rarr; <strong>pick-excerpt</strong> &rarr; <strong>generate-activity</strong> &rarr; <strong>edit-draft</strong></li>
                 <li>If successful, auto-moves the ticket to <strong>Draft Review</strong></li>
             </ol>
 
@@ -702,7 +701,7 @@
                     <div class="jira-lane-title">Ready for Authoring</div>
                 </div>
                 <div class="jira-lane active-lane">
-                    <div class="jira-lane-title">Drafting</div>
+                    <div class="jira-lane-title">Draft Activity with Claude</div>
                     <div class="jira-ticket highlight-ticket">
                         OE_SLP_XX_G9_1.1_7_v1
                         <span class="ticket-status">Pipeline processing...</span>
@@ -736,38 +735,42 @@
             <span class="step-actor-badge badge-auto">Automated</span>
         </div>
         <div class="step-body">
-            <p>While you wait (usually within the next polling cycle), Claude runs three skills in sequence:</p>
+            <p>This runs in the background &mdash; you don't wait on it. Orchestrated by <code>/draft-activity</code>, Claude runs six skills in sequence:</p>
 
             <table class="detail-table">
                 <thead>
-                    <tr><th>Skill</th><th>What It Does</th><th>Time</th></tr>
+                    <tr><th>Skill</th><th>What It Does</th></tr>
                 </thead>
                 <tbody>
                     <tr>
                         <td><strong>/populate-lesson</strong></td>
                         <td>Navigates the Curriculum Hub, copies source texts and lesson plans to the working folder</td>
-                        <td>~3&ndash;5 min</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/extract-requirements</strong></td>
+                        <td>Extracts the lesson requirements and pedagogical intent from the populated lesson</td>
+                    </tr>
+                    <tr>
+                        <td><strong>/find-exemplars</strong></td>
+                        <td>Searches the Activity Catalog for matching exemplars and synthesizes patterns</td>
                     </tr>
                     <tr>
                         <td><strong>/pick-excerpt</strong></td>
                         <td>Selects and formats the text excerpt with correct paragraph numbering</td>
-                        <td>~3&ndash;5 min</td>
                     </tr>
                     <tr>
-                        <td><strong>/draft-activity</strong></td>
+                        <td><strong>/generate-activity</strong></td>
                         <td>Generates the full activity: intro, questions, criteria, assessment, conclusion</td>
-                        <td>~8&ndash;12 min</td>
                     </tr>
                     <tr>
                         <td><strong>/edit-draft</strong></td>
-                        <td>Runs 11-point quality validation and auto-fixes issues</td>
-                        <td>~5&ndash;8 min</td>
+                        <td>Runs the quality validation and auto-fixes issues</td>
                     </tr>
                 </tbody>
             </table>
 
             <div class="callout warning">
-                <p><strong>Total build time: approximately 20&ndash;30 minutes.</strong> Times vary depending on text length and complexity. Don't worry if it takes a while &mdash; the pipeline will move your ticket automatically when it's done.</p>
+                <p><strong>Builds run in the background in a staggered queue.</strong> Each lesson takes roughly 45&ndash;60 minutes of build time, but you don't wait on it &mdash; drop your tickets and most will be drafted by the next morning. The pipeline moves your ticket to Draft Review automatically when it's done.</p>
             </div>
 
             <h3>When It Succeeds</h3>
@@ -783,7 +786,7 @@
             <div class="trigger-flow">
                 <div class="trigger-box error-state">Build error</div>
                 <span class="trigger-arrow">&rarr;</span>
-                <div class="trigger-box error-state">Ticket stays in Drafting</div>
+                <div class="trigger-box error-state">Ticket stays in Draft Activity with Claude</div>
                 <span class="trigger-arrow">&rarr;</span>
                 <div class="trigger-box you-do">Check error &amp; fix inputs</div>
             </div>
@@ -798,7 +801,7 @@
                     <div class="jira-lane-title">Ready for Authoring</div>
                 </div>
                 <div class="jira-lane">
-                    <div class="jira-lane-title">Drafting</div>
+                    <div class="jira-lane-title">Draft Activity with Claude</div>
                 </div>
                 <div class="jira-lane active-lane">
                     <div class="jira-lane-title">Draft Review</div>
@@ -917,7 +920,7 @@
             <ol>
                 <li>Generates a <strong>change summary</strong> comparing your edits to the original draft</li>
                 <li>Moves the draft to <code>draft_outputs/review_ready/</code></li>
-                <li>Updates the Jira ticket to <strong>Final Review</strong></li>
+                <li>Updates the Jira ticket to <strong>Needs Lead Review</strong></li>
             </ol>
 
             <div class="jira-board">
@@ -928,13 +931,13 @@
                     <div class="jira-lane-title">Ready for Authoring</div>
                 </div>
                 <div class="jira-lane">
-                    <div class="jira-lane-title">Drafting</div>
+                    <div class="jira-lane-title">Draft Activity with Claude</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Draft Review</div>
                 </div>
                 <div class="jira-lane active-lane">
-                    <div class="jira-lane-title">Final Review</div>
+                    <div class="jira-lane-title">Needs Lead Review</div>
                     <div class="jira-ticket highlight-ticket">
                         OE_SLP_XX_G9_1.1_7_v1
                         <span class="ticket-status">Awaiting lead review</span>
@@ -982,7 +985,7 @@
                     <div class="jira-lane-title">Ready for Authoring</div>
                 </div>
                 <div class="jira-lane">
-                    <div class="jira-lane-title">Drafting</div>
+                    <div class="jira-lane-title">Draft Activity with Claude</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Draft Review</div>
@@ -1019,7 +1022,7 @@
         </div>
         <div class="step-body">
             <h3>How to Spot a Problem</h3>
-            <p>If your ticket has been in <strong>Drafting</strong> for more than one polling cycle (~30 minutes) and hasn't moved to Draft Review, the build may have stalled.</p>
+            <p>If your ticket is still in <strong>Draft Activity with Claude</strong> well past the expected window &mdash; it hasn't reached Draft Review by the next morning, and earlier tickets in the same batch have already moved &mdash; the build may have stalled.</p>
 
             <div class="jira-board">
                 <div class="jira-lane">
@@ -1029,7 +1032,7 @@
                     <div class="jira-lane-title">Ready for Authoring</div>
                 </div>
                 <div class="jira-lane">
-                    <div class="jira-lane-title">Drafting</div>
+                    <div class="jira-lane-title">Draft Activity with Claude</div>
                     <div class="jira-ticket error-ticket">
                         OE_SLP_XX_G9_1.1_7_v1
                         <span class="ticket-status">Stalled &mdash; check errors</span>
@@ -1050,7 +1053,7 @@
             <div class="error-grid">
                 <div class="error-card">
                     <h4><span class="error-indicator indicator-red"></span> Missing Source Text</h4>
-                    <p>Claude couldn't find the text referenced in your plan. <strong>Fix:</strong> Check the Curriculum Hub for the file. Upload it if missing, then drag the ticket back to Drafting to re-trigger.</p>
+                    <p>Claude couldn't find the text referenced in your plan. <strong>Fix:</strong> Check the Curriculum Hub for the file. Upload it if missing, then drag the ticket back to Draft Activity with Claude to re-trigger.</p>
                 </div>
                 <div class="error-card">
                     <h4><span class="error-indicator indicator-red"></span> Missing Activity ID</h4>
@@ -1078,7 +1081,7 @@
             <ol>
                 <li>Fix the underlying issue (upload missing file, update plan, etc.)</li>
                 <li>Drag the ticket back to <strong>Backlog</strong> or <strong>Ready for Authoring</strong></li>
-                <li>Drag it to <strong>Drafting</strong> again</li>
+                <li>Drag it to <strong>Draft Activity with Claude</strong> again</li>
                 <li>The pipeline will pick it up on the next cycle</li>
             </ol>
 
@@ -1103,7 +1106,7 @@
                     <tr><th>I want to...</th><th>Do this</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td><strong>Start a new build</strong></td><td>Complete plan + verify source materials + drag ticket to Drafting</td></tr>
+                    <tr><td><strong>Start a new build</strong></td><td>Complete plan + verify source materials + drag ticket to Draft Activity with Claude</td></tr>
                     <tr><td><strong>Find my draft</strong></td><td><code>draft_outputs/</code> &gt; find your Activity ID folder &gt; open <code>_Activity_Content.md</code></td></tr>
                     <tr><td><strong>Understand a design choice</strong></td><td>Read the <code>_Match_Report.md</code> in the same folder</td></tr>
                     <tr><td><strong>Fix a small issue</strong></td><td>Edit the file directly in VS Code and save</td></tr>

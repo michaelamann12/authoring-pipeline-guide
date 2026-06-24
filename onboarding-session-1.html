@@ -442,7 +442,7 @@ so I can fix the token file.</pre>
         </div>
 
         <div class="callout">
-            The one move that matters most: dragging a ticket into <strong>Draft Activity with Claude</strong> kicks off the build. Claude takes over and, about <strong>45 minutes to an hour later</strong> (longer if you start several at once), the ticket lands in <strong>Draft Review</strong> on its own. Give it space &mdash; once a build is in motion, the pipeline moves the ticket for you.
+            The one move that matters most: dragging a ticket into <strong>Draft Activity with Claude</strong> kicks off the build. Builds run in the background in a staggered queue &mdash; each lesson takes roughly <strong>45&ndash;60 minutes</strong> of build time, but you don't wait on it. Drop your tickets and <strong>most will be drafted by the next morning</strong>, when you'll find them waiting in <strong>Draft Review</strong>. Once a build is in motion, the pipeline moves the ticket for you.
         </div>
 
         <div class="dd-grid">
@@ -477,7 +477,7 @@ so I can fix the token file.</pre>
         <ol class="steps green">
             <li><strong>Find your tickets.</strong><small>Open your curriculum's Jira board and look in Backlog / To-Do. Filter by your name or the Activity ID prefix.</small></li>
             <li><strong>Pull &amp; assign.</strong><small>Drag the ticket(s) to To-Do or Authoring and assign them to yourself. Use Authoring for any prep &mdash; finalizing the module plan, confirming source materials.</small></li>
-            <li><strong>Trigger the build.</strong><small>Drag the ticket to <strong>Draft Activity with Claude</strong>. Claude builds the draft (~45 min&ndash;1 hr) and moves it to <strong>Draft Review</strong> automatically.</small></li>
+            <li><strong>Trigger the build.</strong><small>Drag the ticket to <strong>Draft Activity with Claude</strong>. The build runs in the background (~45&ndash;60 min per lesson, staggered) &mdash; drop your tickets and most will be drafted by the next morning, when they land in <strong>Draft Review</strong> automatically.</small></li>
             <li><strong>Review &amp; edit in Claude Code.</strong><small>Open the draft folder, read the activity against the plan, and refine. Edit directly, ask Claude in plain English, or run <span class="skill-badge green">/edit-draft</span> for an automated quality pass.</small></li>
             <li><strong>Send it to your lead.</strong><small>Run <span class="skill-badge green">/move-to-review</span>. Claude asks which draft, asks for any notes for the reviewer, lets you pick <strong>Meg or Eric</strong>, then moves the ticket to Needs Lead Review and notifies them.</small></li>
             <li><strong>Watch for the outcome.</strong><small>If your lead requests changes, you'll get a Jira notification with their notes and the ticket returns to Draft Review. If approved, your lead finalizes it &mdash; you're done with that activity.</small></li>

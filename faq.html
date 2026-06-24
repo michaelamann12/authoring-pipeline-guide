@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ — Authoring Pipeline Guide</title>
+    <style>
+        :root {
+            --bg: #f5f6fa; --surface: #ffffff; --surface-hover: #f0f1f5; --border: #e2e4ec;
+            --text: #1a1d2e; --text-muted: #5f6478; --accent: #3b5bdb; --accent-glow: rgba(59,91,219,0.08);
+            --green: #0ca678; --green-bg: rgba(12,166,120,0.08); --amber: #e67700; --amber-bg: rgba(230,119,0,0.07);
+            --rose: #e03131; --rose-bg: rgba(224,49,49,0.07); --purple: #7048e8; --purple-bg: rgba(112,72,232,0.07);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        .header { background: var(--surface); border-bottom: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,0.06); padding: 1.5rem 2rem; position: sticky; top: 0; z-index: 100; }
+        .header-inner { max-width: 880px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+        .header h1 span { color: var(--accent); }
+        .header-subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.15rem; }
+        .header-nav { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .header-nav a { font-size: 0.8rem; font-weight: 600; color: var(--accent); text-decoration: none; border: 1.5px solid var(--accent); padding: 0.35rem 0.85rem; border-radius: 20px; white-space: nowrap; transition: all 0.2s; }
+        .header-nav a:hover { background: var(--accent-glow); }
+        .header-nav a.secondary { color: var(--text-muted); border-color: var(--border); }
+        .main { max-width: 880px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+        .lede { font-size: 1.05rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+        .cat { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin: 1.75rem 0 0.5rem; }
+        details { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 0; margin-bottom: 0.6rem; overflow: hidden; }
+        details[open] { box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+        summary { cursor: pointer; padding: 0.9rem 1.25rem; font-weight: 600; font-size: 0.98rem; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+        summary::-webkit-details-marker { display: none; }
+        summary::after { content: '+'; color: var(--accent); font-size: 1.3rem; font-weight: 400; flex-shrink: 0; }
+        details[open] summary::after { content: '\2212'; }
+        summary:hover { background: var(--surface-hover); }
+        .answer { padding: 0 1.25rem 1.1rem; font-size: 0.94rem; color: var(--text); }
+        .answer p { margin-bottom: 0.6rem; } .answer p:last-child { margin-bottom: 0; }
+        .answer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+        .answer a:hover { text-decoration: underline; }
+        code { font-family: 'SF Mono','Fira Code',ui-monospace,monospace; font-size: 0.82rem; background: #eef0f6; padding: 0.12rem 0.4rem; border-radius: 4px; color: var(--accent); }
+        .callout { border-left: 3px solid var(--accent); background: var(--accent-glow); padding: 0.85rem 1rem; border-radius: 0 8px 8px 0; margin: 1.75rem 0 0; font-size: 0.9rem; }
+        .callout strong { display: block; margin-bottom: 0.2rem; }
+        .footer { max-width: 880px; margin: 3rem auto 2rem; padding: 0 2rem; text-align: center; color: var(--text-muted); font-size: 0.78rem; }
+        .footer a { color: var(--accent); text-decoration: none; }
+        @media (max-width: 768px) { .header { padding: 1rem 1.25rem; } .main { padding: 1.5rem 1.25rem 4rem; } }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="header-inner">
+        <div>
+            <h1><span>FAQ</span> — common questions</h1>
+            <p class="header-subtitle">The things people ask in their first few weeks</p>
+        </div>
+        <nav class="header-nav">
+            <a class="secondary" href="index.html">&larr; Guide Home</a>
+            <a href="glossary.html">Glossary</a>
+        </nav>
+    </div>
+</header>
+
+<main class="main">
+    <p class="lede">Quick answers to the most common questions. Don't see yours? Ask Mojo, or use "Ask the team."</p>
+
+    <div class="cat">Getting a draft built</div>
+
+    <details open>
+        <summary>How long does a build take?</summary>
+        <div class="answer"><p>You don't wait on it. The model to expect is <strong>overnight</strong>: drop your tickets into "Draft Activity with Claude" during the day, and most will be drafted by the next morning. (Each lesson takes roughly 45–60 minutes of build time, but that runs in the background — you're not part of the run.)</p></div>
+    </details>
+
+    <details>
+        <summary>How do I start a build?</summary>
+        <div class="answer"><p>Drag the ticket into the <strong>"Draft Activity with Claude"</strong> column on the Jira board. That drop is the trigger — the pipeline picks it up automatically. No other tool needed.</p></div>
+    </details>
+
+    <details>
+        <summary>I dragged my ticket but nothing happened — no draft appeared.</summary>
+        <div class="answer"><p>A few things to check before re-dragging:</p>
+        <p>1) The ticket's <strong>Activity ID</strong> must match a row in the module plan — a mismatch means the pipeline can't find what to build. 2) The <strong>source materials</strong> the plan references need to be in place. 3) Builds run on a cycle and most complete <strong>overnight</strong>, so give it time. <strong>Don't re-drag repeatedly</strong> — that can create duplicate builds. If it's still empty the next day, use "Ask the team."</p></div>
+    </details>
+
+    <div class="cat">Finding &amp; editing your work</div>
+
+    <details>
+        <summary>Where do I find my draft?</summary>
+        <div class="answer"><p>In <code>draft_outputs/{Curriculum}/{DATE}_{Lesson_ID}/</code> — the file you edit is <code>{Lesson_ID}_Activity_Content.md</code>. Full map on the <a href="where-to-find.html">Where do I find…?</a> page.</p></div>
+    </details>
+
+    <details>
+        <summary>Should I edit by hand or ask Claude?</summary>
+        <div class="answer"><p><strong>Edit by hand</strong> for small, known fixes — a typo, a word swap, a quick deletion. <strong>Ask Claude</strong> for bigger or repetitive work — rewriting a question, reworking criteria, "make Q3 harder," "swap Q2 and Q3." Both are fine; use whichever is faster for the change.</p></div>
+    </details>
+
+    <details>
+        <summary>What's the Match Report for?</summary>
+        <div class="answer"><p>It's Claude's reasoning for the draft — which exemplars it used and why it built the questions the way it did. It's <strong>read-only</strong>; read it to understand the draft before you edit. You only edit the <code>Activity_Content.md</code> file.</p></div>
+    </details>
+
+    <details>
+        <summary>Can I edit files in the _DO_NOT_EDIT folder?</summary>
+        <div class="answer"><p>No. That folder holds the untouched original of the draft — it's what lets the system show exactly what you changed when you submit. Leave it alone (and ignore <code>_pipeline/</code> too).</p></div>
+    </details>
+
+    <details>
+        <summary>What's the difference between an LCQ and a TDQ?</summary>
+        <div class="answer"><p>An <strong>LCQ</strong> (Literal Comprehension) asks what the text <em>says</em> — the answer is right there. A <strong>TDQ</strong> (Text-Dependent) asks what it <em>means</em> or how you know — grounded in the text but takes inference. More terms on the <a href="glossary.html">Glossary</a>.</p></div>
+    </details>
+
+    <div class="cat">Submitting &amp; the board</div>
+
+    <details>
+        <summary>How do I submit my draft for review?</summary>
+        <div class="answer"><p>Run <code>/move-to-review</code>. It writes a summary of your changes, moves the draft to <code>review_ready/</code>, advances the ticket to <strong>Needs Lead Review</strong>, and notifies your lead. You don't drag the ticket yourself for this step.</p></div>
+    </details>
+
+    <details>
+        <summary>What are the board statuses, in order?</summary>
+        <div class="answer"><p><strong>Backlog</strong> &rarr; <em>(Authoring — optional prep)</em> &rarr; <strong>Draft Activity with Claude</strong> (you drop it here to build) &rarr; <strong>Draft Review</strong> (you edit) &rarr; <strong>Needs Lead Review</strong> (after <code>/move-to-review</code>) &rarr; <strong>Final Review</strong> / <strong>In Transformation</strong> (lead finalizes) &rarr; <strong>Done</strong>.</p></div>
+    </details>
+
+    <div class="cat">When to ask a person</div>
+
+    <details>
+        <summary>I think the source text has an error, or the standard doesn't fit the passage.</summary>
+        <div class="answer"><p>That's a judgment call, not something to fix on your own — use <strong>"Ask the team."</strong> Flag what you're seeing and let a lead decide.</p></div>
+    </details>
+
+    <details>
+        <summary>Is my draft good enough to finalize?</summary>
+        <div class="answer"><p>That's the lead's call. Run the <a href="draft-ready.html">Is my draft ready?</a> self-check, submit with <code>/move-to-review</code>, and your lead will tell you if anything needs another pass. When in doubt, ask rather than guess.</p></div>
+    </details>
+
+    <div class="callout"><strong>Still stuck?</strong> Ask Mojo in the panel — it reads the guide and the reference docs and will point you to the exact answer, or hand you to the team when it's a judgment call.</div>
+</main>
+
+<footer class="footer">
+    <p>Authoring Pipeline Guide — CourseMojo &middot; <a href="index.html">Guide Home</a> &middot; <a href="glossary.html">Glossary</a> &middot; <a href="where-to-find.html">Where do I find…?</a> &middot; <a href="draft-ready.html">Is my draft ready?</a></p>
+</footer>
+</body>
+</html>

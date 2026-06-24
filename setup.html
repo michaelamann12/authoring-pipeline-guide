@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup — Authoring Pipeline Guide</title>
+    <style>
+        :root {
+            --bg: #f5f6fa;
+            --surface: #ffffff;
+            --surface-hover: #f0f1f5;
+            --border: #e2e4ec;
+            --border-active: #4a6cf7;
+            --text: #1a1d2e;
+            --text-muted: #5f6478;
+            --accent: #3b5bdb;
+            --accent-glow: rgba(59, 91, 219, 0.08);
+            --green: #0ca678;
+            --green-bg: rgba(12, 166, 120, 0.08);
+            --amber: #e67700;
+            --amber-bg: rgba(230, 119, 0, 0.07);
+            --rose: #e03131;
+            --rose-bg: rgba(224, 49, 49, 0.07);
+            --purple: #7048e8;
+            --purple-bg: rgba(112, 72, 232, 0.07);
+            --cyan: #1098ad;
+            --cyan-bg: rgba(16, 152, 173, 0.07);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-inner {
+            max-width: 940px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .header h1 span { color: var(--accent); }
+
+        .header-subtitle {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 0.15rem;
+        }
+
+        .header-nav { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+
+        .header-nav a {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent);
+            text-decoration: none;
+            border: 1.5px solid var(--accent);
+            padding: 0.35rem 0.85rem;
+            border-radius: 20px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .header-nav a:hover { background: var(--accent-glow); }
+        .header-nav a.secondary { color: var(--text-muted); border-color: var(--border); }
+        .header-nav a.secondary:hover { border-color: var(--text-muted); background: var(--surface-hover); }
+
+        /* Main */
+        .main { max-width: 940px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+
+        .lede {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .eyebrow {
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--accent);
+            margin-bottom: 0.6rem;
+        }
+
+        .time-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--green);
+            background: var(--green-bg);
+            padding: 0.3rem 0.75rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin: 2.5rem 0 1rem;
+        }
+
+        h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.5rem; }
+
+        p { margin-bottom: 0.85rem; }
+
+        /* Hero tool cards */
+        .tools {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .tool-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .tool-card .tool-icon { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .tool-card .tool-num {
+            display: inline-block;
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: var(--accent);
+            background: var(--accent-glow);
+            padding: 0.1rem 0.5rem;
+            border-radius: 20px;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.04em;
+        }
+        .tool-card h3 { font-size: 0.9rem; margin-bottom: 0.3rem; }
+        .tool-card p { font-size: 0.78rem; color: var(--text-muted); margin: 0; line-height: 1.5; }
+
+        /* Numbered steps */
+        .step {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+            margin-bottom: 1.25rem;
+            position: relative;
+        }
+
+        .step-head {
+            display: flex;
+            align-items: center;
+            gap: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .step-badge {
+            flex-shrink: 0;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.05rem;
+        }
+
+        .step-head h3 { margin: 0; font-size: 1.15rem; }
+
+        ol.sub, ul.sub { margin: 0 0 0 1.1rem; padding: 0; }
+        ol.sub li, ul.sub li { margin-bottom: 0.5rem; padding-left: 0.25rem; }
+        ol.sub li:last-child, ul.sub li:last-child { margin-bottom: 0; }
+
+        .os-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.85rem;
+            margin: 0.85rem 0;
+        }
+
+        .os-box {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0.85rem 1rem;
+            background: var(--surface-hover);
+        }
+        .os-box strong { display: block; margin-bottom: 0.3rem; font-size: 0.85rem; }
+        .os-box span { font-size: 0.85rem; color: var(--text-muted); }
+
+        code {
+            font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+            font-size: 0.82rem;
+            background: #eef0f6;
+            padding: 0.12rem 0.4rem;
+            border-radius: 4px;
+            color: var(--accent);
+        }
+
+        .menu-path {
+            font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+            font-size: 0.82rem;
+            background: #eef0f6;
+            padding: 0.12rem 0.4rem;
+            border-radius: 4px;
+            color: var(--text);
+            white-space: nowrap;
+        }
+
+        a.link { color: var(--accent); text-decoration: none; font-weight: 600; }
+        a.link:hover { text-decoration: underline; }
+
+        /* Callouts */
+        .callout {
+            border-left: 3px solid var(--accent);
+            background: var(--accent-glow);
+            padding: 0.85rem 1rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0 0;
+            font-size: 0.88rem;
+        }
+        .callout.warning { border-left-color: var(--amber); background: var(--amber-bg); }
+        .callout.success { border-left-color: var(--green); background: var(--green-bg); }
+        .callout.help { border-left-color: var(--purple); background: var(--purple-bg); }
+        .callout strong { display: block; margin-bottom: 0.2rem; }
+
+        /* Card (generic) */
+        .card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.25rem;
+        }
+        .card.accent { border-left: 4px solid var(--accent); }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 0.5rem 0; }
+        th, td { padding: 0.7rem 0.85rem; text-align: left; border-top: 1px solid var(--border); vertical-align: top; }
+        th { font-weight: 600; background: #eef0f6; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+        td a { color: var(--accent); text-decoration: none; word-break: break-all; }
+        td a:hover { text-decoration: underline; }
+
+        /* Next-step CTA */
+        .next-cta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            background: var(--green-bg);
+            border: 1px solid rgba(12,166,120,0.25);
+            border-radius: 12px;
+            padding: 1.25rem 1.5rem;
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+        }
+        .next-cta div h3 { margin-bottom: 0.2rem; }
+        .next-cta div p { margin: 0; font-size: 0.85rem; color: var(--text-muted); }
+        .next-cta a {
+            flex-shrink: 0;
+            background: var(--green);
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+            transition: opacity 0.2s;
+        }
+        .next-cta a:hover { opacity: 0.88; }
+
+        /* Footer */
+        .footer {
+            max-width: 940px;
+            margin: 3rem auto 2rem;
+            padding: 0 2rem;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+        }
+        .footer a { color: var(--accent); text-decoration: none; }
+
+        /* Sub-steps + code/prompt blocks */
+        h4.substep {
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin: 1.4rem 0 0.6rem;
+            color: var(--text);
+        }
+
+        .code-lines {
+            font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+            font-size: 0.82rem;
+            background: #1a1d2e;
+            color: #e6e8f0;
+            padding: 0.85rem 1rem;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            margin: 0.6rem 0;
+            line-height: 1.5;
+        }
+
+        .prompt-wrap { position: relative; margin: 0.6rem 0; }
+
+        .prompt-block {
+            font-family: 'SF Mono', 'Fira Code', ui-monospace, monospace;
+            font-size: 0.8rem;
+            background: #1a1d2e;
+            color: #e6e8f0;
+            padding: 1rem;
+            border-radius: 8px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.55;
+            overflow-x: auto;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.6rem;
+            right: 0.6rem;
+            background: rgba(255,255,255,0.12);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 6px;
+            padding: 0.25rem 0.6rem;
+            font-size: 0.72rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .copy-btn:hover { background: rgba(255,255,255,0.22); }
+
+        @media (max-width: 768px) {
+            .header { padding: 1rem 1.25rem; }
+            .main { padding: 1.5rem 1.25rem 4rem; }
+            h2 { font-size: 1.3rem; }
+            .os-split { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-inner">
+        <div>
+            <h1><span>Setup</span> — Getting Started with Claude Code</h1>
+            <p class="header-subtitle">Everything you need to start authoring &mdash; about 25 minutes</p>
+        </div>
+        <nav class="header-nav">
+            <a class="secondary" href="index.html">&larr; Guide Home</a>
+            <a href="onboarding-session-1.html">Start Onboarding</a>
+        </nav>
+    </div>
+</header>
+
+<main class="main">
+
+    <p class="eyebrow">Pre-work &middot; do this before your first session</p>
+    <p class="lede">A one-time setup you do on your own machine, from scratch. It walks you through everything you need to start authoring with Claude &mdash; in order, top to bottom. No coding experience required.</p>
+    <span class="time-pill">&#9201; One-time setup &middot; about 25 minutes</span>
+
+    <h2>What you'll install</h2>
+    <div class="tools">
+        <div class="tool-card">
+            <div class="tool-icon">&#128193;</div>
+            <span class="tool-num">TOOL 1</span>
+            <h3>Google Drive for Desktop</h3>
+            <p>So Claude can read and write files on the shared drive.</p>
+        </div>
+        <div class="tool-card">
+            <div class="tool-icon">&#128187;</div>
+            <span class="tool-num">TOOL 2</span>
+            <h3>VS Code</h3>
+            <p>The app where you'll talk to Claude.</p>
+        </div>
+        <div class="tool-card">
+            <div class="tool-icon">&#10024;</div>
+            <span class="tool-num">TOOL 3</span>
+            <h3>Claude Code Extension</h3>
+            <p>Connects Claude to VS Code.</p>
+        </div>
+        <div class="tool-card">
+            <div class="tool-icon">&#128172;</div>
+            <span class="tool-num">HELP DESK</span>
+            <h3>Ask Mojo</h3>
+            <p>Your in-editor helper — ask questions any time.</p>
+        </div>
+    </div>
+
+    <div class="callout">
+        <strong>Before you begin, have these ready:</strong>
+        Your <strong>@coursemojo.com</strong> Google account, and your Anthropic account sign-in (the same one you use for Claude).
+    </div>
+
+    <h2>Step-by-step</h2>
+
+    <!-- Step 1 -->
+    <div class="step">
+        <div class="step-head">
+            <div class="step-badge">1</div>
+            <h3>Install Google Drive for Desktop</h3>
+        </div>
+        <p>Google Drive for Desktop syncs the shared drive to your computer so Claude can access curriculum files directly.</p>
+        <ol class="sub">
+            <li>Go to <a class="link" href="https://www.google.com/drive/download/" target="_blank" rel="noopener">google.com/drive/download</a></li>
+            <li>Click <strong>"Download Drive for desktop"</strong></li>
+            <li>Open the downloaded file and follow the installer prompts</li>
+            <li>Once installed, sign in with your <strong>@coursemojo.com</strong> Google account</li>
+            <li>Verify it's working: open Finder (Mac) or File Explorer (Windows) and look for <strong>"Google Drive"</strong> in the sidebar. You should see <strong>Shared drives &rsaquo; 2026-27 Activity Creation</strong></li>
+        </ol>
+        <div class="callout warning">
+            <strong>Don't see the shared drive?</strong>
+            Make sure you're signed into the correct Google account. Click the Drive icon in your menu bar / system tray &rsaquo; <span class="menu-path">Settings</span> &rsaquo; confirm your coursemojo account is listed.
+        </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="step">
+        <div class="step-head">
+            <div class="step-badge">2</div>
+            <h3>Install VS Code</h3>
+        </div>
+        <p>VS Code is a free code editor from Microsoft. You'll use it as the place where you talk to Claude.</p>
+        <ol class="sub">
+            <li>Go to <a class="link" href="https://code.visualstudio.com/download" target="_blank" rel="noopener">code.visualstudio.com/download</a></li>
+            <li>Download the version for your computer:</li>
+        </ol>
+        <div class="os-split">
+            <div class="os-box"><strong>&#63743; Mac</strong><span>Click the big blue Mac button (it auto-detects Intel vs. Apple Silicon). Then drag the VS Code icon into your <strong>Applications</strong> folder and open it from there.</span></div>
+            <div class="os-box"><strong>&#9913; Windows</strong><span>Click the big blue Windows button, run the installer, and follow the prompts. Check <strong>"Add to PATH"</strong> if asked.</span></div>
+        </div>
+        <ol class="sub" start="3">
+            <li>Open VS Code. You'll see a Welcome tab — you can close it.</li>
+        </ol>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="step">
+        <div class="step-head">
+            <div class="step-badge">3</div>
+            <h3>Install the Claude Code Extension</h3>
+        </div>
+        <p>This connects Claude to VS Code so you can chat with it directly.</p>
+        <ol class="sub">
+            <li>Open VS Code</li>
+            <li>Click the <strong>Extensions</strong> icon in the left sidebar (it looks like four small squares)</li>
+            <li>In the search bar at the top, type: <code>Claude Code</code></li>
+            <li>Find <strong>"Claude Code"</strong> by <strong>Anthropic</strong> and click <strong>Install</strong></li>
+            <li>After install, you'll see a Claude icon in your left sidebar (it looks like a sparkle / star &#10024;)</li>
+        </ol>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="step">
+        <div class="step-head">
+            <div class="step-badge">4</div>
+            <h3>Sign Into Claude</h3>
+        </div>
+        <ol class="sub">
+            <li>Click the <strong>Claude icon</strong> in the VS Code sidebar</li>
+            <li>Claude will prompt you to sign in — click the sign-in link</li>
+            <li>Your browser opens. Sign in with your Anthropic account (the one you already use for Claude)</li>
+            <li>Return to VS Code — Claude should now be active and ready</li>
+        </ol>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="step">
+        <div class="step-head">
+            <div class="step-badge">5</div>
+            <h3>Open the Shared Drive in VS Code</h3>
+        </div>
+        <p>This tells Claude where to find the curriculum files.</p>
+        <ol class="sub">
+            <li>In VS Code, go to <span class="menu-path">File &rsaquo; Open Folder…</span></li>
+            <li>Navigate to <span class="menu-path">Google Drive &rsaquo; Shared drives &rsaquo; 2026-27 Activity Creation</span></li>
+            <li>Click <strong>Open</strong></li>
+            <li>If VS Code asks <em>"Do you trust the authors of the files in this folder?"</em> — click <strong>Yes, I trust the authors</strong></li>
+        </ol>
+        <div class="callout success">
+            <strong>Almost there!</strong>
+            Claude can now see all the shared drive files. One more step &mdash; connecting Jira so Claude can move your tickets.
+        </div>
+    </div>
+
+    <!-- Step 6 -->
+    <div class="step">
+        <div class="step-head">
+            <div class="step-badge">6</div>
+            <h3>Connect Jira</h3>
+        </div>
+        <p>This lets Claude update Jira tickets on your behalf &mdash; moving them along the board when you run <code>/move-to-review</code>, <code>/move-to-final</code>, or <code>/revisions</code>.</p>
+
+        <h4 class="substep">6.1&nbsp;&nbsp;Create your Jira API token</h4>
+        <ol class="sub">
+            <li>Go to <a class="link" href="https://id.atlassian.com/manage-profile/security/api-tokens" target="_blank" rel="noopener">id.atlassian.com &rsaquo; API tokens</a></li>
+            <li>Click the blue <strong>"Create API token"</strong> button</li>
+            <li>Give it a name &mdash; something like <strong>Claude Code</strong> &mdash; and click <strong>Create</strong></li>
+            <li>A long string of characters appears. Click <strong>Copy</strong></li>
+            <li><strong>Keep this browser tab open</strong> until you finish 6.2 &mdash; you won't be able to see the token again once you close it</li>
+        </ol>
+
+        <h4 class="substep">6.2&nbsp;&nbsp;Save the token to a config folder</h4>
+        <div class="os-split">
+            <div class="os-box">
+                <strong>&#63743; Mac</strong>
+                <span>
+                    1. Finder &rsaquo; <strong>Desktop</strong> &rsaquo; right-click &rsaquo; <strong>New Folder</strong> &rsaquo; name it <code>config</code><br>
+                    2. Open <strong>TextEdit</strong>, then <span class="menu-path">Format &rsaquo; Make Plain Text</span> (<code>Shift + Cmd + T</code>) &mdash; important, it must be plain text<br>
+                    3. Add the two lines below, then <span class="menu-path">File &rsaquo; Save</span> as <code>jira-token.txt</code> inside the <code>config</code> folder
+                </span>
+            </div>
+            <div class="os-box">
+                <strong>&#9913; Windows</strong>
+                <span>
+                    1. Right-click Desktop &rsaquo; <strong>New &rsaquo; Folder</strong> &rsaquo; name it <code>config</code><br>
+                    2. Inside it, right-click &rsaquo; <strong>New &rsaquo; Text Document</strong> &rsaquo; name it <code>jira-token.txt</code><br>
+                    3. Open it in Notepad, add the two lines below, then <strong>Ctrl + S</strong> and close
+                </span>
+            </div>
+        </div>
+        <div class="code-lines">email: your.name@coursemojo.com
+token: &lt;paste the token you copied in 6.1 here&gt;</div>
+
+        <h4 class="substep">6.3&nbsp;&nbsp;Let Claude finish the setup</h4>
+        <ol class="sub">
+            <li>Open Claude Code in VS Code (click the Claude icon in the sidebar)</li>
+            <li>Copy the entire prompt below, paste it into the Claude chat, and press <strong>Enter</strong>:</li>
+        </ol>
+        <div class="prompt-wrap">
+            <button class="copy-btn" onclick="copyPrompt(this)">Copy</button>
+            <pre class="prompt-block">Please set up my Jira credentials for the move-to-review skill.
+
+Read the file at ~/Desktop/config/jira-token.txt — it contains two lines:
+  email: &lt;my email&gt;
+  token: &lt;my Jira API token&gt;
+
+Parse those values, then create (or overwrite) the file at ~/.jira-config with exactly this format, substituting my email and token:
+
+JIRA_DOMAIN=coursemojo.atlassian.net
+JIRA_EMAIL=&lt;my email&gt;
+JIRA_API_TOKEN=&lt;my token&gt;
+
+Then verify the credentials work by running:
+  curl -s -o /dev/null -w "%{http_code}" -u "&lt;email&gt;:&lt;token&gt;" https://coursemojo.atlassian.net/rest/api/3/myself
+
+If it returns 200, reply "Jira setup complete — you can now use /move-to-review." If it returns anything else, tell me the response code and what might be wrong so I can fix the token file.</pre>
+        </div>
+        <ol class="sub" start="3">
+            <li>Claude reads your token file, configures everything, and tests the connection. You should see a success message within a few seconds.</li>
+        </ol>
+
+        <div class="callout warning">
+            <strong>&#128274; Your token is sensitive.</strong>
+            Treat it like a password &mdash; don't share your <code>config</code> folder or the file inside. If you ever suspect someone else has seen it, return to the Atlassian page in 6.1 and revoke/recreate the token.
+        </div>
+
+        <div class="callout success">
+            <strong>Nearly there!</strong>
+            Claude can now read the shared drive <em>and</em> update your Jira tickets. One quick install to go.
+        </div>
+    </div>
+
+    <!-- Step 7 -->
+    <div class="step">
+        <div class="step-head">
+            <div class="step-badge">7</div>
+            <h3>Install Ask Mojo (your help desk)</h3>
+        </div>
+        <p><strong>Ask Mojo</strong> is a friendly panel inside VS Code — ask it anything about the pipeline, the process, or where to find things, and it answers from the team's guide. It runs on the Claude you just set up, so there's no extra account and no cost to you.</p>
+        <ol class="sub">
+            <li>In VS Code, open the <strong>Extensions</strong> panel (the four-squares icon, or <code>Cmd/Ctrl + Shift + X</code>)</li>
+            <li>Click the <strong>&#8943;</strong> ("More Actions") menu at the top of that panel, then choose <span class="menu-path">Install from VSIX…</span></li>
+            <li>Navigate to <span class="menu-path">Google Drive &rsaquo; Shared drives &rsaquo; 2026-27 Activity Creation &rsaquo; ask-mojo-extension</span> and pick <code>ask-mojo-latest.vsix</code></li>
+            <li>When VS Code offers to <strong>Reload</strong>, click it</li>
+            <li>A new <strong>Ask Mojo</strong> icon appears in the left Activity Bar — click it and try a question like <em>"Where do I find my module plan?"</em></li>
+        </ol>
+        <div class="callout success">
+            <strong>You're all set! &#127881;</strong>
+            You're ready to author — and Mojo's right there whenever you get stuck.
+        </div>
+    </div>
+
+    <h2>Opening a different folder later</h2>
+    <div class="card accent">
+        <p>You can change which folder Claude is looking at any time — for example, switching to a specific curriculum or a draft-output folder. <strong>The folder you open is the world Claude can see.</strong></p>
+        <ol class="sub">
+            <li>Go to <span class="menu-path">File &rsaquo; Open Folder…</span> (shortcut: <code>Cmd + O</code> on Mac, <code>Ctrl + O</code> on Windows)</li>
+            <li>Navigate to the folder you want and click <strong>Open</strong></li>
+            <li>VS Code reloads with that folder as the active workspace — Claude can now see everything inside it</li>
+            <li>Confirm which folder is open in the <strong>Explorer panel</strong> (top icon in the left sidebar) — it shows the folder name and its contents</li>
+        </ol>
+        <div class="callout">
+            <strong>Tip:</strong> To get back to the main shared drive, do <span class="menu-path">File &rsaquo; Open Folder…</span> again and navigate back to <strong>Google Drive &rsaquo; Shared drives &rsaquo; 2026-27 Activity Creation</strong>.
+        </div>
+    </div>
+
+    <h2>Quick reference</h2>
+    <table>
+        <thead>
+            <tr><th>What</th><th>Where</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>Google Drive for Desktop</td><td><a href="https://www.google.com/drive/download/" target="_blank" rel="noopener">google.com/drive/download</a></td></tr>
+            <tr><td>VS Code</td><td><a href="https://code.visualstudio.com/download" target="_blank" rel="noopener">code.visualstudio.com/download</a></td></tr>
+            <tr><td>Claude Code Extension</td><td>Search <code>Claude Code</code> in VS Code Extensions</td></tr>
+        </tbody>
+    </table>
+
+    <div class="callout help">
+        <strong>Need help?</strong>
+        Reach out on Slack if you run into any issues during setup — no question is too small.
+    </div>
+
+    <div class="next-cta">
+        <div>
+            <h3>That's all the setup &mdash; you're ready! &#127881;</h3>
+            <p>This was the only pre-work. In your first onboarding session we'll walk through how a normal authoring day flows. Want a head start? Peek at your daily loop.</p>
+        </div>
+        <a href="onboarding-session-1.html#loop">Peek at the Daily Loop &rarr;</a>
+    </div>
+
+</main>
+
+<footer class="footer">
+    <p>Authoring Pipeline Guide — CourseMojo &middot; <a href="index.html">Guide Home</a> &middot; <a href="onboarding-session-1.html">Onboarding</a></p>
+</footer>
+
+<script>
+function copyPrompt(btn) {
+    var pre = btn.parentElement.querySelector('pre');
+    navigator.clipboard.writeText(pre.innerText).then(function () {
+        btn.textContent = 'Copied!';
+        setTimeout(function () { btn.textContent = 'Copy'; }, 1500);
+    });
+}
+</script>
+
+</body>
+</html>

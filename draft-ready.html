@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Is my draft ready? — Authoring Pipeline Guide</title>
+    <style>
+        :root {
+            --bg: #f5f6fa; --surface: #ffffff; --surface-hover: #f0f1f5; --border: #e2e4ec;
+            --text: #1a1d2e; --text-muted: #5f6478; --accent: #3b5bdb; --accent-glow: rgba(59,91,219,0.08);
+            --green: #0ca678; --green-bg: rgba(12,166,120,0.08); --amber: #e67700; --amber-bg: rgba(230,119,0,0.07);
+            --rose: #e03131; --rose-bg: rgba(224,49,49,0.07); --purple: #7048e8; --purple-bg: rgba(112,72,232,0.07);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        .header { background: var(--surface); border-bottom: 1px solid var(--border); box-shadow: 0 1px 4px rgba(0,0,0,0.06); padding: 1.5rem 2rem; position: sticky; top: 0; z-index: 100; }
+        .header-inner { max-width: 940px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+        .header h1 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+        .header h1 span { color: var(--accent); }
+        .header-subtitle { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.15rem; }
+        .header-nav { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+        .header-nav a { font-size: 0.8rem; font-weight: 600; color: var(--accent); text-decoration: none; border: 1.5px solid var(--accent); padding: 0.35rem 0.85rem; border-radius: 20px; white-space: nowrap; transition: all 0.2s; }
+        .header-nav a:hover { background: var(--accent-glow); }
+        .header-nav a.secondary { color: var(--text-muted); border-color: var(--border); }
+        .main { max-width: 940px; margin: 0 auto; padding: 2.5rem 2rem 5rem; }
+        .lede { font-size: 1.05rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+        h2 { font-size: 1.25rem; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 0.25rem; }
+        .group { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+        .group .sub { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 0.6rem; }
+        ul.check { list-style: none; margin: 0; padding: 0; }
+        ul.check li { position: relative; padding: 0.4rem 0 0.4rem 1.9rem; font-size: 0.95rem; border-top: 1px solid var(--border); }
+        ul.check li:first-child { border-top: none; }
+        ul.check li::before { content: '\2713'; position: absolute; left: 0; top: 0.45rem; width: 1.3rem; height: 1.3rem; background: var(--green-bg); color: var(--green); border-radius: 5px; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+        code { font-family: 'SF Mono','Fira Code',ui-monospace,monospace; font-size: 0.82rem; background: #eef0f6; padding: 0.12rem 0.4rem; border-radius: 4px; color: var(--accent); }
+        .redflags { background: var(--rose-bg); border: 1px solid rgba(224,49,49,0.3); border-radius: 12px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
+        .redflags h2 { color: var(--rose); }
+        ul.flags { list-style: none; margin: 0.5rem 0 0; padding: 0; }
+        ul.flags li { position: relative; padding: 0.35rem 0 0.35rem 1.7rem; font-size: 0.92rem; }
+        ul.flags li::before { content: '\26A0'; position: absolute; left: 0; top: 0.35rem; color: var(--rose); }
+        .callout { border-left: 3px solid var(--accent); background: var(--accent-glow); padding: 0.85rem 1rem; border-radius: 0 8px 8px 0; margin: 1.5rem 0; font-size: 0.9rem; }
+        .callout.success { border-left-color: var(--green); background: var(--green-bg); }
+        .callout strong { display: block; margin-bottom: 0.2rem; }
+        .footer { max-width: 940px; margin: 3rem auto 2rem; padding: 0 2rem; text-align: center; color: var(--text-muted); font-size: 0.78rem; }
+        .footer a { color: var(--accent); text-decoration: none; }
+        @media (max-width: 768px) { .header { padding: 1rem 1.25rem; } .main { padding: 1.5rem 1.25rem 4rem; } }
+    </style>
+</head>
+<body>
+<header class="header">
+    <div class="header-inner">
+        <div>
+            <h1><span>Is my draft ready</span> to submit?</h1>
+            <p class="header-subtitle">A quick self-check before you run /move-to-review</p>
+        </div>
+        <nav class="header-nav">
+            <a class="secondary" href="index.html">&larr; Guide Home</a>
+            <a href="faq.html">FAQ</a>
+        </nav>
+    </div>
+</header>
+
+<main class="main">
+    <p class="lede">Run through this before you submit. You don't need every box perfect — but the more that are, the smoother the lead review. (Drawn from the Reviewer Guide and the draft-quality rubric.)</p>
+
+    <div class="group">
+        <h2>Alignment &amp; coverage</h2>
+        <p class="sub">Does the draft do what the plan asked?</p>
+        <ul class="check">
+            <li>The activity matches the <strong>objective</strong> from your module plan.</li>
+            <li>Every driving question and analytical move the plan called for is actually in the draft.</li>
+            <li>Anything the plan said to include <em>verbatim</em> appears word-for-word — not paraphrased.</li>
+        </ul>
+    </div>
+
+    <div class="group">
+        <h2>Question sequence &amp; scaffolding</h2>
+        <p class="sub">Do the questions build to the assessment?</p>
+        <ul class="check">
+            <li>Questions build logically: accessible entry &rarr; comprehension &rarr; analysis &rarr; assessment.</li>
+            <li>Each question is right for the grade — not too obvious, not over-reaching.</li>
+            <li>Adjacent questions don't <strong>double-test</strong> the same detail or skill.</li>
+        </ul>
+    </div>
+
+    <div class="group">
+        <h2>Text grounding</h2>
+        <p class="sub">Is everything anchored to this text?</p>
+        <ul class="check">
+            <li>Paragraph references are accurate to the excerpt provided.</li>
+            <li>If a question names a paragraph, its criterion references the same paragraph(s).</li>
+            <li>Criteria use this text's actual names, details, and quotes — not generic, swap-in-any-text language.</li>
+        </ul>
+    </div>
+
+    <div class="group">
+        <h2>Criteria quality</h2>
+        <p class="sub">Each non-MC question needs a criterion that mirrors the question.</p>
+        <ul class="check">
+            <li>Every non-MC question <strong>has</strong> a criterion.</li>
+            <li>Generated criteria (LCQ, TDQ, Highlight, Claim, Brainstorm) stay to <strong>one sentence</strong>.</li>
+            <li>No "sneak-adds": the criterion asks for exactly what the stem asks — no extra requirements or invented counts.</li>
+            <li>"Or" joins real alternatives; "and" only when the question explicitly asks for two separate moves.</li>
+            <li>Vocabulary is grade-appropriate.</li>
+        </ul>
+    </div>
+
+    <div class="group">
+        <h2>Assessment (the Target Task)</h2>
+        <p class="sub">Does it land the analytical move?</p>
+        <ul class="check">
+            <li>The Claim connects logically to the driving questions and flows from the sequence.</li>
+            <li>The write/MC task is clear and appropriately scoped for the grade.</li>
+            <li>The driving questions and Target Task work together as a coherent whole.</li>
+        </ul>
+    </div>
+
+    <div class="group">
+        <h2>Content blocks</h2>
+        <p class="sub">Intro, Transition, Conclusion — without spoilers.</p>
+        <ul class="check">
+            <li>The Introduction sets a focus <strong>without</strong> giving away the answer or the Target Task's conclusion.</li>
+            <li>The Transition signals the shift to the write, names the concept and the text, but doesn't preview the actual question.</li>
+            <li>The Conclusion stamps the <em>generalizable</em> skill (not just what happened in this text) and congratulates students.</li>
+        </ul>
+    </div>
+
+    <div class="group">
+        <h2>Grade fit &amp; tone</h2>
+        <ul class="check">
+            <li>Vocabulary, sentence complexity, and evidence demands match the grade.</li>
+            <li>Tone is warm and accessible — not performative or over-hyped.</li>
+        </ul>
+    </div>
+
+    <div class="redflags">
+        <h2>&#9888; Red flags — stop &amp; fix before submitting</h2>
+        <ul class="flags">
+            <li>A non-MC question with <strong>no criterion</strong>.</li>
+            <li>Generated criteria longer than one sentence.</li>
+            <li>Paragraph references that don't match the excerpt.</li>
+            <li>Verbatim plan content that got paraphrased or reworded.</li>
+            <li>Generic criteria that could apply to any text.</li>
+            <li>An Introduction that states the theme or gives away the Target Task.</li>
+            <li>A Transition that repeats or previews the assessment question.</li>
+            <li>Grade-level vocabulary that's clearly too high or too low.</li>
+        </ul>
+    </div>
+
+    <div class="callout"><strong>Not sure about one of these?</strong> Ask Mojo — e.g. "what makes a good criterion?" or "what's the rule for the Transition block?" — and it'll pull the exact guidance.</div>
+    <div class="callout success"><strong>Genuinely unsure if it's good enough?</strong> That's a judgment call — submit it and let your lead weigh in, or use "Ask the team." Better to ask than to guess.</div>
+</main>
+
+<footer class="footer">
+    <p>Authoring Pipeline Guide — CourseMojo &middot; <a href="index.html">Guide Home</a> &middot; <a href="glossary.html">Glossary</a> &middot; <a href="faq.html">FAQ</a></p>
+</footer>
+</body>
+</html>

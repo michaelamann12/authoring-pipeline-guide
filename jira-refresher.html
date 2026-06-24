@@ -280,7 +280,7 @@
             <li><code>/edit-draft</code> — runs a 17-point validation pass and silently fixes issues</li>
         </ol>
         <p>The original draft is snapshotted into a <code>_DO_NOT_EDIT/</code> folder before any edits, so you can always compare back to what Claude first produced.</p>
-        <p>Expect <strong>~45 minutes to an hour per ticket</strong>, and tickets are processed in a staggered queue — if you push a whole module at once, plan for a healthy stretch of time before the last one lands. Do not re-drag, re-assign, or move tickets while they're working.</p>
+        <p>Builds run in the background in a staggered queue — each lesson takes roughly <strong>45–60 minutes</strong> of build time, but you don't wait on it. Drop your tickets and most will be drafted by the next morning. Do not re-drag, re-assign, or move tickets while they're working.</p>
 
         <h3><span class="step">4</span>Draft Activity with Claude → Draft Review <span class="meta">automatic</span></h3>
         <p>When the build finishes, the pipeline moves the ticket to <span class="lane">Draft Review</span> on its own. The finished folder lands in <code>draft_outputs/[Curriculum]/[DATE]_[Lesson_ID]/</code>.</p>
@@ -321,7 +321,7 @@
             <li>The folder exists in <code>draft_outputs/[Curriculum]/[DATE]_[Lesson_ID]/</code></li>
             <li>The ticket is yours to edit</li>
         </ul>
-        <p>Builds take <strong>~45 min to 1 hour each, staggered</strong> when you submit multiple. Don't be alarmed if a batch takes a while — check back periodically rather than watching one ticket. If a ticket is still in <span class="lane">Draft Activity with Claude</span> well past expected time (and earlier tickets in the same batch have already moved), the build likely failed — click the ticket and check the comments for any details about why it failed, or ping Michaela to take a look!</p>
+        <p>Builds run in the background in a staggered queue — each lesson takes roughly <strong>45–60 minutes</strong> of build time, but you don't wait on it. Drop your tickets and most will be drafted by the next morning, so check back the next morning rather than watching one ticket. If a ticket is still in <span class="lane">Draft Activity with Claude</span> well past expected time (and earlier tickets in the same batch have already moved), the build likely failed — click the ticket and check the comments for any details about why it failed, or ping Michaela to take a look!</p>
         <p><strong>Watch the board for these transitions:</strong></p>
         <ul>
             <li><span class="lane">Backlog</span> or <span class="lane">Authoring</span> → <span class="lane">Draft Activity with Claude</span>: you just triggered a build</li>
@@ -337,7 +337,7 @@
         <ul class="mistakes">
             <li><strong>Creating new tickets.</strong> You don't need to — they're already on the board. If you can't find a ticket you expect, ping ops rather than making one.</li>
             <li><strong>Dragging a ticket out of <em>Draft Activity with Claude</em> manually.</strong> The pipeline moves it. If you drag it, you'll desync the ticket from the actual build state.</li>
-            <li><strong>Resist the urge to re-drag.</strong> Builds take 45 min to 1 hour each and run staggered — a full module will take a while. Re-triggering creates duplicate work and confuses the pipeline.</li>
+            <li><strong>Resist the urge to re-drag.</strong> Builds run in the background in a staggered queue — each lesson takes roughly 45–60 minutes of build time, and most are drafted by the next morning. Re-triggering creates duplicate work and confuses the pipeline.</li>
             <li><strong>Activity ID mismatch.</strong> The Jira ticket name must match the module plan Activity ID exactly. One typo = no build.</li>
             <li><strong>Missing source materials.</strong> If the text isn't in the Curriculum Hub, the build fails. Verify before dragging.</li>
             <li><strong>Moving Draft Review → Needs Lead Review by dragging.</strong> Use <code>/move-to-review</code> — it generates the change summary, snapshots, QA pass, and lead @-mention. Dragging skips all of it.</li>

@@ -560,6 +560,11 @@
         <a href="author-workflow.html" style="font-size:0.82rem;font-weight:600;color:var(--accent);text-decoration:none;border:1.5px solid var(--accent);padding:0.35rem 0.85rem;border-radius:20px;">Author Walkthrough &rarr;</a>
         <a href="jira-pipeline.html" style="font-size:0.82rem;font-weight:600;color:var(--accent);text-decoration:none;border:1.5px solid var(--accent);padding:0.35rem 0.85rem;border-radius:20px;">Jira Pipeline &rarr;</a>
         <a href="jira-refresher.html" style="font-size:0.82rem;font-weight:600;color:var(--accent);text-decoration:none;border:1.5px solid var(--accent);padding:0.35rem 0.85rem;border-radius:20px;">Jira Refresher &rarr;</a>
+        <a href="setup.html" style="font-size:0.82rem;font-weight:600;color:#fff;background:var(--accent);text-decoration:none;border:1.5px solid var(--accent);padding:0.35rem 0.85rem;border-radius:20px;">Setup &middot; start here &rarr;</a>
+        <a href="glossary.html" style="font-size:0.82rem;font-weight:600;color:var(--accent);text-decoration:none;border:1.5px solid var(--accent);padding:0.35rem 0.85rem;border-radius:20px;">Glossary &rarr;</a>
+        <a href="where-to-find.html" style="font-size:0.82rem;font-weight:600;color:var(--accent);text-decoration:none;border:1.5px solid var(--accent);padding:0.35rem 0.85rem;border-radius:20px;">Where do I find…? &rarr;</a>
+        <a href="draft-ready.html" style="font-size:0.82rem;font-weight:600;color:var(--accent);text-decoration:none;border:1.5px solid var(--accent);padding:0.35rem 0.85rem;border-radius:20px;">Is my draft ready? &rarr;</a>
+        <a href="faq.html" style="font-size:0.82rem;font-weight:600;color:var(--accent);text-decoration:none;border:1.5px solid var(--accent);padding:0.35rem 0.85rem;border-radius:20px;">FAQ &rarr;</a>
         <div class="filters">
             <button class="filter-pill active" data-filter="all">All Roles</button>
             <button class="filter-pill" data-filter="author">Author</button>
@@ -928,7 +933,7 @@
                     <ol>
                         <li><strong>Pull a full module/unit</strong> from Backlog into Ready for Authoring at once (not one ticket at a time)</li>
                         <li><strong>Assign tickets to yourself</strong> &mdash; this makes them easy to find on the board</li>
-                        <li><strong>Drag to Drafting</strong> when you're ready for Claude to build &mdash; this triggers the pipeline</li>
+                        <li><strong>Drag to Draft Activity with Claude</strong> when you're ready for Claude to build &mdash; this triggers the pipeline</li>
                         <li><strong>Review</strong> when the ticket lands in Draft Review (Claude auto-advances it)</li>
                         <li><strong>Submit for lead review</strong> via <code>/move-to-review</code> when your edits are done</li>
                         <li><strong>Lead reviews</strong> and either sends back for revisions (via <code>/revisions</code> &mdash; reassigns ticket to author with feedback) or finalizes (via <code>/move-to-final</code>)</li>
@@ -956,7 +961,7 @@
             <div class="section-body">
                 <div class="section-content">
                     <h3>How It Works</h3>
-                    <p>When a Jira ticket moves to <strong>Draft Activity with Claude</strong>, Claude executes a sequence of specialized skills. Each skill handles one stage of the build, running in order:</p>
+                    <p>When a Jira ticket moves to <strong>Draft Activity with Claude</strong>, the <code>/draft-activity</code> orchestrator runs a sequence of six specialized skills. Each skill handles one stage of the build, running in order:</p>
 
                     <table class="detail-table">
                         <thead>
@@ -970,13 +975,28 @@
                             </tr>
                             <tr>
                                 <td><span class="status-badge status-auto">2</span></td>
+                                <td><strong>/extract-requirements</strong></td>
+                                <td>Extracts the lesson requirements, pedagogical intent, and source text assessment from the populated lesson.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="status-badge status-auto">3</span></td>
+                                <td><strong>/find-exemplars</strong></td>
+                                <td>Searches the Activity Catalog for matching exemplars, reads pattern documents, and synthesizes patterns across them.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="status-badge status-auto">4</span></td>
                                 <td><strong>/pick-excerpt</strong></td>
                                 <td>Selects and extracts the exact text excerpt. Handles paragraph numbering rules: preserved numbers for anthology curricula (AMP, HMH, MYP, STS), sequential numbering for novel curricula (WNW, EL, FTK).</td>
                             </tr>
                             <tr>
-                                <td><span class="status-badge status-auto">3</span></td>
-                                <td><strong>/draft-activity</strong></td>
+                                <td><span class="status-badge status-auto">5</span></td>
+                                <td><strong>/generate-activity</strong></td>
                                 <td>Generates the full activity: introduction, driving questions with criteria and correct-threshold judgments, transition text, assessment section (claim + write), and extension question.</td>
+                            </tr>
+                            <tr>
+                                <td><span class="status-badge status-auto">6</span></td>
+                                <td><strong>/edit-draft</strong></td>
+                                <td>Runs the automated quality validation pass and silently fixes issues before the draft reaches you.</td>
                             </tr>
                         </tbody>
                     </table>
