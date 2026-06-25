@@ -283,6 +283,26 @@
             </div>
         </div>
 
+        <div class="card card-purple">
+            <h3>Exception &amp; Loop Lanes</h3>
+            <p style="font-size:0.88rem;margin-bottom:0.75rem;">Two lanes sit off the straight-line flow above. A ticket enters one when it needs a human, then rejoins the flow.</p>
+            <table>
+                <tr><th>Lane</th><th>Status / ID</th><th>A ticket enters when&hellip;</th><th>&hellip;and leaves when</th></tr>
+                <tr>
+                    <td><strong>Needs Attention</strong></td>
+                    <td><code>Needs Attention</code><br>ID: 10742</td>
+                    <td>The pipeline can't complete a draft — missing source, unreadable plan, or a quality gate it can't pass. <code>process-tickets.sh</code> moves it here (transition <strong>161</strong>) and adds a <code>hold_&hellip;</code> comment/label.</td>
+                    <td>The input is fixed and the ticket is <strong>re-queued</strong> by <code>requeue.sh</code> (operator-run) to <code>Ready for Authoring</code> (transition <strong>111</strong>) for another drafting run.</td>
+                </tr>
+                <tr>
+                    <td><strong>In Revision</strong></td>
+                    <td><code>In Revision</code><br>ID: 10741</td>
+                    <td>A lead runs <code>/revisions</code> from <strong>Needs Lead Review</strong> or <strong>Final Review</strong> (transition <strong>151</strong>): files move to <code>needs_additional_review/</code>; the original author is @mentioned and reassigned.</td>
+                    <td>The author resubmits with <code>/move-to-final-review</code> (&rarr; Final Review, 131), or self-finalizes with <code>/move-to-final</code> (&rarr; In Transformation, 41) when the ticket carries <span class="tag tag-green">author-finalize-ok</span>.</td>
+                </tr>
+            </table>
+        </div>
+
         <div class="card" style="border-left:3px solid var(--text-muted);background:var(--surface-hover);">
             <h3 style="color:var(--text-muted);">25-26 Boards — Legacy Transformation Columns</h3>
             <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:0.75rem;">These columns are <strong>not part of the authoring workflow</strong>. They exist only on the 10 legacy 25-26 boards (Amplify, EL, HMH, Wit &amp; Wisdom, MyPerspectives, Fishtank, Test Prep, HISD, TX_BBO, MG) to preserve visibility of tickets already in those stages. They appear after In Transformation and are not used by any skills or automation.</p>
@@ -334,16 +354,52 @@
                         <td>Assigns to lead reviewer, @mentions them in comment</td>
                     </tr>
                     <tr>
-                        <td>Needs Lead Review &rarr; Draft Review</td>
-                        <td><code>/revisions</code> skill</td>
-                        <td>121</td>
-                        <td>Lead sends back for revisions, @mentions original author, reassigns to them</td>
+                        <td>Draft Activity with Claude &rarr; Needs Attention</td>
+                        <td><code>process-tickets.sh</code> (automated)</td>
+                        <td>161</td>
+                        <td>Build couldn't complete (missing source, unreadable plan, failed gate). Ticket is parked with a <code>hold_&hellip;</code> comment/label for a human.</td>
+                    </tr>
+                    <tr>
+                        <td>Needs Attention &rarr; Draft Activity with Claude</td>
+                        <td><code>requeue.sh</code> (operator)</td>
+                        <td>111</td>
+                        <td>After the input is fixed, the ticket is re-queued for another drafting run (status returns to <code>Ready for Authoring</code>).</td>
+                    </tr>
+                    <tr>
+                        <td>Draft Review &rarr; Needs Lead Review</td>
+                        <td><code>/move-to-review</code> skill</td>
+                        <td>141</td>
+                        <td>Assigns to lead reviewer, @mentions them in comment</td>
+                    </tr>
+                    <tr>
+                        <td>Needs Lead Review &rarr; In Revision</td>
+                        <td><code>/revisions</code> skill (lead)</td>
+                        <td>151</td>
+                        <td>Lead sends back for revisions. Files move to <code>needs_additional_review/</code>; original author is @mentioned and reassigned.</td>
                     </tr>
                     <tr>
                         <td>Needs Lead Review &rarr; Final Review</td>
                         <td>Lead (manual drag)</td>
                         <td>131</td>
                         <td>Lead approves the draft for final QA pass</td>
+                    </tr>
+                    <tr>
+                        <td>Final Review &rarr; In Revision</td>
+                        <td><code>/revisions</code> skill (lead)</td>
+                        <td>151</td>
+                        <td>Re-review loop: lead sends a draft already in Final Review back to the author for further changes.</td>
+                    </tr>
+                    <tr>
+                        <td>In Revision &rarr; Final Review</td>
+                        <td><code>/move-to-final-review</code> skill (author)</td>
+                        <td>131</td>
+                        <td>Author resubmits the revised draft (now in <code>final_review/</code>) for the lead's final check.</td>
+                    </tr>
+                    <tr>
+                        <td>In Revision &rarr; In Transformation</td>
+                        <td><code>/move-to-final</code> skill (author)</td>
+                        <td>41</td>
+                        <td>Minor path: author self-finalizes without a second lead pass. Allowed only when the ticket carries <span class="tag tag-green">author-finalize-ok</span>.</td>
                     </tr>
                     <tr>
                         <td>Final Review &rarr; In Transformation</td>
@@ -396,6 +452,12 @@
                         <td>Lead flagged this revision as urgent — needs author attention today.</td>
                         <td><code>/revisions</code> skill</td>
                         <td>Manual (after revisions complete)</td>
+                    </tr>
+                    <tr>
+                        <td><span class="tag tag-green">author-finalize-ok</span></td>
+                        <td>Lead chose the "minor" return path on an In Revision ticket — the author may self-finalize with <code>/move-to-final</code>, skipping a second lead review.</td>
+                        <td><code>/revisions</code> skill (minor path)</td>
+                        <td><code>/revisions</code> skill (cleared on the major path)</td>
                     </tr>
                     <tr>
                         <td><span class="tag tag-green">25-26</span></td>
@@ -452,17 +514,21 @@
 
         <div class="card card-purple">
             <h3><code>/revisions</code></h3>
-            <p style="font-size:0.88rem;margin-bottom:0.75rem;">Lead sends a draft back to the author for revisions.</p>
+            <p style="font-size:0.88rem;margin-bottom:0.75rem;">Lead sends a draft back to the author for revisions — from <strong>Needs Lead Review</strong> or <strong>Final Review</strong>.</p>
 
             <div class="flow">
                 <span class="flow-step skill">/revisions</span>
                 <span class="flow-arrow">&rarr;</span>
                 <span class="flow-step">Asks: "What revisions needed?"</span>
                 <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step">Asks: minor or major return path</span>
+                <span class="flow-arrow">&rarr;</span>
                 <span class="flow-step">Looks up original author from changelog</span>
             </div>
             <div class="flow">
-                <span class="flow-step jira">Transition &rarr; Draft Review</span>
+                <span class="flow-step">Moves files to needs_additional_review/</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step jira">Transition &rarr; In Revision</span>
                 <span class="flow-arrow">&rarr;</span>
                 <span class="flow-step jira">Reassign to original author</span>
                 <span class="flow-arrow">&rarr;</span>
@@ -472,14 +538,42 @@
             <h4>Jira Actions</h4>
             <table>
                 <tr><th>Action</th><th>Detail</th></tr>
-                <tr><td>Transition</td><td>ID <code>121</code> &rarr; Draft Review (status 10637)</td></tr>
-                <tr><td>Assignee</td><td>Set to original author (discovered from ticket changelog — who transitioned into Needs Lead Review)</td></tr>
-                <tr><td>Comment</td><td>ADF format with <code>mention</code> node @tagging the author + lead's revision notes + priority flag</td></tr>
+                <tr><td>Runs from</td><td>Needs Lead Review (10671) or Final Review (10638)</td></tr>
+                <tr><td>Transition</td><td>ID <code>151</code> &rarr; In Revision (status 10741)</td></tr>
+                <tr><td>Assignee</td><td>Set to original author (discovered from ticket changelog)</td></tr>
+                <tr><td>Return path</td><td>Minor &rarr; sets <span class="tag tag-green">author-finalize-ok</span> (author self-finalizes). Major &rarr; clears it (re-review required).</td></tr>
+                <tr><td>Comment</td><td>ADF <code>mention</code> node @tagging the author + lead's revision notes — this comment is the author's only notification</td></tr>
                 <tr><td>Label (if urgent)</td><td>Adds <span class="tag tag-purple">priority_revision</span></td></tr>
             </table>
 
             <h4>Author Discovery</h4>
-            <p style="font-size:0.85rem;color:var(--text-muted);">The skill reads the ticket's <code>?expand=changelog</code> and finds the most recent transition into status 10671 (Needs Lead Review). The <code>author</code> field of that changelog entry is the person who submitted the draft — that's who gets tagged and reassigned.</p>
+            <p style="font-size:0.85rem;color:var(--text-muted);">The skill reads the ticket's <code>?expand=changelog</code> to find the original author — the person who first submitted the draft into review. That's who gets tagged and reassigned, whether the lesson is in Needs Lead Review or back in Final Review.</p>
+        </div>
+
+        <div class="card card-purple">
+            <h3><code>/move-to-final-review</code></h3>
+            <p style="font-size:0.88rem;margin-bottom:0.75rem;">Author resubmits a revised draft for the lead's final check — the <strong>In Revision &rarr; Final Review</strong> loop.</p>
+
+            <div class="flow">
+                <span class="flow-step skill">/move-to-final-review</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step">Confirms the lesson in needs_additional_review/</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step">Moves files to final_review/</span>
+            </div>
+            <div class="flow">
+                <span class="flow-step jira">Transition &rarr; Final Review</span>
+                <span class="flow-arrow">&rarr;</span>
+                <span class="flow-step notify">Lead picks the revised draft up in final_review/</span>
+            </div>
+
+            <h4>Jira Actions</h4>
+            <table>
+                <tr><th>Action</th><th>Detail</th></tr>
+                <tr><td>Precondition</td><td>Ticket must be in <code>In Revision</code> (10741)</td></tr>
+                <tr><td>Transition</td><td>ID <code>131</code> &rarr; Final Review (status 10638)</td></tr>
+            </table>
+            <p style="font-size:0.85rem;color:var(--text-muted);">Minor revisions marked <span class="tag tag-green">author-finalize-ok</span> skip this step — the author self-finalizes directly with <code>/move-to-final</code>.</p>
         </div>
 
         <div class="card card-amber">

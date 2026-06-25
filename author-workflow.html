@@ -566,7 +566,7 @@
             </ul>
 
             <div class="callout warning">
-                <p><strong>If source materials are missing, the build will fail.</strong> Claude will not fabricate content. The ticket will stall in Draft Activity with Claude and show an error. Better to catch this now than after the build runs.</p>
+                <p><strong>If source materials are missing, the build will fail.</strong> Claude will not fabricate content. Instead of drafting, the pipeline moves your ticket to the <strong>Needs Attention</strong> lane with a note on what's wrong &mdash; see <a href="#error-states">Needs Attention &amp; Stalled Tickets</a> below. Better to catch this now than after the build runs.</p>
             </div>
 
             <h3>Your Jira Ticket at This Point</h3>
@@ -948,7 +948,11 @@
                 </div>
             </div>
 
-            <p>Your lead reviews in the <code>review_ready/</code> folder. They'll either finalize via <code>/move-to-final</code>, or send it back to you for revisions via <code>/revisions</code>. If sent back, you'll get a Jira notification with specific feedback on what to change. Make the revisions, then re-submit with <code>/move-to-review</code>.</p>
+            <p>Your lead reviews in the <code>review_ready/</code> folder. From there one of two things happens:</p>
+            <ul>
+                <li><strong>It's approved</strong> &mdash; the lead finalizes it with <code>/move-to-final</code> (Step 9).</li>
+                <li><strong>It needs changes</strong> &mdash; the lead runs <code>/revisions</code>, which moves the ticket to the <strong>In Revision</strong> lane and @mentions you on the ticket with specific feedback. See <a href="#in-revision">The In Revision Lane</a> below for exactly what to do.</li>
+            </ul>
         </div>
     </div>
 
@@ -1011,38 +1015,94 @@
         </div>
     </div>
 
+    <!-- IN REVISION -->
+    <div class="step-section" id="in-revision" style="border-left: 3px solid var(--purple);">
+        <div class="step-header">
+            <div class="step-number" style="background:var(--purple-bg);color:var(--purple);">&#x21BA;</div>
+            <div class="step-header-text">
+                <div class="step-title">The In Revision Lane</div>
+                <div class="step-subtitle">What to do when your lead sends a draft back</div>
+            </div>
+            <span class="step-actor-badge badge-you">You</span>
+        </div>
+        <div class="step-body">
+            <p>When a lead finds issues during review, they don't fix the draft for you &mdash; they run <code>/revisions</code> to send it back. That skill:</p>
+            <ol>
+                <li>Moves the lesson files to <code>needs_additional_review/</code></li>
+                <li>Transitions the ticket to <strong>In Revision</strong> and reassigns it to you</li>
+                <li>Posts a Jira <strong>@mention comment</strong> with the lead's feedback &mdash; this comment is your <em>only</em> notification, so watch for it</li>
+            </ol>
+
+            <div class="jira-board">
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Draft Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Needs Lead Review</div>
+                </div>
+                <div class="jira-lane active-lane">
+                    <div class="jira-lane-title">In Revision</div>
+                    <div class="jira-ticket highlight-ticket">
+                        OE_SLP_XX_G9_1.1_7_v1
+                        <span class="ticket-status">Back to you &mdash; see feedback</span>
+                    </div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Final Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Done</div>
+                </div>
+            </div>
+
+            <h3>What You Do</h3>
+            <ol>
+                <li><strong>Read the feedback</strong> in the Jira @mention comment.</li>
+                <li><strong>Make the changes</strong> &mdash; open the lesson in <code>needs_additional_review/</code> and edit directly, or ask Claude in the panel for bigger changes.</li>
+                <li><strong>Resubmit.</strong> Your lead picked one of two return paths when they sent it back:
+                    <ul>
+                        <li><strong>Re-review needed (most cases):</strong> type <code>/move-to-final-review</code>. This moves the lesson to <code>final_review/</code> and sends the ticket to <strong>Final Review</strong> so the lead can check your changes.</li>
+                        <li><strong>Minor / self-finalize:</strong> if the lead marked the ticket <code>author-finalize-ok</code>, you finalize it yourself with <code>/move-to-final</code> &mdash; no second lead pass.</li>
+                    </ul>
+                </li>
+            </ol>
+
+            <div class="callout warning">
+                <p><strong>Not sure which path applies?</strong> The lead's Jira comment will say. If it isn't clear, default to <code>/move-to-final-review</code> &mdash; an extra review pass is always safe.</p>
+            </div>
+        </div>
+    </div>
+
     <!-- ERROR STATES -->
     <div class="step-section" id="error-states" style="border-left: 3px solid var(--rose);">
         <div class="step-header">
             <div class="step-number" style="background:var(--rose-bg);color:var(--rose);">!</div>
             <div class="step-header-text">
-                <div class="step-title">Error States &amp; Stalled Tickets</div>
-                <div class="step-subtitle">What to do when something doesn't go right</div>
+                <div class="step-title">Needs Attention &amp; Stalled Tickets</div>
+                <div class="step-subtitle">What the Needs Attention lane means and what to do</div>
             </div>
         </div>
         <div class="step-body">
-            <h3>How to Spot a Problem</h3>
-            <p>If your ticket is still in <strong>Draft Activity with Claude</strong> well past the expected window &mdash; it hasn't reached Draft Review by the next morning, and earlier tickets in the same batch have already moved &mdash; the build may have stalled.</p>
+            <h3>What the Needs Attention Lane Is</h3>
+            <p>When the automated pipeline hits a problem it can't resolve on its own &mdash; a missing source text, a plan row it can't read, or a quality gate it can't pass &mdash; it does <strong>not</strong> guess or push a broken draft forward. Instead it moves your ticket into the <strong>Needs Attention</strong> lane and adds a comment explaining what stopped it (usually with a <code>hold_&hellip;</code> label naming the cause).</p>
+            <p>So a ticket in <strong>Needs Attention</strong> is the pipeline flagging it for a human. That's your signal to open the ticket, read the comment, and fix the input. (You may also notice a ticket sitting in <strong>Draft Activity with Claude</strong> longer than expected &mdash; the next polling cycle will either finish it or move it to Needs Attention.)</p>
 
             <div class="jira-board">
-                <div class="jira-lane">
-                    <div class="jira-lane-title">Backlog</div>
-                </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Ready for Authoring</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Draft Activity with Claude</div>
+                </div>
+                <div class="jira-lane active-lane">
+                    <div class="jira-lane-title">Needs Attention</div>
                     <div class="jira-ticket error-ticket">
                         OE_SLP_XX_G9_1.1_7_v1
-                        <span class="ticket-status">Stalled &mdash; check errors</span>
+                        <span class="ticket-status">Held &mdash; source text missing</span>
                     </div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Draft Review</div>
-                </div>
-                <div class="jira-lane">
-                    <div class="jira-lane-title">Final Review</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Done</div>
@@ -1053,15 +1113,15 @@
             <div class="error-grid">
                 <div class="error-card">
                     <h4><span class="error-indicator indicator-red"></span> Missing Source Text</h4>
-                    <p>Claude couldn't find the text referenced in your plan. <strong>Fix:</strong> Check the Curriculum Hub for the file. Upload it if missing, then drag the ticket back to Draft Activity with Claude to re-trigger.</p>
+                    <p>Claude couldn't find the text referenced in your plan. <strong>Fix:</strong> Check the Curriculum Hub for the file. Upload it if missing, then flag Michaela to re-queue (see below).</p>
                 </div>
                 <div class="error-card">
                     <h4><span class="error-indicator indicator-red"></span> Missing Activity ID</h4>
-                    <p>The module plan row doesn't have an Activity ID. <strong>Fix:</strong> Add the ID to your plan, save, and re-trigger the ticket.</p>
+                    <p>The module plan row doesn't have an Activity ID. <strong>Fix:</strong> Add the ID to your plan, save, and flag Michaela to re-queue.</p>
                 </div>
                 <div class="error-card">
                     <h4><span class="error-indicator indicator-amber"></span> Module Plan Not Found</h4>
-                    <p>The plan CSV isn't in the expected folder or doesn't match the naming convention. <strong>Fix:</strong> Verify the file is in <code>module_plans/{Curriculum}/{Grade}/</code> and re-trigger.</p>
+                    <p>The plan CSV isn't in the expected folder or doesn't match the naming convention. <strong>Fix:</strong> Verify the file is in <code>module_plans/{Curriculum}/{Grade}/</code>, then flag Michaela to re-queue.</p>
                 </div>
                 <div class="error-card">
                     <h4><span class="error-indicator indicator-amber"></span> Ambiguous Excerpt Reference</h4>
@@ -1069,7 +1129,7 @@
                 </div>
                 <div class="error-card">
                     <h4><span class="error-indicator indicator-red"></span> Supplemental Text Missing</h4>
-                    <p>"Requires Supplemental Text" is marked Yes but the supplemental file isn't in the Hub. <strong>Fix:</strong> Upload the supplemental material and re-trigger.</p>
+                    <p>"Requires Supplemental Text" is marked Yes but the supplemental file isn't in the Hub. <strong>Fix:</strong> Upload the supplemental material, then flag Michaela to re-queue.</p>
                 </div>
                 <div class="error-card">
                     <h4><span class="error-indicator indicator-amber"></span> Polling Window Missed</h4>
@@ -1077,13 +1137,14 @@
                 </div>
             </div>
 
-            <h3>How to Re-Trigger a Stalled Ticket</h3>
+            <h3>How a Needs Attention Ticket Gets Re-Queued</h3>
+            <p>Re-queueing is handled on the pipeline side &mdash; <strong>you don't drag a Needs Attention ticket back yourself.</strong> The flow is:</p>
             <ol>
-                <li>Fix the underlying issue (upload missing file, update plan, etc.)</li>
-                <li>Drag the ticket back to <strong>Backlog</strong> or <strong>Ready for Authoring</strong></li>
-                <li>Drag it to <strong>Draft Activity with Claude</strong> again</li>
-                <li>The pipeline will pick it up on the next cycle</li>
+                <li><strong>You fix what's yours.</strong> If the cause is an author input &mdash; a missing source file, a plan row without an Activity ID, a vague excerpt reference &mdash; correct it at the source: upload the file to the Curriculum Hub, or update the module-plan row and save.</li>
+                <li><strong>Tell Michaela the input is fixed.</strong> A quick Slack note with the ticket or lesson ID is enough.</li>
+                <li><strong>Michaela re-queues it.</strong> She confirms the fix is live and re-runs the ticket through the pipeline. You'll see it leave Needs Attention, draft, and move on to Draft Review when the build completes.</li>
             </ol>
+            <p>Some holds aren't author-fixable at all &mdash; a copyright block, a pipeline bug, or a source that still needs transcription. The ticket comment will say so. In those cases just flag Michaela and she'll route it to the lead or engineering. <strong>When in doubt, don't guess &mdash; send Michaela the ticket ID.</strong></p>
 
             <div class="callout error">
                 <p><strong>If you're stuck:</strong> Reach out to Michaela. She can check the pipeline logs, diagnose what went wrong, and help resolve it quickly. Don't spend time guessing &mdash; that's what she's here for.</p>
@@ -1114,7 +1175,8 @@
                     <tr><td><strong>Run a full quality check</strong></td><td>Type <code>/edit-draft</code> in the Claude panel</td></tr>
                     <tr><td><strong>Submit for lead review</strong></td><td>Type <code>/move-to-review</code></td></tr>
                     <tr><td><strong>Finalize (leads only)</strong></td><td>Type <code>/move-to-final</code> after lead review is complete</td></tr>
-                    <tr><td><strong>Check a stalled ticket</strong></td><td>Look at Jira comments for error info, fix inputs, re-trigger by dragging back then forward</td></tr>
+                    <tr><td><strong>Address a draft sent back (In Revision)</strong></td><td>Edit the lesson in <code>needs_additional_review/</code>, then <code>/move-to-final-review</code> (or <code>/move-to-final</code> if the ticket is marked <code>author-finalize-ok</code>)</td></tr>
+                    <tr><td><strong>My ticket is in Needs Attention</strong></td><td>Open the ticket, read the comment, fix the flagged input, then ping Michaela to re-queue &mdash; don't drag it back yourself</td></tr>
                     <tr><td><strong>Something looks wrong</strong></td><td>Ask Claude in the panel &mdash; or reach out to Michaela</td></tr>
                 </tbody>
             </table>
