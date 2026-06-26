@@ -83,8 +83,8 @@
 
         .board-columns {
             display: flex;
-            gap: 2px;
-            min-width: 900px;
+            gap: 6px;
+            min-width: 1080px;
         }
 
         .board-col {
@@ -117,6 +117,8 @@
         .board-col-header.review { border-bottom-color: var(--purple); }
         .board-col-header.transform { border-bottom-color: var(--amber); }
         .board-col-header.done { border-bottom-color: var(--green); }
+        .board-col-header.attention { border-bottom-color: var(--rose); border-bottom-style: dashed; }
+        .board-col-header.revision { border-bottom-color: var(--purple); border-bottom-style: dashed; }
 
         .board-col-meta {
             font-size: 0.65rem;
@@ -237,55 +239,58 @@
     <!-- BOARD LAYOUT -->
     <div class="section">
         <h2 class="section-title">Board Layout</h2>
-        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1rem;">All 15 boards in the <strong>Activity Creation Space (ET26)</strong> project share this column layout. Columns are color-coded by who owns the work at that stage.</p>
+        <p style="color:var(--text-muted);font-size:0.9rem;margin-bottom:1rem;">Every active <strong>26-27</strong> board in the <strong>Activity Creation Space (ET26)</strong> &mdash; one per curriculum (Arts &amp; Letters, CKLA-BBO, Guidebooks, My&nbsp;Perspectives, Novel, O'Dell, RedThread, StudySync) plus the reference workflow board &mdash; shares this column layout. Columns are color-coded by who owns the work at that stage; the legacy 25-26 boards add transformation columns after In&nbsp;Transformation (see below).</p>
 
         <div class="board-visual">
             <div class="board-columns">
                 <div class="board-col">
-                    <div class="board-col-header manual">Backlog</div>
+                    <div class="board-col-header manual">To-Do</div>
                     <div class="board-col-meta">Status: <code>To Do</code><br>ID: 10013</div>
                 </div>
-                <div class="board-arrow">&rarr;</div>
                 <div class="board-col">
                     <div class="board-col-header manual">Authoring</div>
                     <div class="board-col-meta">Status: <code>Authoring</code><br>ID: 10561</div>
                 </div>
-                <div class="board-arrow">&rarr;</div>
                 <div class="board-col">
                     <div class="board-col-header automated">Draft Activity with Claude</div>
                     <div class="board-col-meta">Status: <code>Ready for Authoring</code><br>ID: 10636</div>
                 </div>
-                <div class="board-arrow">&rarr;</div>
+                <div class="board-col">
+                    <div class="board-col-header attention">Needs Attention</div>
+                    <div class="board-col-meta">Status: <code>Needs Attention</code><br>ID: 10742</div>
+                </div>
                 <div class="board-col">
                     <div class="board-col-header review">Draft Review</div>
                     <div class="board-col-meta">Status: <code>Draft Review</code><br>ID: 10637</div>
                 </div>
-                <div class="board-arrow">&rarr;</div>
                 <div class="board-col">
                     <div class="board-col-header review">Needs Lead Review</div>
                     <div class="board-col-meta">Status: <code>Needs Lead Review</code><br>ID: 10671</div>
                 </div>
-                <div class="board-arrow">&rarr;</div>
+                <div class="board-col">
+                    <div class="board-col-header revision">In Revision</div>
+                    <div class="board-col-meta">Status: <code>In Revision</code><br>ID: 10741</div>
+                </div>
                 <div class="board-col">
                     <div class="board-col-header review">Final Review</div>
                     <div class="board-col-meta">Status: <code>Final Review</code><br>ID: 10638</div>
                 </div>
-                <div class="board-arrow">&rarr;</div>
                 <div class="board-col">
                     <div class="board-col-header transform">In Transformation</div>
                     <div class="board-col-meta">Status: <code>In Transformation</code><br>ID: 10525</div>
                 </div>
-                <div class="board-arrow">&rarr;</div>
                 <div class="board-col">
                     <div class="board-col-header done">Done</div>
-                    <div class="board-col-meta">Status: <code>Done</code><br>ID: 10014, 10563</div>
+                    <div class="board-col-meta">Status: <code>Done</code><br>ID: 10014 (+ Unpublished 10563)</div>
                 </div>
             </div>
         </div>
 
+        <p style="font-size:0.8rem;color:var(--text-muted);margin:-1rem 0 1.5rem;"><strong>Reading the board:</strong> columns appear left&ndash;to&ndash;right exactly as on a live curriculum board (e.g. <em>26-27 My&nbsp;Perspectives</em>). The two dashed lanes &mdash; <span style="color:var(--rose);font-weight:600;">Needs Attention</span> and <span style="color:var(--purple);font-weight:600;">In Revision</span> &mdash; are branch/loop lanes: a ticket only lands there when the pipeline halts or a lead sends it back, and the happy path skips them. See the Ticket Lifecycle below for how tickets actually move between columns.</p>
+
         <div class="card card-purple">
             <h3>Exception &amp; Loop Lanes</h3>
-            <p style="font-size:0.88rem;margin-bottom:0.75rem;">Two lanes sit off the straight-line flow above. A ticket enters one when it needs a human, then rejoins the flow.</p>
+            <p style="font-size:0.88rem;margin-bottom:0.75rem;">The two dashed columns above &mdash; Needs Attention and In Revision &mdash; are branch/loop lanes. A ticket enters one only when it needs a human, then rejoins the flow:</p>
             <table>
                 <tr><th>Lane</th><th>Status / ID</th><th>A ticket enters when&hellip;</th><th>&hellip;and leaves when</th></tr>
                 <tr>
@@ -305,7 +310,7 @@
 
         <div class="card" style="border-left:3px solid var(--text-muted);background:var(--surface-hover);">
             <h3 style="color:var(--text-muted);">25-26 Boards — Legacy Transformation Columns</h3>
-            <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:0.75rem;">These columns are <strong>not part of the authoring workflow</strong>. They exist only on the 10 legacy 25-26 boards (Amplify, EL, HMH, Wit &amp; Wisdom, MyPerspectives, Fishtank, Test Prep, HISD, TX_BBO, MG) to preserve visibility of tickets already in those stages. They appear after In Transformation and are not used by any skills or automation.</p>
+            <p style="font-size:0.88rem;color:var(--text-muted);margin-bottom:0.75rem;">These columns are <strong>not part of the authoring workflow</strong>. They exist only on the 10 legacy 25-26 boards (Amplify, EL, HMH, Wit &amp; Wisdom, MyPerspectives, Fishtank, Test Prep, HISD, TX_BBO, StudySync) to preserve visibility of tickets already in those stages. They appear after In Transformation and are not used by any skills or automation.</p>
             <table>
                 <tr><th>Column</th><th>Status Name</th><th>Status ID</th></tr>
                 <tr><td>Transformation Backlog</td><td>Transformation Backlog</td><td>10562</td></tr>
@@ -739,9 +744,13 @@ JIRA_API_TOKEN=your_token_here</code></pre>
                 <tbody>
                     <tr><td>372</td><td>26-27 Activity Creation Workflow</td><td>Kanban</td><td>Reference board</td></tr>
                     <tr><td>405</td><td>26-27 Arts &amp; Letters</td><td>Kanban</td><td>&mdash;</td></tr>
-                    <tr><td>407</td><td>26-27 O'Dell</td><td>Kanban</td><td>&mdash;</td></tr>
+                    <tr><td>475</td><td>26-27 CKLA-BBO</td><td>Kanban</td><td>&mdash;</td></tr>
                     <tr><td>406</td><td>26-27 Guidebooks</td><td>Kanban</td><td>&mdash;</td></tr>
-                    <tr><td>186</td><td>26-27 CKLA-BBO</td><td>Kanban</td><td>&mdash;</td></tr>
+                    <tr><td>441</td><td>26-27 My Perspectives</td><td>Kanban</td><td>&mdash;</td></tr>
+                    <tr><td>541</td><td>26-27 Novel</td><td>Kanban</td><td>&mdash;</td></tr>
+                    <tr><td>407</td><td>26-27 O'Dell</td><td>Kanban</td><td>&mdash;</td></tr>
+                    <tr><td>575</td><td>26-27 RedThread</td><td>Kanban</td><td>&mdash;</td></tr>
+                    <tr><td>442</td><td>26-27 StudySync</td><td>Kanban</td><td>&mdash;</td></tr>
                     <tr><td>295</td><td>25-26 Amplify</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
                     <tr><td>296</td><td>25-26 EL</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
                     <tr><td>299</td><td>25-26 HMH</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
@@ -751,7 +760,7 @@ JIRA_API_TOKEN=your_token_here</code></pre>
                     <tr><td>302</td><td>25-26 Test Prep</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
                     <tr><td>304</td><td>25-26 HISD</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
                     <tr><td>303</td><td>25-26 TX_BBO</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
-                    <tr><td>300</td><td>25-26 MG</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
+                    <tr><td>300</td><td>25-26 StudySync</td><td>Kanban</td><td>+Transformation Backlog, Testing, Retransform, Ready to Publish</td></tr>
                 </tbody>
             </table>
             <p style="font-size:0.82rem;color:var(--text-muted);margin-top:0.75rem;">Board columns are managed via the GreenHopper API (<code>PUT /rest/greenhopper/1.0/rapidviewconfig/columns</code>). The Agile REST API is read-only for board configuration. Jira Automation rules are UI-only — no API access.</p>
