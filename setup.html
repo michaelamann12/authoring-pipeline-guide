@@ -532,26 +532,35 @@
         </ol>
 
         <h4 class="substep">6.2&nbsp;&nbsp;Save the token to a config folder</h4>
+        <p>This file has to be <strong>plain text</strong> &mdash; just the raw characters you type, with no hidden formatting. The catch: the default writing apps can quietly wrap your text in formatting and save the wrong kind of file, which the setup can't read. The steps below make sure you end up with a clean plain-text file.</p>
         <div class="os-split">
             <div class="os-box">
                 <strong>&#63743; Mac</strong>
                 <span>
-                    1. Finder &rsaquo; <strong>Desktop</strong> &rsaquo; right-click &rsaquo; <strong>New Folder</strong> &rsaquo; name it <code>config</code><br>
-                    2. Open <strong>TextEdit</strong>, then <span class="menu-path">Format &rsaquo; Make Plain Text</span> (<code>Shift + Cmd + T</code>) &mdash; important, it must be plain text<br>
-                    3. Add the two lines below, then <span class="menu-path">File &rsaquo; Save</span> as <code>jira-token.txt</code> inside the <code>config</code> folder
+                    1. Finder &rsaquo; Desktop &rsaquo; right-click &rsaquo; <strong>New Folder</strong> &rsaquo; name it <code>config</code><br>
+                    2. Open <strong>TextEdit</strong> (<code>Cmd + Space</code>, type &ldquo;TextEdit&rdquo;). If a file-picker appears, click <strong>New Document</strong><br>
+                    3. In the top menu bar: <span class="menu-path">Format &rsaquo; Make Plain Text</span> (<code>Shift + Cmd + T</code>). You'll know it worked when the gray ruler across the top <strong>disappears</strong>. <em>(If the menu says &ldquo;Make Rich Text&rdquo; instead, it's already plain &mdash; skip this.)</em><br>
+                    4. Type the two lines below, then <span class="menu-path">File &rsaquo; Save</span> as <code>jira-token.txt</code> inside the <code>config</code> folder<br>
+                    5. If a box asks about the extension, click <strong>Use &ldquo;.txt&rdquo;</strong> (not <code>.rtf</code>)
                 </span>
             </div>
             <div class="os-box">
                 <strong>&#9913; Windows</strong>
                 <span>
                     1. Right-click Desktop &rsaquo; <strong>New &rsaquo; Folder</strong> &rsaquo; name it <code>config</code><br>
-                    2. Inside it, right-click &rsaquo; <strong>New &rsaquo; Text Document</strong> &rsaquo; name it <code>jira-token.txt</code><br>
-                    3. Open it in Notepad, add the two lines below, then <strong>Ctrl + S</strong> and close
+                    2. Open <strong>Notepad</strong> (press <strong>Start</strong>, type &ldquo;Notepad&rdquo;) &mdash; Notepad only makes plain text, so you're safe by default<br>
+                    3. Type the two lines below<br>
+                    4. <span class="menu-path">File &rsaquo; Save As</span> &rsaquo; open your <code>config</code> folder &rsaquo; set <strong>Save as type</strong> to <strong>Text Documents (*.txt)</strong> &rsaquo; name it <code>jira-token.txt</code> &rsaquo; <strong>Save</strong><br>
+                    <em>Save from inside Notepad like this &mdash; making the file by right-clicking in a folder can hide a second <code>.txt</code> and break the setup.</em>
                 </span>
             </div>
         </div>
         <div class="code-lines">email: your.name@coursemojo.com
 token: &lt;paste the token you copied in 6.1 here&gt;</div>
+        <div class="callout">
+            <strong>Not sure it saved correctly?</strong>
+            On <em>Mac</em>, click the file once and press <code>Cmd + I</code> &mdash; under &ldquo;Kind&rdquo; it should read <em>Plain Text</em> (not Rich Text, and not a <code>.rtf</code> file). On <em>Windows</em>, just confirm the name is exactly <code>jira-token.txt</code> &mdash; not <code>jira-token.txt.txt</code>.
+        </div>
 
         <h4 class="substep">6.3&nbsp;&nbsp;Let Claude finish the setup</h4>
         <ol class="sub">
