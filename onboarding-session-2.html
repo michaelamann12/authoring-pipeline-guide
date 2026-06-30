@@ -296,6 +296,11 @@
             </div>
             <div class="board-arrow-sm">&rarr;</div>
             <div class="board-lane">
+                <div class="board-lane-name">To-Do</div>
+                <div class="board-lane-who">Ready to start</div>
+            </div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane">
                 <div class="board-lane-name">Authoring</div>
                 <div class="board-lane-who">You (manual)</div>
             </div>
@@ -303,6 +308,11 @@
             <div class="board-lane highlight">
                 <div class="board-lane-name">Draft Activity with Claude</div>
                 <div class="board-lane-who">Automated</div>
+            </div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane">
+                <div class="board-lane-name">Needs Attention</div>
+                <div class="board-lane-who">Build issue &rarr; fix</div>
             </div>
             <div class="board-arrow-sm">&rarr;</div>
             <div class="board-lane highlight-green">
@@ -313,6 +323,11 @@
             <div class="board-lane highlight-purple">
                 <div class="board-lane-name">Needs Lead Review</div>
                 <div class="board-lane-who">Meg / Eric</div>
+            </div>
+            <div class="board-arrow-sm">&rarr;</div>
+            <div class="board-lane">
+                <div class="board-lane-name">In Revision</div>
+                <div class="board-lane-who">Lead sent back</div>
             </div>
             <div class="board-arrow-sm">&rarr;</div>
             <div class="board-lane">
@@ -341,7 +356,7 @@
         <ol class="steps">
             <li><strong>Finalize your module plan</strong> — Activity IDs present, specs detailed, shared with your lead for review</li>
             <li><strong>Confirm source materials are in place</strong> — check with Steven if unsure</li>
-            <li><strong>Pull your full module</strong> from Backlog to Ready for Authoring on the Jira board &mdash; assign tickets to yourself</li>
+            <li><strong>Pull your full module</strong> from Backlog to To-Do on the Jira board &mdash; assign tickets to yourself</li>
             <li><strong>Drag to Draft Activity with Claude</strong> when ready &mdash; this triggers the pipeline. Builds run in the background (~45&ndash;60 min per lesson, staggered); most are drafted by the next morning</li>
             <li><strong>Open the draft in Claude Code</strong> and edit it — edit directly, ask Claude questions, or run <span class="skill-badge">/edit-draft</span> for a quality pass</li>
             <li><strong>Run <span class="skill-badge">/move-to-review</span></strong> when you're done — picks the reviewer, notifies them automatically</li>

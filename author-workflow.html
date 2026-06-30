@@ -237,11 +237,11 @@
         }
 
         .jira-lane {
-            min-width: 130px;
+            min-width: 72px;
             flex: 1;
             background: #eef0f6;
             border-radius: 8px;
-            padding: 0.6rem;
+            padding: 0.5rem 0.4rem;
         }
 
         .jira-lane-title {
@@ -571,24 +571,39 @@
 
             <h3>Your Jira Ticket at This Point</h3>
             <div class="jira-board">
-                <div class="jira-lane">
-                    <div class="jira-lane-title">Backlog</div>
-                </div>
                 <div class="jira-lane active-lane">
-                    <div class="jira-lane-title">Ready for Authoring</div>
+                    <div class="jira-lane-title">Backlog</div>
                     <div class="jira-ticket highlight-ticket">
-                        OE_SLP_XX_G9_1.1_7_v1
-                        <span class="ticket-status">Sources verified</span>
+                    OE_SLP_XX_G9_1.1_7_v1
+                    <span class="ticket-status">Sources verified &mdash; ready to pull</span>
                     </div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">To-Do</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Authoring</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Draft Activity with Claude</div>
                 </div>
                 <div class="jira-lane">
+                    <div class="jira-lane-title">Needs Attention</div>
+                </div>
+                <div class="jira-lane">
                     <div class="jira-lane-title">Draft Review</div>
                 </div>
                 <div class="jira-lane">
+                    <div class="jira-lane-title">Needs Lead Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">In Revision</div>
+                </div>
+                <div class="jira-lane">
                     <div class="jira-lane-title">Final Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">In Transformation</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Done</div>
@@ -614,43 +629,61 @@
             <ol>
                 <li>Open the APT Jira board</li>
                 <li>Find the tickets for your <strong>full module/unit</strong> in Backlog &mdash; pull the whole set at once rather than one at a time</li>
-                <li>Drag them to <strong>Ready for Authoring</strong> to signal that you've verified the plan and source materials are in place</li>
+                <li>Drag them to <strong>To-Do</strong> to signal that you've verified the plan and source materials are in place</li>
                 <li><strong>Assign each ticket to yourself</strong> &mdash; this makes your activities easy to locate on the board</li>
+                <li>As you start actively prepping a lesson, move its ticket to <strong>Authoring</strong></li>
             </ol>
 
             <div class="trigger-flow">
                 <div class="trigger-box you-do">Find ticket in Backlog</div>
                 <span class="trigger-arrow">&rarr;</span>
-                <div class="trigger-box you-do">Drag to Ready for Authoring</div>
+                <div class="trigger-box you-do">Drag to To-Do</div>
+                <span class="trigger-arrow">&rarr;</span>
+                <div class="trigger-box you-do">Move to Authoring</div>
             </div>
 
             <div class="jira-board">
                 <div class="jira-lane">
                     <div class="jira-lane-title">Backlog</div>
                     <div class="jira-ticket">
-                        OE_SLP_XX_G9_1.1_5_v1
-                        <span class="ticket-status">Waiting</span>
+                    OE_SLP_XX_G9_1.1_5_v1
+                    <span class="ticket-status">Waiting</span>
                     </div>
                     <div class="jira-ticket">
-                        OE_SLP_XX_G9_1.1_6_v1
-                        <span class="ticket-status">Waiting</span>
+                    OE_SLP_XX_G9_1.1_6_v1
+                    <span class="ticket-status">Waiting</span>
                     </div>
                 </div>
                 <div class="jira-lane active-lane">
-                    <div class="jira-lane-title">Ready for Authoring</div>
+                    <div class="jira-lane-title">To-Do</div>
                     <div class="jira-ticket highlight-ticket">
-                        OE_SLP_XX_G9_1.1_7_v1
-                        <span class="ticket-status">You pulled this one</span>
+                    OE_SLP_XX_G9_1.1_7_v1
+                    <span class="ticket-status">You pulled this one</span>
                     </div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Authoring</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Draft Activity with Claude</div>
                 </div>
                 <div class="jira-lane">
+                    <div class="jira-lane-title">Needs Attention</div>
+                </div>
+                <div class="jira-lane">
                     <div class="jira-lane-title">Draft Review</div>
                 </div>
                 <div class="jira-lane">
+                    <div class="jira-lane-title">Needs Lead Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">In Revision</div>
+                </div>
+                <div class="jira-lane">
                     <div class="jira-lane-title">Final Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">In Transformation</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Done</div>
@@ -674,7 +707,7 @@
             <span class="step-actor-badge badge-you">You</span>
         </div>
         <div class="step-body">
-            <p>In Jira, drag your ticket from <strong>Backlog</strong> (or Ready for Authoring) to the <strong>Draft Activity with Claude</strong> lane. This is the signal that tells the pipeline: "This activity is ready to be built."</p>
+            <p>In Jira, drag your ticket from <strong>To-Do</strong> (or <strong>Authoring</strong>) to the <strong>Draft Activity with Claude</strong> lane. This is the signal that tells the pipeline: "This activity is ready to be built."</p>
 
             <div class="trigger-flow">
                 <div class="trigger-box you-do">You drag ticket to Draft Activity with Claude</div>
@@ -698,20 +731,35 @@
                     <div class="jira-lane-title">Backlog</div>
                 </div>
                 <div class="jira-lane">
-                    <div class="jira-lane-title">Ready for Authoring</div>
+                    <div class="jira-lane-title">To-Do</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Authoring</div>
                 </div>
                 <div class="jira-lane active-lane">
                     <div class="jira-lane-title">Draft Activity with Claude</div>
                     <div class="jira-ticket highlight-ticket">
-                        OE_SLP_XX_G9_1.1_7_v1
-                        <span class="ticket-status">Pipeline processing...</span>
+                    OE_SLP_XX_G9_1.1_7_v1
+                    <span class="ticket-status">Pipeline processing...</span>
                     </div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Needs Attention</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Draft Review</div>
                 </div>
                 <div class="jira-lane">
+                    <div class="jira-lane-title">Needs Lead Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">In Revision</div>
+                </div>
+                <div class="jira-lane">
                     <div class="jira-lane-title">Final Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">In Transformation</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Done</div>
@@ -798,20 +846,35 @@
                     <div class="jira-lane-title">Backlog</div>
                 </div>
                 <div class="jira-lane">
-                    <div class="jira-lane-title">Ready for Authoring</div>
+                    <div class="jira-lane-title">To-Do</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Authoring</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Draft Activity with Claude</div>
                 </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Needs Attention</div>
+                </div>
                 <div class="jira-lane active-lane">
                     <div class="jira-lane-title">Draft Review</div>
                     <div class="jira-ticket highlight-ticket">
-                        OE_SLP_XX_G9_1.1_7_v1
-                        <span class="ticket-status">Draft ready for review</span>
+                    OE_SLP_XX_G9_1.1_7_v1
+                    <span class="ticket-status">Draft ready for review</span>
                     </div>
                 </div>
                 <div class="jira-lane">
+                    <div class="jira-lane-title">Needs Lead Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">In Revision</div>
+                </div>
+                <div class="jira-lane">
                     <div class="jira-lane-title">Final Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">In Transformation</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Done</div>
@@ -928,10 +991,16 @@
                     <div class="jira-lane-title">Backlog</div>
                 </div>
                 <div class="jira-lane">
-                    <div class="jira-lane-title">Ready for Authoring</div>
+                    <div class="jira-lane-title">To-Do</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Authoring</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Draft Activity with Claude</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Needs Attention</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Draft Review</div>
@@ -939,9 +1008,18 @@
                 <div class="jira-lane active-lane">
                     <div class="jira-lane-title">Needs Lead Review</div>
                     <div class="jira-ticket highlight-ticket">
-                        OE_SLP_XX_G9_1.1_7_v1
-                        <span class="ticket-status">Awaiting lead review</span>
+                    OE_SLP_XX_G9_1.1_7_v1
+                    <span class="ticket-status">Awaiting lead review</span>
                     </div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">In Revision</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Final Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">In Transformation</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Done</div>
@@ -986,23 +1064,38 @@
                     <div class="jira-lane-title">Backlog</div>
                 </div>
                 <div class="jira-lane">
-                    <div class="jira-lane-title">Ready for Authoring</div>
+                    <div class="jira-lane-title">To-Do</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Authoring</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Draft Activity with Claude</div>
                 </div>
                 <div class="jira-lane">
+                    <div class="jira-lane-title">Needs Attention</div>
+                </div>
+                <div class="jira-lane">
                     <div class="jira-lane-title">Draft Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Needs Lead Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">In Revision</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Final Review</div>
                 </div>
                 <div class="jira-lane active-lane">
-                    <div class="jira-lane-title">Done</div>
+                    <div class="jira-lane-title">In Transformation</div>
                     <div class="jira-ticket highlight-ticket">
-                        OE_SLP_XX_G9_1.1_7_v1
-                        <span class="ticket-status">In Transformation</span>
+                    OE_SLP_XX_G9_1.1_7_v1
+                    <span class="ticket-status">Lead finalized &mdash; handed to transformation</span>
                     </div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Done</div>
                 </div>
             </div>
 
@@ -1035,6 +1128,21 @@
 
             <div class="jira-board">
                 <div class="jira-lane">
+                    <div class="jira-lane-title">Backlog</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">To-Do</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Authoring</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Draft Activity with Claude</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Needs Attention</div>
+                </div>
+                <div class="jira-lane">
                     <div class="jira-lane-title">Draft Review</div>
                 </div>
                 <div class="jira-lane">
@@ -1043,12 +1151,15 @@
                 <div class="jira-lane active-lane">
                     <div class="jira-lane-title">In Revision</div>
                     <div class="jira-ticket highlight-ticket">
-                        OE_SLP_XX_G9_1.1_7_v1
-                        <span class="ticket-status">Back to you &mdash; see feedback</span>
+                    OE_SLP_XX_G9_1.1_7_v1
+                    <span class="ticket-status">Back to you &mdash; see feedback</span>
                     </div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Final Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">In Transformation</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Done</div>
@@ -1089,7 +1200,13 @@
 
             <div class="jira-board">
                 <div class="jira-lane">
-                    <div class="jira-lane-title">Ready for Authoring</div>
+                    <div class="jira-lane-title">Backlog</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">To-Do</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Authoring</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Draft Activity with Claude</div>
@@ -1097,12 +1214,24 @@
                 <div class="jira-lane active-lane">
                     <div class="jira-lane-title">Needs Attention</div>
                     <div class="jira-ticket error-ticket">
-                        OE_SLP_XX_G9_1.1_7_v1
-                        <span class="ticket-status">Held &mdash; source text missing</span>
+                    OE_SLP_XX_G9_1.1_7_v1
+                    <span class="ticket-status">Held &mdash; source text missing</span>
                     </div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Draft Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Needs Lead Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">In Revision</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">Final Review</div>
+                </div>
+                <div class="jira-lane">
+                    <div class="jira-lane-title">In Transformation</div>
                 </div>
                 <div class="jira-lane">
                     <div class="jira-lane-title">Done</div>
